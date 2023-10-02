@@ -41,16 +41,16 @@ def arffMIMLReader(file):
                     #line=line.split(',')
                     #print(line)
                     key = line[0:line.find(",")]
-                    line=line[line.find(",")+2:]
+                    line=line[line.find("\"")+1:]
                     labels=line[line.find("\"",2)+2:]
                     values = line[:line.find("\"",2)].split("\\n")
                     
-                    print("Key: ", key)
-                    print("Values ", values)
+                    #print("Key: ", key)
+                    #print("Values ", values)
                     valueslist=[]
                     for v in values:
                         valueslist.append(tuple([float(i) for i in v.split(',')]))
-                    print("Labels: ", labels)
+                    #print("Labels: ", labels)
                     
                     arff.addBag(key,tuple(valueslist),tuple([int(i) for i in labels.split(',')]))
                             #Cuando se llegue a data, se añade el id del bag a un diccionario y los values de cada clave 
@@ -63,7 +63,5 @@ def arffMIMLReader(file):
 toy=arffMIMLReader("toy.arff")
 toy.showArff()
 
-#TODO: Datos en los datasets diferentes, en birds hay un espacio entre valores
-
 birds=arffMIMLReader("miml_birds.arff")
-birds.showArff()
+#birds.showArff()
