@@ -1,3 +1,6 @@
+import numpy as np
+
+#Clase para gestionar archivos .arff para problemas multi-etiqueta multi-instancia
 class MIMLArff:
     def __init__(self) -> None:
         self.name = "undefined"
@@ -28,34 +31,42 @@ def arffMIMLReader(file):
 
     arff = MIMLArff()
     arff_file = open(file)
-    count=0
+    
     for line in arff_file:
-            count+=1
+            
+            #Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
             line=line.lstrip()
             if line=="":
                 continue
             
             if not (line.startswith("@")):
                 if not (line.startswith("%")):
-                    line=line.strip("\n")
-                    #line=line.split(',')
-                    #print(line)
-                    key = line[0:line.find(",")]
-                    line=line[line.find("\"")+1:]
-                    labels=line[line.find("\"",2)+2:]
-                    values = line[:line.find("\"",2)].split("\\n")
                     
+                    #Eliminanos el salto de línea del final de la cadena
+                    line=line.strip("\n")
+
+                    #Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
+                    key = line[0:line.find(",")]
                     #print("Key: ", key)
+
+                    #Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
+                    line=line[line.find("\"")+1:]
+                    values = line[:line.find("\"",2)]
+                    #Separamos los valores por instancias de la bolsa
+                    values=values.split("\\n")
                     #print("Values ", values)
-                    valueslist=[]
-                    for v in values:
-                        valueslist.append(tuple([float(i) for i in v.split(',')]))
+
+                    #El resto de la cadena se trata de las etiquetas
+                    labels=line[line.find("\"",2)+2:]
                     #print("Labels: ", labels)
                     
-                    arff.addBag(key,tuple(valueslist),tuple([int(i) for i in labels.split(',')]))
-                            #Cuando se llegue a data, se añade el id del bag a un diccionario y los values de cada clave 
-                            #sera una tupla de 2 elementos, una tupla con tuplas de los distintos values y otra tupla con las etiquetas
-                            #key: (((3,5,6,7),(1,4,5,7)),(1,0,1))
+                    valueslist=[]
+                    for v in values:
+                        valueslist.append(np.array([float(i) for i in v.split(',')]))
+                    
+                    arff.addBag(key,np.array(valueslist),np.array([int(i) for i in labels.split(',')]))
+                            #TODO: añadir gestion atributos
+                            #TODO: quizas separar en funciones para data y para atributos
                             #TODO: incluso diccionario aparte para stats
     
     return arff
