@@ -2,27 +2,34 @@
 import numpy as np
 
 def arff_to_csv(file,delimiter="'"):
-    arff=open(file)
-    csv = open(file[:-5]+".csv","w")
+    """
+    Convert MIML Arff to CSV.
+
+    Parameters
+    ----------
+    file : string
+        Filepath of the file to be converted
+
+    delimiter : string ( ' or " ), default = '
+        Delimiter used in arff file for the start and end of the bag values
+
+    """
+    arff = open(file)
+    csv = open(file[:-5] + ".csv","w")
     attrib = []
     flag = 0
     for line in arff:
-
         #Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
         line = line.lstrip()
         if line == "":
             continue
             
         if (line.startswith("%") or line.startswith("@")):
-
             if line.startswith("@attribute"):
-                    
                 if not (line.startswith("@attribute bag relational")):
-                            attrib.append(line[line.find(" ")+1:line.find(" ",line.find(" ")+1)])
-                            #csv.write(","+line[line.find(" ")+1:line.find(" ",line.find(" ")+1)])
+                    attrib.append(line[line.find(" ")+1:line.find(" ",line.find(" ")+1)])
 
         else:
-            
             if flag == 0:
                 for x in range(len(attrib)):
                     if x == len(attrib) - 1:
@@ -53,7 +60,9 @@ def arff_to_csv(file,delimiter="'"):
                 csv.write(key + "," + v + "," + labels + "\n")
                     #TODO: quizas separar en funciones para data y para atributos
                     #TODO: intentar optimizar la funcion
+                    #TODO: control de errores
     
     arff.close()
     csv.close()
+
 #arff_to_csv("miml_birds.arff",delimiter="\"")
