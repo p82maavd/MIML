@@ -3,28 +3,31 @@ class MIMLDataset:
         self.name = "undefined"
         self.attributes = []
         self.data = dict()
-        self.numberlabels=0
-    
-    def setName(self, name):
+        self.numberlabels = 0
+
+    def set_name(self, name):
         self.name = name
-    def getName(self):
+
+    def get_name(self):
         return self.name
-    
-    def setAttributes(self, attributes):
-        self.attributes=attributes
-    def getAttributes(self):
+
+    def set_attributes(self, attributes):
+        self.attributes = attributes
+
+    def get_attributes(self):
         return self.attributes
-    
-    def setNumberLabels(self, labels):
-        self.numberlabels=labels
-    def getNumberLabels(self):
+
+    def set_number_labels(self, labels):
+        self.numberlabels = labels
+
+    def get_number_labels(self):
         return self.numberlabels
-    
-    def addBag(self,key,values,labels):
-        self.data[key]=(values,labels)
-    
-    def showDataset(self):
-        #TODO: Improve this to table style
-        for keys,values in self.data.items():
+
+    def add_bag(self, key, values, labels):
+        self.data[key] = (values, labels)
+
+    def show_dataset(self):
+        # TODO: Improve this to table style
+        for keys, values in self.data.items():
             print(keys)
             print(values)
