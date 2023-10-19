@@ -1,0 +1,21 @@
+import pandas as pd
+
+def load_dataset(file):
+
+    if file[-4:] == ".csv":
+        load_dataset_csv(file)
+    elif file[-5:] == ".arff":
+        load_dataset_arff(file)
+    else:
+        print("Error")
+        #TODO: Control de errores
+
+def load_dataset_csv(file):
+    dataset = pd.read_csv(file,header=0)
+    print(dataset.describe())
+    pass
+
+def load_dataset_arff(file):
+    pass
+
+load_dataset("miml_birds.csv")

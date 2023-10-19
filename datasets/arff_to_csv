@@ -14,10 +14,12 @@ def arff_to_csv(file,delimiter="'"):
         Delimiter used in arff file for the start and end of the bag values
 
     """
+
     arff = open(file)
     csv = open(file[:-5] + ".csv","w")
     attrib = []
     flag = 0
+
     for line in arff:
         #Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
         line = line.lstrip()
@@ -59,7 +61,7 @@ def arff_to_csv(file,delimiter="'"):
             for v in values:
                 csv.write(key + "," + v + "," + labels + "\n")
                     #TODO: quizas separar en funciones para data y para atributos
-                    #TODO: intentar optimizar la funcion
+                    #TODO: intentar optimizar la funcion, aprovechar que la string del arff es parecida, separar solo los values
                     #TODO: control de errores
     
     arff.close()
