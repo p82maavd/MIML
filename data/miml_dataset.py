@@ -26,6 +26,18 @@ class MIMLDataset:
     def add_bag(self, key, values, labels):
         self.data[key] = (values, labels)
 
+    def get_bag(self, key):
+        #TODO
+        pass
+
+    def get_number_bags(self):
+        #TODO
+        pass
+
+    def set_attribute(self,key,attribute,value):
+        #TODO
+        pass
+
     def show_dataset(self):
         # TODO: Improve this to table style
         for keys, values in self.data.items():
