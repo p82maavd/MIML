@@ -8,56 +8,50 @@ def arff_to_csv(file,delimiter="'"):
     flag = 0
     for line in f:
 
-            #Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
-            line = line.lstrip()
-            if line == "":
-                continue
+        #Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
+        line = line.lstrip()
+        if line == "":
+            continue
+            
+        if (line.startswith("%") or line.startswith("@")):
 
-
-            if line.startswith("@"):
-                if not (line.startswith("%")):
-                    if line.startswith("@relation"):
-                        #arff.setName(line[line.find(" ")+1:])
-                        pass
-                    elif line.startswith("@attribute bag relational"):
-                        flag = 1
-                    elif line.startswith("@end bag"):
-                        flag = 0
-                    elif flag == 1:
-                        if line.startswith("@attribute"):
-
+            if line.startswith("@attribute"):
+                    
+                if not (line.startswith("@attribute bag relational")):
                             attrib.append(line[line.find(" ")+1:line.find(" ",line.find(" ")+1)])
+                            #csv.write(","+line[line.find(" ")+1:line.find(" ",line.find(" ")+1)])
 
+        else:
+            
+            if flag == 0:
+                for x in range(len(attrib)):
+                    if x == len(attrib) - 1:
+                        csv.write(attrib[x]+"\n")
+                    else:
+                        csv.write(attrib[x]+",")
+                flag=1
 
-            else:
-                #Eliminanos el salto de línea del final de la cadena
-                line = line.strip("\n")
+            #Eliminanos el salto de línea del final de la cadena
+            line = line.strip("\n")
 
-                #Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
-                key = line[0:line.find(",")]
-                #print("Key: ", key)
+            #Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
+            key = line[0:line.find(",")]
+            #print("Key: ", key)
 
-                #Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
-                line = line[line.find(delimiter)+1:]
-                #TODO: Testeo con toy.arff
-                values = line[:line.find(delimiter,line.find(delimiter,line.find(delimiter)))]
-                #Separamos los valores por instancias de la bolsa
-                values = values.split("\\n")
-                #print("Values ", values)
+            #Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
+            line = line[line.find(delimiter)+1:]
+            values = line[:line.find(delimiter,line.find(delimiter,line.find(delimiter)))]
+            #Separamos los valores por instancias de la bolsa
+            values = values.split("\\n")
+            #print("Values ", values)
 
-                #El resto de la cadena se trata de las etiquetas
-                labels = line[line.find(delimiter,line.find(delimiter,line.find(delimiter)))+2:]
-                #arff.setNumberLabels(len(labels.split(",")))
-                #print("Labels: ", labels)
+            #El resto de la cadena se trata de las etiquetas
+            labels = line[line.find(delimiter,line.find(delimiter,line.find(delimiter)))+2:]
+            #print("Labels: ", labels)
 
-                valueslist = []
-                for v in values:
-                    csv.write(key + "," + v + "," + labels + "\n")
-                #arff.addBag(key,np.array(valueslist),np.array([int(i) for i in labels.split(',')]))
-                    #TODO: añadir gestion atributos
+            for v in values:
+                csv.write(key + "," + v + "," + labels + "\n")
                     #TODO: quizas separar en funciones para data y para atributos
-                    #TODO: incluso diccionario aparte para stats
+                    #TODO: intentar optimizar la funcion
 
-    #arff.setAttributes(attrib)
-    #return arff
-arff_to_csv("toy.arff","\"")
+#arff_to_csv("miml_birds.arff",delimiter="\"")
