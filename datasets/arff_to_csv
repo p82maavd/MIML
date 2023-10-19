@@ -2,11 +2,11 @@
 import numpy as np
 
 def arff_to_csv(file,delimiter="'"):
-    f=open(file)
+    arff=open(file)
     csv = open(file[:-5]+".csv","w")
     attrib = []
     flag = 0
-    for line in f:
+    for line in arff:
 
         #Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
         line = line.lstrip()
@@ -53,5 +53,7 @@ def arff_to_csv(file,delimiter="'"):
                 csv.write(key + "," + v + "," + labels + "\n")
                     #TODO: quizas separar en funciones para data y para atributos
                     #TODO: intentar optimizar la funcion
-
+    
+    arff.close()
+    csv.close()
 #arff_to_csv("miml_birds.arff",delimiter="\"")
