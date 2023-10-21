@@ -25,6 +25,7 @@ def load_dataset_arff(file):
     dataset = MIMLDataset()
     arff_file = open(file)
     attrib = []
+    labels_name = []
     flag = 0
     for line in arff_file:
 
@@ -40,10 +41,13 @@ def load_dataset_arff(file):
                 elif line.startswith("@attribute bag relational"):
                     flag = 1
                 elif line.startswith("@end bag"):
-                    flag = 0
+                    flag = 2
                 elif flag == 1:
                     if line.startswith("@attribute"):
                         attrib.append(line[line.find(" ") + 1:line.find(" ", line.find(" ") + 1)])
+                elif flag == 2:
+                    if line.startswith("@attribute"):
+                        labels_name.append(line[line.find(" ") + 1:line.find(" ", line.find(" ") + 1)])
 
         else:
             # Eliminanos el salto de línea del final de la cadena
@@ -62,7 +66,6 @@ def load_dataset_arff(file):
 
             # El resto de la cadena se trata de las etiquetas
             labels = line[line.find("\"", 2) + 2:]
-            dataset.set_number_labels(len(labels.split(",")))
             # print("Labels: ", labels)
 
             valueslist = []
@@ -75,6 +78,7 @@ def load_dataset_arff(file):
             # TODO: incluso diccionario aparte para stats
 
     dataset.set_attributes(attrib)
+    dataset.set_labels(labels_name)
     return dataset
 
 # load_dataset("miml_birds.csv")
