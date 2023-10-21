@@ -35,6 +35,7 @@ class MIMLDataset:
 
     def get_bag(self, key):
         #TODO: Formatearlo para que se vea bonito
+        #TODO: Hacerlo quizas en funcion print_bag
         return self.data[key]
 
     def get_number_bags(self):
@@ -46,13 +47,16 @@ class MIMLDataset:
 
     def show_dataset(self):
         # TODO: Formatearlo para que se vea bonito
+        # TODO: Hacer algo como head y tail de pandas
         print("Name: ", self.get_name())
         print("Attributes: ", self.get_attributes())
         print("Labels: ", self.get_labels())
         print("Bags:")
+
         for key in self.data:
             print("\n")
             bag = self.get_bag(key)
             print("Key: ", key)
             print("Attributes: ", bag[0])
             print("Labels: ", bag[1])
+

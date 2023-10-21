@@ -17,7 +17,9 @@ def load_dataset(file):
 def load_dataset_csv(file):
     dataset = pd.read_csv(file, header=0)
     print(dataset.describe())
-    # TODO
+    # TODO: Hay que ver como diferenciar los atributos de las labels
+    # TODO: Si no se puede implementar la funcionalidad de pandas "[]"
+    # TODO: y poner atributos y labels como parametros opcionales quizas
     pass
 
 
@@ -73,9 +75,8 @@ def load_dataset_arff(file):
                 valueslist.append(np.array([float(i) for i in v.split(',')]))
 
             dataset.add_bag(key, np.array(valueslist), np.array([int(i) for i in labels.split(',')]))
-            # TODO: añadir gestion atributos
+            # TODO: mejorar gestion atributos
             # TODO: quizas separar en funciones para data y para atributos
-            # TODO: incluso diccionario aparte para stats
 
     dataset.set_attributes(attrib)
     dataset.set_labels(labels_name)
