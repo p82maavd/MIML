@@ -5,6 +5,14 @@ from data.miml_dataset import *
 
 
 def load_dataset(file):
+    """
+    Function to load a dataset
+
+    Parameters
+    ----------
+    file : string
+        Path of the dataset file
+    """
     if file[-4:] == ".csv":
         return load_dataset_csv(file)
     elif file[-5:] == ".arff":
@@ -15,6 +23,14 @@ def load_dataset(file):
 
 
 def load_dataset_csv(file):
+    """
+    Function to load a dataset in csv format
+
+    Parameters
+    ----------
+    file : string
+        Path of the dataset file
+    """
     dataset = pd.read_csv(file, header=0)
     print(dataset.describe())
     # TODO: Hay que ver como diferenciar los atributos de las labels
@@ -24,6 +40,14 @@ def load_dataset_csv(file):
 
 
 def load_dataset_arff(file):
+    """
+    Function to load a dataset in arff format
+
+    Parameters
+    ----------
+    file : string
+        Path of the dataset file
+    """
     dataset = MIMLDataset()
     arff_file = open(file)
     attrib = []
@@ -81,5 +105,3 @@ def load_dataset_arff(file):
     dataset.set_attributes(attrib)
     dataset.set_labels(labels_name)
     return dataset
-
-# load_dataset("miml_birds.csv")
