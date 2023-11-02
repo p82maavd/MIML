@@ -1,4 +1,8 @@
 class MIMLDataset:
+    """"
+    Class to manage MIML data obtained from datasets
+    """
+
     def __init__(self) -> None:
         self.name = "undefined"
         self.attributes = []
@@ -7,45 +11,158 @@ class MIMLDataset:
         self.numberlabels = 0
 
     def set_name(self, name):
+        """
+        Set function for dataset name
+
+        Parameters
+        ----------
+        name : string
+            Name of the dataset
+        """
         self.name = name
 
     def get_name(self):
+        """
+         Get function for dataset name
+
+        Returns
+        ----------
+        name : string
+            Name of the dataset
+        """
         return self.name
 
     def set_attributes(self, attributes):
+        """
+        Set function for dataset attributes
+
+        Parameters
+        ----------
+        attributes : List of string
+            List of the attributes of the dataset
+        """
         self.attributes = attributes
 
     def get_attributes(self):
+        """
+        Get function for dataset attributes
+
+        Returns
+        ----------
+        attributes : List of strings
+            Attributes of the dataset
+        """
         return self.attributes
 
     def get_number_attributes(self):
+        """
+        Get numbers of attributes of the dataset
+
+        Returns
+        ----------
+         numbers of attributes: int
+            Numbers of attributes of the dataset
+        """
+        # TODO: Quizas no es necesario
         return len(self.attributes)
 
     def set_labels(self, labels):
+        """
+        Set function for dataset labels
+
+        Parameters
+        ----------
+        labels: List of string
+            List of the labels of the dataset
+        """
         self.labels = labels
 
     def get_labels(self):
+        """
+        Get function for dataset labels
+
+        Returns
+        ----------
+        labels : List of strings
+            Labels of the dataset
+        """
         return self.labels
 
     def get_number_labels(self):
+        """
+        Get numbers of labels of the dataset
+
+        Returns
+        ----------
+        numbers of labels: int
+            Numbers of labels of the dataset
+        """
+        # TODO: Quizas no es necesario
         return len(self.labels)
 
     def add_bag(self, key, values, labels):
+        """
+        Add a bag to the dataset
+
+        Parameters
+        ----------
+        key : string
+            Key of the bag
+
+        values: ndarray
+            Values of attributes of the bag
+
+        labels: ndarray
+            Labels of the bag
+        """
         self.data[key] = (values, labels)
 
     def get_bag(self, key):
-        #TODO: Formatearlo para que se vea bonito
-        #TODO: Hacerlo quizas en funcion print_bag
+        """
+        Get data of a bag of the dataset
+
+        Returns
+        ----------
+        bag: ndarray
+            Attributes and labels of a bag of the dataset
+        """
+        # TODO: Formatearlo para que se vea bonito
+        # TODO: Hacerlo quizas en funcion print_bag
         return self.data[key]
 
     def get_number_bags(self):
+        """
+        Get numbers of bags of the dataset
+
+        Returns
+        ----------
+        numbers of bags: int
+            Numbers of bags of the dataset
+        """
         return len(self.data)
 
-    def set_attribute(self,key,attribute,value):
-        #TODO
+    def set_attribute(self, key, attribute, value):
+        """
+        Set function for dataset name
+
+        Parameters
+        ----------
+        key : string
+            Bag key of the dataset
+
+        attribute: string
+            Attribute of the dataset
+
+        value: float
+            New value for the update
+        """
+        # TODO: df.loc()
         pass
 
     def show_dataset(self):
+        """"
+        Function to show information about the dataset
+        """
         # TODO: Formatearlo para que se vea bonito
         # TODO: Hacer algo como head y tail de pandas
         print("Name: ", self.get_name())
@@ -59,4 +176,4 @@ class MIMLDataset:
             print("Key: ", key)
             print("Attributes: ", bag[0])
             print("Labels: ", bag[1])
-
+            print(bag)
