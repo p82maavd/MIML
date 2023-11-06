@@ -34,7 +34,7 @@ class MIMLDataset:
 
     def set_attributes(self, attributes):
         """
-        Set function for dataset attributes
+        Set function for dataset attributes name
 
         Parameters
         ----------
@@ -45,7 +45,7 @@ class MIMLDataset:
 
     def get_attributes(self):
         """
-        Get function for dataset attributes
+        Get function for dataset attributes name
 
         Returns
         ----------
@@ -63,12 +63,11 @@ class MIMLDataset:
          numbers of attributes: int
             Numbers of attributes of the dataset
         """
-        # TODO: Quizas no es necesario
         return len(self.attributes)
 
     def set_labels(self, labels):
         """
-        Set function for dataset labels
+        Set function for dataset labels name
 
         Parameters
         ----------
@@ -79,7 +78,7 @@ class MIMLDataset:
 
     def get_labels(self):
         """
-        Get function for dataset labels
+        Get function for dataset labels name
 
         Returns
         ----------
@@ -97,7 +96,6 @@ class MIMLDataset:
         numbers of labels: int
             Numbers of labels of the dataset
         """
-        # TODO: Quizas no es necesario
         return len(self.labels)
 
     def add_bag(self, key, values, labels):
@@ -176,4 +174,31 @@ class MIMLDataset:
             print("Key: ", key)
             print("Attributes: ", bag[0])
             print("Labels: ", bag[1])
-            print(bag)
+            #print(bag)
+
+    def cardinality(self):
+        """
+        Computes the Cardinality as the average number of labels per pattern. It
+        requires the method calculateStats to be previously called.
+        """
+        suma = 0
+        for key in self.data:
+            suma += sum(self.data[key][1])
+        return suma/len(self.data)
+
+    def density(self):
+        """
+        Computes the density as the cardinality / numLabels.
+        """
+        return self.cardinality()/self.get_number_labels()
+
+    def distinct(self):
+        options = set()
+        for key in self.data:
+            options.add(tuple(self.data[key][1]))
+        return len(options)
+
+    def describe(self):
+        print("Cardinalidad: ", self.cardinality())
+        print("Densidad: ", self.density())
+        print("Distinct: ", self.distinct())
