@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from data.miml_dataset import *
+from data.miml_dataset import MIMLDataset
 
 
 def load_dataset(file):

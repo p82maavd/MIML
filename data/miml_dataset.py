@@ -1,3 +1,4 @@
+
 class MIMLDataset:
     """"
     Class to manage MIML data obtained from datasets
@@ -174,7 +175,7 @@ class MIMLDataset:
             print("Key: ", key)
             print("Attributes: ", bag[0])
             print("Labels: ", bag[1])
-            #print(bag)
+            # print(bag)
 
     def cardinality(self):
         """
@@ -202,3 +203,14 @@ class MIMLDataset:
         print("Cardinalidad: ", self.cardinality())
         print("Densidad: ", self.density())
         print("Distinct: ", self.distinct())
+
+
+    def convert_to_ml(self, mode="arithmetic"):
+        if mode == "arithmetic":
+            return self.arithmetic(self)
+        elif mode == "geometric":
+            return geometric(self)
+        elif mode == "minmax":
+            return minmax(self)
+        else:
+            print("Options for mode: arithmetic, geometric, minmax")
