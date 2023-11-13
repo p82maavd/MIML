@@ -5,6 +5,7 @@ class MIMLDataset:
     """
 
     def __init__(self) -> None:
+
         self.name = "undefined"
         self.attributes = []
         self.labels = []
@@ -99,6 +100,19 @@ class MIMLDataset:
         """
         return len(self.labels)
 
+    def get_bag(self, key):
+        """
+        Get data of a bag of the dataset
+
+        Returns
+        ----------
+        bag: ndarray
+            Attributes and labels of a bag of the dataset
+        """
+        # TODO: Formatearlo para que se vea bonito
+        # TODO: Hacerlo quizas en funcion print_bag
+        return self.data[key]
+
     def add_bag(self, key, values, labels):
         """
         Add a bag to the dataset
@@ -116,18 +130,33 @@ class MIMLDataset:
         """
         self.data[key] = (values, labels)
 
-    def get_bag(self, key):
+    def get_instance(self, key, index):
         """
-        Get data of a bag of the dataset
+
+        Parameters
+        ----------
+        key
+        index
 
         Returns
-        ----------
-        bag: ndarray
-            Attributes and labels of a bag of the dataset
+        -------
+
         """
-        # TODO: Formatearlo para que se vea bonito
-        # TODO: Hacerlo quizas en funcion print_bag
-        return self.data[key]
+        pass
+
+    def add_instance(self, key, values):
+        """
+
+        Parameters
+        ----------
+        key
+        values
+
+        Returns
+        -------
+
+        """
+        # TODO: Ver si se puede hacer con las tuplas, sino ver si hay algun problema por cambiarlas a lista
 
     def get_number_bags(self):
         """
@@ -140,9 +169,36 @@ class MIMLDataset:
         """
         return len(self.data)
 
+    def get_number_instances(self, key):
+        """
+        Get numbers of instances of a bag
+
+        Parameters
+        ----------
+        key
+
+        Returns
+        ----------
+        numbers of instances: int
+            Numbers of instances of a bag
+        """
+        return len(self.data[key][0])
+
+    def add_attribute(self, attribute):
+        """
+
+        Parameters
+        ----------
+        attribute
+
+        Returns
+        -------
+
+        """
+
     def set_attribute(self, key, attribute, value):
         """
-        Set function for dataset name
+        Update value from attributes
 
         Parameters
         ----------
@@ -194,23 +250,24 @@ class MIMLDataset:
         return self.cardinality()/self.get_number_labels()
 
     def distinct(self):
+        """
+
+        Returns
+        -------
+
+        """
         options = set()
         for key in self.data:
             options.add(tuple(self.data[key][1]))
         return len(options)
 
     def describe(self):
+        """
+
+        Returns
+        -------
+
+        """
         print("Cardinalidad: ", self.cardinality())
         print("Densidad: ", self.density())
         print("Distinct: ", self.distinct())
-
-
-    def convert_to_ml(self, mode="arithmetic"):
-        if mode == "arithmetic":
-            return self.arithmetic(self)
-        elif mode == "geometric":
-            return geometric(self)
-        elif mode == "minmax":
-            return minmax(self)
-        else:
-            print("Options for mode: arithmetic, geometric, minmax")
