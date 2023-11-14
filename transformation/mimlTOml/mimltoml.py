@@ -15,6 +15,7 @@ class MultilabelTransformation:
 
     def transform_dataset(self):
         """
+        Transform the dataset to multilabel dataset
 
         Returns
         -------
@@ -33,15 +34,35 @@ class MultilabelTransformation:
         elif self.mode == "minmax":
             return self.minmax()
 
-    def set_mode(self, mode):
-        """
+    def transform_instance(self, key):
+         """
+        Transform the instances of a bag to a multilabel instance
 
         Parameters
         ----------
-        mode
+        key : string
+            Key of the bag to be transformed to multilabel instance
 
         Returns
         -------
+        instance : tuple
+        Tuple of numpy ndarray with attribute values and labels
+
+        """
+        # TODO: Implementarlo
+        
+
+        
+
+    def set_mode(self, mode):
+        """
+        Set the type of the multilabel transformation
+        
+        Parameters
+        ----------
+        
+        mode : string
+            Type of multilabel transformation
 
         """
         modes = ["arithmetic", "geometric", "minmax"]
@@ -56,7 +77,7 @@ class MultilabelTransformation:
 
         Returns
         -------
-
+        
         X : {numpy ndarray} of shape (number of instances, number of attributes)
         Training vector
 
