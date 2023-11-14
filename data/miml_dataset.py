@@ -6,6 +6,7 @@ class MIMLDataset:
 
     def __init__(self) -> None:
 
+        # TODO: Si dataset leido en csv, el nombre poner el del archivo
         self.name = "undefined"
         self.attributes = []
         self.labels = []
@@ -41,7 +42,7 @@ class MIMLDataset:
         Parameters
         ----------
         attributes : List of string
-            List of the attributes of the dataset
+            List of the attributes name of the dataset
         """
         self.attributes = attributes
 
@@ -52,7 +53,7 @@ class MIMLDataset:
         Returns
         ----------
         attributes : List of strings
-            Attributes of the dataset
+            Attributes name of the dataset
         """
         return self.attributes
 
@@ -74,7 +75,7 @@ class MIMLDataset:
         Parameters
         ----------
         labels: List of string
-            List of the labels of the dataset
+            List of the labels name of the dataset
         """
         self.labels = labels
 
@@ -85,7 +86,7 @@ class MIMLDataset:
         Returns
         ----------
         labels : List of strings
-            Labels of the dataset
+            Labels name of the dataset
         """
         return self.labels
 
@@ -135,28 +136,35 @@ class MIMLDataset:
 
         Parameters
         ----------
-        key
-        index
+        key : string
+            Key of the bag
+            
+        index : int
+            Index of the instance in the bag
 
         Returns
         -------
+        instance : tuple of ndarrays
+            Tuple with attribute values and label of the instance
 
         """
-        pass
+        # TODO: check
+        return (self.data[key][0][index], self.data[key][1])
 
     def add_instance(self, key, values):
         """
 
         Parameters
         ----------
-        key
-        values
-
-        Returns
-        -------
+        key : string
+            Key of the bag
+        values : ndarray
+            Values of the instance to be inserted
 
         """
         # TODO: Ver si se puede hacer con las tuplas, sino ver si hay algun problema por cambiarlas a lista
+        instance = (values, self.get_bag(key)[1])
+        # TODO: Ver como incluirlo en la tupla actual
 
     def get_number_bags(self):
         """
@@ -175,26 +183,29 @@ class MIMLDataset:
 
         Parameters
         ----------
-        key
+        key : string
+            Key of the bag
 
         Returns
         ----------
         numbers of instances: int
             Numbers of instances of a bag
         """
-        return len(self.data[key][0])
+        return len(self.get_bag(key)[0])
 
-    def add_attribute(self, attribute):
+    def add_attribute(self, attribute, default_value = 0):
         """
 
         Parameters
         ----------
-        attribute
-
-        Returns
-        -------
+        attribute : string
+            Name of the attribute to be added
+            
+        default_value : int
+            Default value to be inserted in new attribute column as placeholder
 
         """
+        # TODO: Implementarlo
 
     def set_attribute(self, key, attribute, value):
         """
@@ -211,7 +222,7 @@ class MIMLDataset:
         value: float
             New value for the update
         """
-        # TODO: df.loc()
+        # TODO: Implementarlo
         pass
 
     def show_dataset(self):
@@ -219,7 +230,7 @@ class MIMLDataset:
         Function to show information about the dataset
         """
         # TODO: Formatearlo para que se vea bonito
-        # TODO: Hacer algo como head y tail de pandas
+        # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas
         print("Name: ", self.get_name())
         print("Attributes: ", self.get_attributes())
         print("Labels: ", self.get_labels())
@@ -235,8 +246,12 @@ class MIMLDataset:
 
     def cardinality(self):
         """
-        Computes the Cardinality as the average number of labels per pattern. It
-        requires the method calculateStats to be previously called.
+        Computes the Cardinality as the average number of labels per pattern.
+
+        Returns
+        ----------
+        cardinality : float
+            Average number of labels per pattern
         """
         suma = 0
         for key in self.data:
@@ -246,15 +261,22 @@ class MIMLDataset:
     def density(self):
         """
         Computes the density as the cardinality / numLabels.
+
+        Returns
+        ----------
+        density : float
+            Cardinality divived by number of labels
         """
         return self.cardinality()/self.get_number_labels()
 
     def distinct(self):
         """
-
+        Computes the numbers of labels combinations used in the dataset respect all the possible ones
+        
         Returns
         -------
-
+        distinct : float
+            Numbers of labels combinations used in the dataset divided by all possible combinations
         """
         options = set()
         for key in self.data:
@@ -263,10 +285,7 @@ class MIMLDataset:
 
     def describe(self):
         """
-
-        Returns
-        -------
-
+        Print statistics about the dataset
         """
         print("Cardinalidad: ", self.cardinality())
         print("Densidad: ", self.density())
