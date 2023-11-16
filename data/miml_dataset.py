@@ -316,3 +316,5 @@ class MIMLDataset:
         print("Max Instances per bag: ", max_instances)
         # TODO: Mirar bien que cuenta
         #sb.append("\nAttributesPerBag: " + attributesPerBag);
+        #sb.append("\nDistribution of bags <nBags, nInstances>:");
+
