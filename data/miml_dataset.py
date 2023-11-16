@@ -291,7 +291,7 @@ class MIMLDataset:
             instances_bag = len(self.data[key][1])
             n_instances += instances_bag
             if instances_bag < min_instances:
-                min_instances=instances_bag
+                min_instances = instances_bag
             elif instances_bag > max_instances:
                 max_instances = instances_bag
         return n_instances, min_instances, max_instances
@@ -311,10 +311,9 @@ class MIMLDataset:
         print("-----MULTIINSTANCE-----")
         print("Nº of bags; ", self.get_number_bags())
         print("Total instances: ", n_instances)
-        print("Average Instances per bag: ", n_instances/self.get_number_bags())
+        print("Average Instances per bag: ", n_instances / self.get_number_bags())
         print("Min Instances per bag: ", min_instances)
         print("Max Instances per bag: ", max_instances)
         # TODO: Mirar bien que cuenta
-        #sb.append("\nAttributesPerBag: " + attributesPerBag);
-        #sb.append("\nDistribution of bags <nBags, nInstances>:");
-
+        # sb.append("\nAttributesPerBag: " + attributesPerBag);
+        # sb.append("\nDistribution of bags <nBags, nInstances>:");
