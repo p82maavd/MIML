@@ -50,30 +50,29 @@ def load_dataset_arff(file):
     """
     dataset = MIMLDataset()
     arff_file = open(file)
-    attrib = []
+    attribs_name = []
     labels_name = []
     flag = 0
     for line in arff_file:
 
         # Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
         line = line.lstrip()
-        if line == "":
+
+        if not line or line.startswith("%"):
             continue
 
         if line.startswith("@"):
-            if not (line.startswith("%")):
-                if line.startswith("@relation"):
-                    dataset.set_name(line[line.find(" ") + 1:])
-                elif line.startswith("@attribute bag relational"):
-                    flag = 1
-                elif line.startswith("@end bag"):
-                    flag = 2
-                elif flag == 1:
-                    if line.startswith("@attribute"):
-                        attrib.append(line[line.find(" ") + 1:line.find(" ", line.find(" ") + 1)])
-                elif flag == 2:
-                    if line.startswith("@attribute"):
-                        labels_name.append(line[line.find(" ") + 1:line.find(" ", line.find(" ") + 1)])
+
+            if line.startswith("@relation"):
+                dataset.set_name(line[line.find(" ") + 1:])
+            elif line.startswith("@attribute bag relational"):
+                flag = 1
+            elif line.startswith("@end bag"):
+                flag = 2
+            elif flag == 1:
+                attribs_name.append(line.split(" ")[1])
+            elif flag == 2:
+                labels_name.append(line.split(" ")[1])
 
         else:
             # Eliminanos el salto de línea del final de la cadena
@@ -94,14 +93,12 @@ def load_dataset_arff(file):
             labels = line[line.find("\"", 2) + 2:]
             # print("Labels: ", labels)
 
-            valueslist = []
+            values_list = []
             for v in values:
-                valueslist.append(np.array([float(i) for i in v.split(',')]))
+                values_list.append(np.array([float(i) for i in v.split(',')]))
 
-            dataset.add_bag(key, np.array(valueslist), np.array([int(i) for i in labels.split(',')]))
-            # TODO: mejorar gestion atributos
-            # TODO: quizas separar en funciones para data y para atributos
+            dataset.add_bag(key, np.array(values_list), np.array([int(i) for i in labels.split(',')]))
 
-    dataset.set_attributes(attrib)
+    dataset.set_attributes(attribs_name)
     dataset.set_labels(labels_name)
     return dataset

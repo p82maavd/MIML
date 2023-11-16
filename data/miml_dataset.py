@@ -147,7 +147,7 @@ class MIMLDataset:
 
         """
         # TODO: check
-        return (self.data[key][0][index], self.data[key][1])
+        return (self.get_bag(key)[0][index], self.get_bag(key)[1])
 
     def add_instance(self, key, values):
         """
@@ -313,7 +313,7 @@ class MIMLDataset:
         print("Distinct: ", self.distinct())
         print("")
         # TODO: Testearlo
-        n_instances, min_instances, max_instances = self.get_statistics()
+        n_instances, min_instances, max_instances, distribution = self.get_statistics()
         print("-----MULTIINSTANCE-----")
         print("Nº of bags; ", self.get_number_bags())
         print("Total instances: ", n_instances)
