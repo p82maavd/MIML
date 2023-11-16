@@ -10,7 +10,6 @@ class MIMLDataset:
         self.attributes = []
         self.labels = []
         self.data = dict()
-        self.numberlabels = 0
 
     def set_name(self, name):
         """
@@ -285,21 +284,28 @@ class MIMLDataset:
     def get_statistics(self):
         n_instances = 0
         max_instances = 0
-        # TODO: Poner infinito
-        min_instances = 100
+        # TODO: check
+        min_instances = float("inf")
+        distribution = dict()
         for key in self.data:
             instances_bag = len(self.data[key][1])
             n_instances += instances_bag
+            if instances_bag in distribution:
+                distribution[instances_bag] += 1
+            else:
+                distribution[instances_bag] = 1
             if instances_bag < min_instances:
                 min_instances = instances_bag
             elif instances_bag > max_instances:
                 max_instances = instances_bag
-        return n_instances, min_instances, max_instances
+        return n_instances, min_instances, max_instances, distribution
 
     def describe(self):
         """
         Print statistics about the dataset
         """
+
+        # TODO: Ponerlo bonito con tabulate
 
         print("-----MULTILABEL-----")
         print("Cardinalidad: ", self.cardinality())
@@ -314,6 +320,6 @@ class MIMLDataset:
         print("Average Instances per bag: ", n_instances / self.get_number_bags())
         print("Min Instances per bag: ", min_instances)
         print("Max Instances per bag: ", max_instances)
-        # TODO: Mirar bien que cuenta
-        # sb.append("\nAttributesPerBag: " + attributesPerBag);
+        print("Attributes per bag: ", self.get_number_attributes())
+        # TODO: Implementarlo
         # sb.append("\nDistribution of bags <nBags, nInstances>:");

@@ -4,10 +4,10 @@ from data.miml_dataset import MIMLDataset
 
 
 class MultilabelTransformation:
-
     """
     Class that performs a transformation to convert a MIMLDataset class to numpy ndarrays.
     """
+
     def __init__(self, dataset: MIMLDataset, mode="arithmetic"):
         self.dataset = dataset
         self.mode = ""
@@ -35,7 +35,7 @@ class MultilabelTransformation:
             return self.minmax()
 
     def transform_instance(self, key):
-         """
+        """
         Transform the instances of a bag to a multilabel instance
 
         Parameters
@@ -49,10 +49,8 @@ class MultilabelTransformation:
         Tuple of numpy ndarray with attribute values and labels
 
         """
-        # TODO: Implementarlo
-        
 
-        
+    # TODO: Implementarlo
 
     def set_mode(self, mode):
         """
