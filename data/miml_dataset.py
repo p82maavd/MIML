@@ -1,4 +1,3 @@
-
 class MIMLDataset:
     """"
     Class to manage MIML data obtained from datasets
@@ -193,7 +192,7 @@ class MIMLDataset:
         """
         return len(self.get_bag(key)[0])
 
-    def add_attribute(self, attribute, default_value = 0):
+    def add_attribute(self, attribute, default_value=0):
         """
 
         Parameters
@@ -256,7 +255,7 @@ class MIMLDataset:
         suma = 0
         for key in self.data:
             suma += sum(self.data[key][1])
-        return suma/len(self.data)
+        return suma / len(self.data)
 
     def density(self):
         """
@@ -267,7 +266,7 @@ class MIMLDataset:
         density : float
             Cardinality divived by number of labels
         """
-        return self.cardinality()/self.get_number_labels()
+        return self.cardinality() / self.get_number_labels()
 
     def distinct(self):
         """
@@ -283,10 +282,37 @@ class MIMLDataset:
             options.add(tuple(self.data[key][1]))
         return len(options)
 
+    def get_statistics(self):
+        n_instances = 0
+        max_instances = 0
+        # TODO: Poner infinito
+        min_instances = 100
+        for key in self.data:
+            instances_bag = len(self.data[key][1])
+            n_instances += instances_bag
+            if instances_bag < min_instances:
+                min_instances=instances_bag
+            elif instances_bag > max_instances:
+                max_instances = instances_bag
+        return n_instances, min_instances, max_instances
+
     def describe(self):
         """
         Print statistics about the dataset
         """
+
+        print("-----MULTILABEL-----")
         print("Cardinalidad: ", self.cardinality())
         print("Densidad: ", self.density())
         print("Distinct: ", self.distinct())
+        print("")
+        # TODO: Testearlo
+        n_instances, min_instances, max_instances = self.get_statistics()
+        print("-----MULTIINSTANCE-----")
+        print("Nº of bags; ", self.get_number_bags())
+        print("Total instances: ", n_instances)
+        print("Average Instances per bag: ", n_instances/self.get_number_bags())
+        print("Min Instances per bag: ", min_instances)
+        print("Max Instances per bag: ", max_instances)
+        # TODO: Mirar bien que cuenta
+        #sb.append("\nAttributesPerBag: " + attributesPerBag);
