@@ -3,11 +3,12 @@ import numpy as np
 from data.miml_dataset import MIMLDataset
 
 
+# TODO: Separarlo en clases cada transformacion
 class MultilabelTransformation:
-
     """
     Class that performs a transformation to convert a MIMLDataset class to numpy ndarrays.
     """
+
     def __init__(self, dataset: MIMLDataset, mode="arithmetic"):
         self.dataset = dataset
         self.mode = ""
@@ -35,7 +36,7 @@ class MultilabelTransformation:
             return self.minmax()
 
     def transform_instance(self, key):
-         """
+        """
         Transform the instances of a bag to a multilabel instance
 
         Parameters
@@ -49,10 +50,8 @@ class MultilabelTransformation:
         Tuple of numpy ndarray with attribute values and labels
 
         """
-        # TODO: Implementarlo
-        
 
-        
+    # TODO: Implementarlo
 
     def set_mode(self, mode):
         """
@@ -117,9 +116,9 @@ class MultilabelTransformation:
         y = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_labels()))
         count = 0
         for keys, pattern in self.dataset.data.items():
-            new_instance = np.multiply(pattern[0], axis=0)
-            # TODO: No funciona con valores negativos, opcion de sumar min value
-            new_instance = new_instance ** (1 / pattern[0].shape[0])
+            min_values = np.min(pattern[0], axis=0)
+            max_values = np.max(pattern[0], axis=0)
+            new_instance = (min_values + max_values) / 2
             x[count] = new_instance
             y[count] = pattern[1]
             count += 1
@@ -141,11 +140,11 @@ class MultilabelTransformation:
         Target vector relative to X.
 
         """
-        # TODO: Primer len es get_number_bags()
-        x = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_attributes()))
-        y = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_labels()))
+        x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_attributes()))
+        y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
         for keys, pattern in self.dataset.data.items():
+            # TODO: Cambiar esto, se guardan dos valores (min y max) en cada bolsa
             min_values = np.min(pattern[0], axis=0)
             max_values = np.max(pattern[0], axis=0)
             new_instance = (min_values + max_values) / 2
