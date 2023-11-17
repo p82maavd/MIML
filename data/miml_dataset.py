@@ -301,7 +301,7 @@ class MIMLDataset:
         options = set()
         for key in self.data:
             options.add(tuple(self.data[key][1]))
-        return len(options)
+        return len(options)/(2**self.get_number_labels())
 
     def get_statistics(self):
         n_instances = 0
@@ -310,7 +310,7 @@ class MIMLDataset:
         min_instances = float("inf")
         distribution = dict()
         for key in self.data:
-            instances_bag = len(self.data[key][1])
+            instances_bag = len(self.get_bag(key)[0])
             n_instances += instances_bag
             if instances_bag in distribution:
                 distribution[instances_bag] += 1
@@ -337,7 +337,7 @@ class MIMLDataset:
         # TODO: Testearlo
         n_instances, min_instances, max_instances, distribution = self.get_statistics()
         print("-----MULTIINSTANCE-----")
-        print("Nº of bags; ", self.get_number_bags())
+        print("Nº of bags: ", self.get_number_bags())
         print("Total instances: ", n_instances)
         print("Average Instances per bag: ", n_instances / self.get_number_bags())
         print("Min Instances per bag: ", min_instances)
