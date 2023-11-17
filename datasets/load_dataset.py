@@ -50,7 +50,7 @@ def load_dataset_arff(file):
     """
     dataset = MIMLDataset()
     arff_file = open(file)
-    attribs_name = []
+    attributes_name = []
     labels_name = []
     flag = 0
     for line in arff_file:
@@ -58,7 +58,7 @@ def load_dataset_arff(file):
         # Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
         line = line.lstrip()
 
-        if not line or line.startswith("%"):
+        if not line or line.startswith("%") or line.startswith("@data"):
             continue
 
         if line.startswith("@"):
@@ -70,7 +70,7 @@ def load_dataset_arff(file):
             elif line.startswith("@end bag"):
                 flag = 2
             elif flag == 1:
-                attribs_name.append(line.split(" ")[1])
+                attributes_name.append(line.split(" ")[1])
             elif flag == 2:
                 labels_name.append(line.split(" ")[1])
 
@@ -99,6 +99,6 @@ def load_dataset_arff(file):
 
             dataset.add_bag(key, np.array(values_list), np.array([int(i) for i in labels.split(',')]))
 
-    dataset.set_attributes(attribs_name)
+    dataset.set_attributes(attributes_name)
     dataset.set_labels(labels_name)
     return dataset

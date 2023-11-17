@@ -1,3 +1,6 @@
+from tabulate import tabulate
+
+
 class MIMLDataset:
     """"
     Class to manage MIML data obtained from datasets
@@ -129,6 +132,19 @@ class MIMLDataset:
         """
         self.data[key] = (values, labels)
 
+    def show_bag(self, key):
+        # TODO: Check
+        bag = self.get_bag(key)
+        table = [[key] + self.get_attributes() + (self.get_labels())]
+        count = 0
+        for instance in bag[0]:
+            table.append([count] + list(instance) + (list(bag[1])))
+            count += 1
+        # table = [['col 1', 'col 2', 'col 3', 'col 4'], [1, 2222, 30, 500], [4, 55, 6777, 1]]
+        # print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
+        # print(tabulate([key], tablefmt="grid"))
+        print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
+
     def get_instance(self, key, index):
         """
 
@@ -223,23 +239,29 @@ class MIMLDataset:
         # TODO: Implementarlo
         pass
 
-    def show_dataset(self):
+    def show_dataset(self, head=None, attributes=None, labels=None):
         """"
         Function to show information about the dataset
         """
         # TODO: Formatearlo para que se vea bonito
-        # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas
+        # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
+        #  a mostrar opcionales
         print("Name: ", self.get_name())
         print("Attributes: ", self.get_attributes())
         print("Labels: ", self.get_labels())
         print("Bags:")
-
+        count = 0
         for key in self.data:
-            print("\n")
-            bag = self.get_bag(key)
-            print("Key: ", key)
-            print("Attributes: ", bag[0])
-            print("Labels: ", bag[1])
+            # print("\n")
+            # bag = self.get_bag(key)
+            # print("Key: ", key)
+            # print("Attributes: ", bag[0])
+            # print("Labels: ", bag[1])
+            self.show_bag(key)
+            count += 1
+            if head is not None:
+                if count >= head:
+                    break
             # print(bag)
 
     def cardinality(self):
