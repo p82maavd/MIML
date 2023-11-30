@@ -28,22 +28,25 @@ class BinaryRelevanceTransformation:
         """
         datasets = []
         # TODO: Optimizar
-        x = np.zeros(shape=(self.dataset.get_number_bags(), self.dataset.get_number_attributes()))
-
+        # x = np.zeros(shape=(self.dataset.get_number_bags(), self.dataset.get_number_attributes()))
+        xs = []
         y = np.empty(shape=(self.dataset.get_number_bags(), 1))
-        ys = [y*self.dataset.get_number_labels()]
+        ys = []
+        for i in range(self.dataset.get_number_labels()):
+            ys.append(y)
         count = 0
         for keys, pattern in self.dataset.data.items():
             #print("-------------------")
-            #print(pattern[0])
-            #print(x[count])
-            x[count] = pattern[0]
+            xs.append(pattern[0])
             for i in range(self.dataset.get_number_labels()):
+                # print(pattern[1][i])
+                # print(ys)
                 ys[i][count] = pattern[1][i]
             count += 1
+        #xs = np.array(xs)
 
         for i in ys:
-            datasets.append([x, i])
+            datasets.append([xs, i])
 
         return datasets
 

@@ -8,14 +8,12 @@ from transformation.mimlTOml.arithmetic import ArithmeticTransformation
 dataset_train = load_dataset("../datasets/miml_birds_random_80train.arff", delimiter="'")
 dataset_test = load_dataset("../datasets/miml_birds_random_20test.arff", delimiter="'")
 
-
-# binaryrelevance = BinaryRelevanceTransformation(dataset)
-# datasets = binaryrelevance.transform_dataset()
-
 arithmetic_transformation_train = ArithmeticTransformation(dataset_train)
 arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
+
 X_train, y_train = arithmetic_transformation_train.transform_dataset()
 X_test, y_test = arithmetic_transformation_test.transform_dataset()
+
 classifier = MultiOutputClassifier(RandomForestClassifier(random_state=27))
 classifier.fit(X_train, y_train)
 
