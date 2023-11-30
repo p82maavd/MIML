@@ -1,3 +1,4 @@
+import numpy as np
 from tabulate import tabulate
 
 
@@ -130,7 +131,7 @@ class MIMLDataset:
         labels: ndarray
             Labels of the bag
         """
-        self.data[key] = (values, labels)
+        self.data[key] = [values, labels]
 
     def show_bag(self, key):
         # TODO: Check
@@ -163,7 +164,7 @@ class MIMLDataset:
 
         """
         # TODO: check
-        return (self.get_bag(key)[0][index], self.get_bag(key)[1])
+        return [self.get_bag(key)[0][index], self.get_bag(key)[1]]
 
     def add_instance(self, key, values):
         """
@@ -176,9 +177,10 @@ class MIMLDataset:
             Values of the instance to be inserted
 
         """
-        # TODO: Ver si se puede hacer con las tuplas, sino ver si hay algun problema por cambiarlas a lista
-        instance = (values, self.get_bag(key)[1])
-        # TODO: Ver como incluirlo en la tupla actual
+
+        instance = np.array(values,ndmin=2)
+        self.data[key] = [np.append(self.get_bag(key)[0], instance, axis=0),self.data[key][1]]
+        # TODO: Optimizarlo
 
     def get_number_bags(self):
         """

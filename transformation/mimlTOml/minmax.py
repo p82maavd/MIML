@@ -57,7 +57,3 @@ class MinMaxTransformation:
         """
 
     # TODO: Implementarlo
-
-
-
-
