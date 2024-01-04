@@ -33,7 +33,7 @@ class BinaryRelevanceTransformation:
         y = np.empty(shape=(self.dataset.get_number_bags(), 1))
         ys = []
         for i in range(self.dataset.get_number_labels()):
-            ys.append(y)
+            ys.append(y.copy())
         count = 0
         for keys, pattern in self.dataset.data.items():
             #print("-------------------")

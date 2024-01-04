@@ -2,9 +2,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, hamming_loss
 from sklearn.multioutput import MultiOutputClassifier
 
+from classifier.knn_classifier import KNNClassifier
 from datasets.load_dataset import load_dataset
 from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
-
 
 dataset_train = load_dataset("../datasets/miml_birds_random_80train.arff", delimiter="'")
 dataset_test = load_dataset("../datasets/miml_birds_random_20test.arff", delimiter="'")
@@ -17,20 +17,21 @@ datasets_test = binary_relevance_test.transform_dataset()
 
 classifiers = []
 
-for x in range(dataset_train.get_number_labels()):
-    classifier = MultiOutputClassifier(RandomForestClassifier(random_state=27))
-    print(datasets_train[x][1])
-    classifier.fit(datasets_train[x][0], datasets_train[x][1])
-    classifiers.append(classifier)
+for i in range(len(datasets_train)):
+    knn_classifier = KNNClassifier(k=5)
+    print("Train attrib: ", datasets_train[i][0])
+    print("Train labels: ", datasets_train[i][1])
+    knn_classifier.train(datasets_train[i][0], datasets_train[i][1])
+    classifiers.append(knn_classifier)
 
-# Predicciones
-y_preds=[]
-y_tests=[]
-for x in range(dataset_train.get_number_labels()):
-
-    y_pred = classifiers[x].predict(datasets_test[x][0])
+y_preds = []
+y_tests = []
+for i in range(dataset_train.get_number_labels()):
+    y_pred = []
+    for j in range(len(datasets_train[i][0])):
+        y_pred.append(classifiers[i].predict(datasets_test[i][0][j]))
     y_preds.append(y_pred)
-    y_tests.append(datasets_test[x][1])
+    y_tests.append(datasets_test[i][1])
 
 # Evaluación del modelo
 print("Reporte de clasificación:\n", classification_report(y_tests, y_preds, zero_division=0))
