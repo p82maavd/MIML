@@ -178,8 +178,8 @@ class MIMLDataset:
 
         """
 
-        instance = np.array(values,ndmin=2)
-        self.data[key] = [np.append(self.get_bag(key)[0], instance, axis=0),self.data[key][1]]
+        instance = np.array(values, ndmin=2)
+        self.data[key] = [np.append(self.get_bag(key)[0], instance, axis=0), self.data[key][1]]
         # TODO: Optimizarlo
 
     def get_number_bags(self):
@@ -194,53 +194,26 @@ class MIMLDataset:
         return len(self.data)
 
     def get_number_instances(self, key):
-        """
-        Get numbers of instances of a bag
 
-        Parameters
-        ----------
-        key : string
-            Key of the bag
-
-        Returns
-        ----------
-        numbers of instances: int
-            Numbers of instances of a bag
-        """
-        return len(self.get_bag(key)[0])
-
-    def add_attribute(self, attribute, default_value=0):
-        """
-
-        Parameters
-        ----------
-        attribute : string
-            Name of the attribute to be added
-            
-        default_value : int
-            Default value to be inserted in new attribute column as placeholder
-
-        """
-        # TODO: Implementarlo
-
-    def set_attribute(self, key, attribute, value):
-        """
-        Update value from attributes
-
-        Parameters
-        ----------
-        key : string
-            Bag key of the dataset
-
-        attribute: string
-            Attribute of the dataset
-
-        value: float
-            New value for the update
-        """
-        # TODO: Implementarlo
+        #for x in all bags: sum of x.get_number_instances
         pass
+    def set_attribute(self, key, attribute, value):
+            """
+            Update value from attributes
 
+            Parameters
+            ----------
+            key : string
+                Bag key of the dataset
+
+            attribute: string
+                Attribute of the dataset
+
+            value: float
+                New value for the update
+            """
+            # TODO: Implementarlo
+            pass
     def show_dataset(self, head=None, attributes=None, labels=None):
         """"
         Function to show information about the dataset
