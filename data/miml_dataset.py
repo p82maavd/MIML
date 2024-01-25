@@ -1,6 +1,8 @@
 import numpy as np
 from tabulate import tabulate
 
+from data.bag import Bag
+
 
 class MIMLDataset:
     """"
@@ -116,22 +118,17 @@ class MIMLDataset:
         # TODO: Hacerlo quizas en funcion print_bag
         return self.data[key]
 
-    def add_bag(self, key, values, labels):
+    def add_bag(self, bag: Bag):
         """
         Add a bag to the dataset
 
         Parameters
         ----------
-        key : string
-            Key of the bag
+        bag : Bag
+            Bag to be added
 
-        values: ndarray
-            Values of attributes of the bag
-
-        labels: ndarray
-            Labels of the bag
         """
-        self.data[key] = [values, labels]
+        self.data[bag.key] = bag
 
     def show_bag(self, key):
         # TODO: Check

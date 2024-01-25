@@ -1,6 +1,8 @@
 import numpy as np
 import os
 
+from data.bag import Bag
+from data.instance import Instance
 from data.miml_dataset import MIMLDataset
 
 
@@ -42,26 +44,36 @@ def load_dataset_csv(file, header=0):
     file_name = os.path.basename(file)
     dataset.set_name(os.path.splitext(file_name)[0])
 
+    # TODO: Hacer que se pueda pasar por parametro
     num_labels = int(csv_file.readline().replace("\n", ""))
 
     header_line = csv_file.readline().replace("\n", "").split(",")
     attributes_name = header_line[1:-num_labels]
-    dataset.set_attributes(attributes_name)
+    # dataset.set_attributes(attributes_name)
     labels_name = header_line[-num_labels:]
-    dataset.set_labels(labels_name)
+    # dataset.set_labels(labels_name)
+    attributes = dict()
+    for x in attributes_name:
+        attributes[x] = 0
+    for y in labels_name:
+        attributes[y] = 1
 
     for line in csv_file:
 
         data = line.split(",")
 
         key = data[0]
+
         values = np.array([float(i) for i in data[1:-num_labels]], ndmin=2)
         labels = np.array([int(i) for i in data[-num_labels:]])
 
+        instance = Instance(values + labels, attributes)
+
         if key not in dataset.data:
-            dataset.add_bag(key, values, labels)
+            bag = Bag(instance, key)
+            dataset.add_bag(bag)
         else:
-            dataset.add_instance(key, values)
+            dataset.get_bag(key).add_instance(instance)
 
     return dataset
 
