@@ -3,9 +3,9 @@ import numpy as np
 from data.miml_dataset import MIMLDataset
 
 
-class GeometricTransformation:
+class MinMaxTransformation:
     """
-    Class that performs a geometric transformation to convert a MIMLDataset class to numpy ndarrays.
+    Class that performs a minmax transformation to convert a MIMLDataset class to numpy ndarrays.
     """
 
     def __init__(self, dataset: MIMLDataset):
@@ -13,8 +13,8 @@ class GeometricTransformation:
 
     def transform_dataset(self):
         """
-        Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
-        attribute the geometric center of the instances in the bag.
+        Transform the dataset to multilabel dataset converting each bag into a single instance with the min and max
+        value of each attribute as two new attributes.
 
         Returns
         -------
@@ -27,16 +27,16 @@ class GeometricTransformation:
 
         """
 
-        x = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_attributes()))
+        x = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_attributes() * 2))
         y = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_labels()))
         count = 0
         for keys, pattern in self.dataset.data.items():
             min_values = np.min(pattern[0], axis=0)
             max_values = np.max(pattern[0], axis=0)
-            new_instance = (min_values + max_values) / 2
-            x[count] = new_instance
+            x[count] = min_values
+            x[count + 1] = max_values
             y[count] = pattern[1]
-            count += 1
+            count += 2
 
         return x, y
 
@@ -57,7 +57,3 @@ class GeometricTransformation:
         """
 
     # TODO: Implementarlo
-
-
-
-

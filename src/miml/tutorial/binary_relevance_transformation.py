@@ -1,6 +1,4 @@
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, hamming_loss
-from sklearn.multioutput import MultiOutputClassifier
 
 from classifier.knn_classifier import KNNClassifier
 from datasets.load_dataset import load_dataset

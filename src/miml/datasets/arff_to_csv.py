@@ -1,5 +1,3 @@
-
-
 def arff_to_csv(file, delimiter="'"):
     """
     Convert MIML Arff to CSV.

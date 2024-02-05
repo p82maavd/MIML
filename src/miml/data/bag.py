@@ -1,8 +1,6 @@
 import numpy as np
 from tabulate import tabulate
 
-from data.instance import Instance
-
 
 class Bag:
 

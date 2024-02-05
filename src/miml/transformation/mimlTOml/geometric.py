@@ -3,9 +3,9 @@ import numpy as np
 from data.miml_dataset import MIMLDataset
 
 
-class ArithmeticTransformation:
+class GeometricTransformation:
     """
-    Class that performs an arithmetic transformation to convert a MIMLDataset class to numpy ndarrays.
+    Class that performs a geometric transformation to convert a MIMLDataset class to numpy ndarrays.
     """
 
     def __init__(self, dataset: MIMLDataset):
@@ -14,7 +14,7 @@ class ArithmeticTransformation:
     def transform_dataset(self):
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
-        attribute the mean value of the instances in the bag.
+        attribute the geometric center of the instances in the bag.
 
         Returns
         -------
@@ -26,12 +26,14 @@ class ArithmeticTransformation:
         Target vector relative to X.
 
         """
-        x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_attributes()))
-        y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
+
+        x = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_attributes()))
+        y = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_labels()))
         count = 0
         for keys, pattern in self.dataset.data.items():
-            new_instance = np.sum(pattern[0], axis=0)
-            new_instance /= pattern[0].shape[0]
+            min_values = np.min(pattern[0], axis=0)
+            max_values = np.max(pattern[0], axis=0)
+            new_instance = (min_values + max_values) / 2
             x[count] = new_instance
             y[count] = pattern[1]
             count += 1
@@ -55,7 +57,3 @@ class ArithmeticTransformation:
         """
 
     # TODO: Implementarlo
-
-
-
-

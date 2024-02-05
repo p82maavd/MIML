@@ -36,14 +36,14 @@ class BinaryRelevanceTransformation:
             ys.append(y.copy())
         count = 0
         for keys, pattern in self.dataset.data.items():
-            #print("-------------------")
+            # print("-------------------")
             xs.append(pattern[0])
             for i in range(self.dataset.get_number_labels()):
                 # print(pattern[1][i])
                 # print(ys)
                 ys[i][count] = pattern[1][i]
             count += 1
-        #xs = np.array(xs)
+        # xs = np.array(xs)
 
         for i in ys:
             datasets.append([xs, i])

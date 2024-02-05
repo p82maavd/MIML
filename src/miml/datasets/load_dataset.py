@@ -1,5 +1,6 @@
-import numpy as np
 import os
+
+import numpy as np
 
 from data.bag import Bag
 from data.instance import Instance
@@ -49,14 +50,9 @@ def load_dataset_csv(file, header=0):
 
     header_line = csv_file.readline().replace("\n", "").split(",")
     attributes_name = header_line[1:-num_labels]
-    # dataset.set_attributes(attributes_name)
+    dataset.set_attributes(attributes_name)
     labels_name = header_line[-num_labels:]
-    # dataset.set_labels(labels_name)
-    attributes = dict()
-    for x in attributes_name:
-        attributes[x] = 0
-    for y in labels_name:
-        attributes[y] = 1
+    dataset.set_labels(labels_name)
 
     for line in csv_file:
 
@@ -67,7 +63,7 @@ def load_dataset_csv(file, header=0):
         values = np.array([float(i) for i in data[1:-num_labels]], ndmin=2)
         labels = np.array([int(i) for i in data[-num_labels:]])
 
-        instance = Instance(values + labels, attributes)
+        instance = Instance(values + labels)
 
         if key not in dataset.data:
             bag = Bag(instance, key)
@@ -86,6 +82,8 @@ def load_dataset_arff(file, delimiter="\""):
     ----------
     file : string
         Path of the dataset file
+    delimiter : str
+        Delimiter of instances in a bag in the arff file
     """
     dataset = MIMLDataset()
     arff_file = open(file)
@@ -119,24 +117,28 @@ def load_dataset_arff(file, delimiter="\""):
 
             # Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
             key = line[0:line.find(",")]
-            # print("Key: ", key)
 
             # Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
             line = line[line.find(delimiter) + 1:]
             values = line[:line.find(delimiter, 2)]
             # Separamos los valores por instancias de la bolsa
             values = values.split("\\n")
-            # print("Values ", values)
 
             # El resto de la cadena se trata de las etiquetas
             labels = line[line.find(delimiter, 2) + 2:]
+            labels_values = np.array([int(i) for i in labels.split(",")], ndmin=2)
             # print("Labels: ", labels)
 
             values_list = []
             for v in values:
-                values_list.append(np.array([float(i) for i in v.split(',')]))
+                values_instance = np.array([float(i) for i in v.split(',')], ndmin=2)
+                instance = Instance(np.hstack((values_instance, labels_values)))
 
-            dataset.add_bag(key, np.array(values_list), np.array([int(i) for i in labels.split(',')]))
+                if key not in dataset.data:
+                    bag = Bag(instance, key)
+                    dataset.add_bag(bag)
+                else:
+                    dataset.get_bag(key).add_instance(instance)
 
     dataset.set_attributes(attributes_name)
     dataset.set_labels(labels_name)

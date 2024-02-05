@@ -5,7 +5,6 @@ from sklearn.multioutput import MultiOutputClassifier
 from datasets.load_dataset import load_dataset
 from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
 
-
 dataset_train = load_dataset("../datasets/miml_birds_random_80train.arff", delimiter="'")
 dataset_test = load_dataset("../datasets/miml_birds_random_20test.arff", delimiter="'")
 
@@ -24,10 +23,9 @@ for x in range(dataset_train.get_number_labels()):
     classifiers.append(classifier)
 
 # Predicciones
-y_preds=[]
-y_tests=[]
+y_preds = []
+y_tests = []
 for x in range(dataset_train.get_number_labels()):
-
     y_pred = classifiers[x].predict(datasets_test[x][0])
     y_preds.append(y_pred)
     y_tests.append(datasets_test[x][1])

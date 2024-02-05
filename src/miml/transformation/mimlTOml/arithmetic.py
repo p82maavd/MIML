@@ -3,9 +3,9 @@ import numpy as np
 from data.miml_dataset import MIMLDataset
 
 
-class MinMaxTransformation:
+class ArithmeticTransformation:
     """
-    Class that performs a minmax transformation to convert a MIMLDataset class to numpy ndarrays.
+    Class that performs an arithmetic transformation to convert a MIMLDataset class to numpy ndarrays.
     """
 
     def __init__(self, dataset: MIMLDataset):
@@ -13,8 +13,8 @@ class MinMaxTransformation:
 
     def transform_dataset(self):
         """
-        Transform the dataset to multilabel dataset converting each bag into a single instance with the min and max
-        value of each attribute as two new attributes.
+        Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
+        attribute the mean value of the instances in the bag.
 
         Returns
         -------
@@ -26,17 +26,17 @@ class MinMaxTransformation:
         Target vector relative to X.
 
         """
-
-        x = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_attributes()*2))
-        y = np.empty(shape=(len(self.dataset.data.keys()), self.dataset.get_number_labels()))
+        x = np.empty(shape=(
+            self.dataset.get_number_bags(), self.dataset.get_number_attributes() - self.dataset.get_number_labels()))
+        y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
         for keys, pattern in self.dataset.data.items():
-            min_values = np.min(pattern[0], axis=0)
-            max_values = np.max(pattern[0], axis=0)
-            x[count] = min_values
-            x[count+1] = max_values
-            y[count] = pattern[1]
-            count += 2
+            values = pattern.data[0:, 0:self.dataset.get_number_attributes() - self.dataset.get_number_labels()]
+            labels = pattern.data[0:, self.dataset.get_number_attributes() - self.dataset.get_number_labels():]
+            new_instance = np.mean(values, axis=0)
+            x[count] = new_instance
+            y[count] = labels[0]
+            count += 1
 
         return x, y
 

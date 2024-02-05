@@ -13,8 +13,7 @@ class MIMLDataset:
 
         # TODO: Si dataset leido en csv, el nombre poner el del archivo
         self.name = "undefined"
-        self.attributes = []
-        self.labels = []
+        self.attributes = dict()
         self.data = dict()
 
     def set_name(self, name):
@@ -103,7 +102,11 @@ class MIMLDataset:
         numbers of labels: int
             Numbers of labels of the dataset
         """
-        return len(self.labels)
+        count = 0
+        for x in self.attributes.keys():
+            if self.attributes[x] == 1:
+                count += 1
+        return count
 
     def get_bag(self, key):
         """
@@ -192,10 +195,11 @@ class MIMLDataset:
 
     def get_number_instances(self, key):
 
-        #for x in all bags: sum of x.get_number_instances
+        # for x in all bags: sum of x.get_number_instances
         pass
+
     def set_attribute(self, key, attribute, value):
-            """
+        """
             Update value from attributes
 
             Parameters
@@ -209,8 +213,9 @@ class MIMLDataset:
             value: float
                 New value for the update
             """
-            # TODO: Implementarlo
-            pass
+        # TODO: Implementarlo
+        pass
+
     def show_dataset(self, head=None, attributes=None, labels=None):
         """"
         Function to show information about the dataset
@@ -225,11 +230,11 @@ class MIMLDataset:
         count = 0
         for key in self.data:
             # print("\n")
-            # bag = self.get_bag(key)
+            bag = self.get_bag(key)
             # print("Key: ", key)
             # print("Attributes: ", bag[0])
             # print("Labels: ", bag[1])
-            self.show_bag(key)
+            bag.show_bag()
             count += 1
             if head is not None:
                 if count >= head:
@@ -273,7 +278,7 @@ class MIMLDataset:
         options = set()
         for key in self.data:
             options.add(tuple(self.data[key][1]))
-        return len(options)/(2**self.get_number_labels())
+        return len(options) / (2 ** self.get_number_labels())
 
     def get_statistics(self):
         n_instances = 0

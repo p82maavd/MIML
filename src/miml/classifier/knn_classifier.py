@@ -1,5 +1,5 @@
-from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
 
 import classifier.abstract_classifier
 
@@ -15,7 +15,8 @@ class KNNClassifier(classifier.abstract_classifier.AbstractClassifier):
         self.model.fit(training_data, training_labels)
 
     def predict(self, test_data):
-        return self.model.predict(test_data)
+        predictions=[]
+        return predictions
 
     def evaluate(self, test_data, test_labels):
         predictions = self.predict(test_data)
