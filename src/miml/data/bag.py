@@ -1,4 +1,5 @@
 import numpy as np
+from data.instance import Instance
 from tabulate import tabulate
 
 
@@ -8,7 +9,7 @@ class Bag:
         # Crear numpy ndarray 3d con una instancia
         self.data = np.array(instance.data)
         self.key = key
-        self.attributes = instance.attributes
+        self.dataset = None
 
     def get_number_instances(self):
         """
@@ -42,10 +43,15 @@ class Bag:
             Tuple with attribute values and label of the instance
 
         """
-        pass
+        instance = Instance(self.data[index], self)
+        return instance
 
     def get_attributes(self):
-        return list(self.attributes.keys())
+        if self.dataset is not None:
+            return self.dataset.get_attributes()
+        else:
+            # TODO: Control de errores
+            return 0
 
     def add_instance(self, instance):
         """
@@ -67,7 +73,9 @@ class Bag:
             position = len(self.data)
         pass
 
-    def set_attribute(self, index, value):
+    # TODO: Terminar funcion
+
+    def set_attribute(self, index, attribute, value):
         """
         Update value from attributes
 
@@ -82,7 +90,7 @@ class Bag:
         value: float
             New value for the update
         """
-        pass
+        self.data[index][attribute] = value
 
     def set_attribute(self, name, value):
         pass
@@ -95,6 +103,9 @@ class Bag:
 
     def delete_attribute(self, name):
         pass
+
+    def set_dataset(self,dataset):
+        self.dataset=dataset
 
     def show_bag(self):
         # TODO: Check

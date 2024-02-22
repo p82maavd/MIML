@@ -131,6 +131,7 @@ class MIMLDataset:
             Bag to be added
 
         """
+        bag.set_dataset(self)
         self.data[bag.key] = bag
 
     def show_bag(self, key):

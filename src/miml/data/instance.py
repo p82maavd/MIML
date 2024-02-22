@@ -4,35 +4,35 @@ from tabulate import tabulate
 
 class Instance:
 
-    def __init__(self, values, attributes: dict = None):
-        self.dataset = None
+    def __init__(self, values, bag=None):
+        self.bag = bag
         self.data = np.array(values)
         # TODO: Estructura que almacene la informacion de los atributos(nombre, si es label, etc)
 
     def get_number_attributes(self):
-        if self.dataset is not None:
-            return self.dataset.get_number_attributes()
+        if self.bag is not None:
+            return self.bag.get_number_attributes()
         else:
             # TODO: Control de errores
             return 0
 
     def get_attributes(self):
-        if self.dataset is not None:
-            return self.dataset.get_attributes()
+        if self.bag is not None:
+            return self.bag.get_attributes()
         else:
             # TODO: Control de errores
             return 0
 
     def get_number_classes(self):
-        if self.dataset is not None:
-            return self.dataset.get_number_classes()
+        if self.bag is not None:
+            return self.bag.get_number_classes()
         else:
             # TODO: Control de errores
             return 0
 
     def get_classes(self):
-        if self.dataset is not None:
-            return self.dataset.get_classes()
+        if self.bag is not None:
+            return self.bag.get_classes()
         else:
             # TODO: Control de errores
             return 0
@@ -41,9 +41,8 @@ class Instance:
         return self.data.item(index)
 
     def get_attribute_by_name(self, attribute: str):
-        index = list(self.dataset.get_attributes()).index(attribute)
+        index = list(self.bag.get_attributes()).index(attribute)
         return self.data.item(index)
-
 
     def set_attribute_by_index(self, index: int, value):
         self.data[index] = value
@@ -52,11 +51,11 @@ class Instance:
         index = list(self.get_attributes()).index(attribute)
         self.data[index] = value
 
-    def set_dataset(self, dataset):
-        self.dataset = dataset
+    def set_bag(self, bag):
+        self.bag = bag
 
     def add_attribute(self, value=0, position=None):
-        if self.dataset is None:
+        if self.bag is None:
             if position is None:
                 position = len(self.data)
             self.data = np.insert(self.data, position, value)
@@ -66,8 +65,8 @@ class Instance:
 
     def delete_attribute(self, position):
         # TODO: Check
-        if self.dataset is None:
-            self.data = np.delete(self.data,position)
+        if self.bag is None:
+            self.data = np.delete(self.data, position)
         else:
             # TODO: Control de errores
             pass
