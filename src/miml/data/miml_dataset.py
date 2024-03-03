@@ -2,6 +2,7 @@ import numpy as np
 from tabulate import tabulate
 
 from data.bag import Bag
+from data.instance import Instance
 
 
 class MIMLDataset:
@@ -47,7 +48,12 @@ class MIMLDataset:
         attributes : List of string
             List of the attributes name of the dataset
         """
-        self.attributes = attributes
+        if len(self.attributes) != 0:
+            for attribute in self.attributes.keys():
+                if self.attributes[attribute] == 0:
+                    self.attributes.pop(attribute)
+        for attribute in attributes:
+            self.attributes[attribute] = 0
 
     def get_attributes(self):
         """
@@ -58,7 +64,11 @@ class MIMLDataset:
         attributes : List of strings
             Attributes name of the dataset
         """
-        return self.attributes
+        attributes = []
+        for attribute in self.attributes.keys():
+            if self.attributes[attribute] == 0:
+                attributes.append(attribute)
+        return attributes
 
     def get_number_attributes(self):
         """
@@ -69,7 +79,8 @@ class MIMLDataset:
          numbers of attributes: int
             Numbers of attributes of the dataset
         """
-        return len(self.attributes)
+
+        return len(self.get_attributes())
 
     def set_labels(self, labels):
         """
@@ -80,7 +91,12 @@ class MIMLDataset:
         labels: List of string
             List of the labels name of the dataset
         """
-        self.labels = labels
+        if len(self.attributes) != 0:
+            for attribute in self.attributes.keys():
+                if self.attributes[attribute] == 1:
+                    self.attributes.pop(attribute)
+        for label in labels:
+            self.attributes[label] = 1
 
     def get_labels(self):
         """
@@ -91,7 +107,11 @@ class MIMLDataset:
         labels : List of strings
             Labels name of the dataset
         """
-        return self.labels
+        labels = []
+        for attribute in self.attributes.keys():
+            if self.attributes[attribute] == 1:
+                labels.append(attribute)
+        return labels
 
     def get_number_labels(self):
         """
@@ -102,11 +122,8 @@ class MIMLDataset:
         numbers of labels: int
             Numbers of labels of the dataset
         """
-        count = 0
-        for x in self.attributes.keys():
-            if self.attributes[x] == 1:
-                count += 1
-        return count
+
+        return len(self.get_labels())
 
     def get_bag(self, key):
         """
@@ -117,8 +134,7 @@ class MIMLDataset:
         bag: ndarray
             Attributes and labels of a bag of the dataset
         """
-        # TODO: Formatearlo para que se vea bonito
-        # TODO: Hacerlo quizas en funcion print_bag
+
         return self.data[key]
 
     def add_bag(self, bag: Bag):
@@ -134,19 +150,6 @@ class MIMLDataset:
         bag.set_dataset(self)
         self.data[bag.key] = bag
 
-    def show_bag(self, key):
-        # TODO: Check
-        bag = self.get_bag(key)
-        table = [[key] + self.get_attributes() + (self.get_labels())]
-        count = 0
-        for instance in bag[0]:
-            table.append([count] + list(instance) + (list(bag[1])))
-            count += 1
-        # table = [['col 1', 'col 2', 'col 3', 'col 4'], [1, 2222, 30, 500], [4, 55, 6777, 1]]
-        # print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
-        # print(tabulate([key], tablefmt="grid"))
-        print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
-
     def get_instance(self, key, index):
         """
 
@@ -160,12 +163,12 @@ class MIMLDataset:
 
         Returns
         -------
-        instance : tuple of ndarrays
-            Tuple with attribute values and label of the instance
+        instance : Instance
+            Instance
 
         """
         # TODO: check
-        return [self.get_bag(key)[0][index], self.get_bag(key)[1]]
+        return self.get_bag(key).get_instance(index)
 
     def add_instance(self, key, values):
         """
@@ -178,10 +181,8 @@ class MIMLDataset:
             Values of the instance to be inserted
 
         """
-
-        instance = np.array(values, ndmin=2)
-        self.data[key] = [np.append(self.get_bag(key)[0], instance, axis=0), self.data[key][1]]
-        # TODO: Optimizarlo
+        instance = Instance(values)
+        self.get_bag(key).add_instance(instance)
 
     def get_number_bags(self):
         """
@@ -194,12 +195,11 @@ class MIMLDataset:
         """
         return len(self.data)
 
-    def get_number_instances(self, key):
+    def get_number_instances(self):
 
-        # for x in all bags: sum of x.get_number_instances
-        pass
+        return sum(self.data[bag].get_number_instances() for bag in self.data.keys())
 
-    def set_attribute(self, key, attribute, value):
+    def set_attribute(self, key, index, attribute, value):
         """
             Update value from attributes
 
@@ -208,14 +208,15 @@ class MIMLDataset:
             key : string
                 Bag key of the dataset
 
-            attribute: string
+            attribute: int
                 Attribute of the dataset
 
             value: float
                 New value for the update
             """
-        # TODO: Implementarlo
-        pass
+        
+        self.get_instance(key, index).set_attribute_by_index(attribute, value)
+
 
     def show_dataset(self, head=None, attributes=None, labels=None):
         """"
