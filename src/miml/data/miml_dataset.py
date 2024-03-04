@@ -1,8 +1,5 @@
-import numpy as np
-from tabulate import tabulate
 
-from data.bag import Bag
-from data.instance import Instance
+from src.miml.data.bag import Bag
 
 
 class MIMLDataset:
@@ -234,7 +231,7 @@ class MIMLDataset:
         self.get_instance(key, index).set_attribute_by_index(attribute, value)
 
     def show_dataset(self, head=None, attributes=None, labels=None):
-        """"
+        """
         Function to show information about the dataset
 
         Parameters
