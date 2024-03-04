@@ -69,7 +69,7 @@ def load_dataset_csv(file, header=0):
             bag = Bag(instance, key)
             dataset.add_bag(bag)
         else:
-            dataset.get_bag(key).add_instance(instance)
+            dataset.add_instance(key, instance)
 
     return dataset
 
@@ -138,7 +138,7 @@ def load_dataset_arff(file, delimiter="\""):
                     bag = Bag(instance, key)
                     dataset.add_bag(bag)
                 else:
-                    dataset.get_bag(key).add_instance(instance)
+                    dataset.add_instance(key, instance)
 
     dataset.set_attributes(attributes_name)
     dataset.set_labels(labels_name)

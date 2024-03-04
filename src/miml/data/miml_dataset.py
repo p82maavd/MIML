@@ -11,6 +11,10 @@ class MIMLDataset:
     """
 
     def __init__(self) -> None:
+        """
+        Constructor of the class MIMLDataset
+
+        """
 
         # TODO: Si dataset leido en csv, el nombre poner el del archivo
         self.name = "undefined"
@@ -61,7 +65,7 @@ class MIMLDataset:
 
         Returns
         ----------
-        attributes : List of strings
+        attributes : List of string
             Attributes name of the dataset
         """
         attributes = []
@@ -104,7 +108,7 @@ class MIMLDataset:
 
         Returns
         ----------
-        labels : List of strings
+        labels : List of string
             Labels name of the dataset
         """
         labels = []
@@ -131,8 +135,8 @@ class MIMLDataset:
 
         Returns
         ----------
-        bag: ndarray
-            Attributes and labels of a bag of the dataset
+        bag: Bag
+            Instance of Bag class
         """
 
         return self.data[key]
@@ -144,7 +148,7 @@ class MIMLDataset:
         Parameters
         ----------
         bag : Bag
-            Bag to be added
+            Instance of Bag class to be added
 
         """
         bag.set_dataset(self)
@@ -152,6 +156,7 @@ class MIMLDataset:
 
     def get_instance(self, key, index):
         """
+        Get an Instance of the dataset
 
         Parameters
         ----------
@@ -164,24 +169,24 @@ class MIMLDataset:
         Returns
         -------
         instance : Instance
-            Instance
+            Instance of Instance class
 
         """
         # TODO: check
         return self.get_bag(key).get_instance(index)
 
-    def add_instance(self, key, values):
+    def add_instance(self, key, instance):
         """
 
         Parameters
         ----------
         key : string
-            Key of the bag
-        values : ndarray
-            Values of the instance to be inserted
+            Key of the bag where the instance will be added
+        instance : Instance
+            Instance of Instance class to be added
 
         """
-        instance = Instance(values)
+
         self.get_bag(key).add_instance(instance)
 
     def get_number_bags(self):
@@ -196,17 +201,28 @@ class MIMLDataset:
         return len(self.data)
 
     def get_number_instances(self):
+        """
+        Get numbers of instances of the dataset
+
+        Returns
+        ----------
+        numbers of instances: int
+            Numbers of instances of the dataset
+        """
 
         return sum(self.data[bag].get_number_instances() for bag in self.data.keys())
 
     def set_attribute(self, key, index, attribute, value):
         """
-            Update value from attributes
+        Update value from attributes
 
             Parameters
             ----------
             key : string
                 Bag key of the dataset
+
+            index : int
+                Index of the instance
 
             attribute: int
                 Attribute of the dataset
@@ -217,10 +233,20 @@ class MIMLDataset:
 
         self.get_instance(key, index).set_attribute_by_index(attribute, value)
 
-
     def show_dataset(self, head=None, attributes=None, labels=None):
         """"
         Function to show information about the dataset
+
+        Parameters
+        ----------
+            head : int
+                Number of the nth firsts bag to show
+
+            attributes: List of string
+                Attributes to show
+
+            labels : List of string
+                Labels to show
         """
         # TODO: Formatearlo para que se vea bonito
         # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
@@ -241,7 +267,6 @@ class MIMLDataset:
             if head is not None:
                 if count >= head:
                     break
-            # print(bag)
 
     def cardinality(self):
         """
