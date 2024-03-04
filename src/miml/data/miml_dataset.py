@@ -289,7 +289,7 @@ class MIMLDataset:
         Returns
         ----------
         density : float
-            Cardinality divived by number of labels
+            Cardinality divided by number of labels
         """
         return self.cardinality() / self.get_number_labels()
 
@@ -308,14 +308,30 @@ class MIMLDataset:
         return len(options) / (2 ** self.get_number_labels())
 
     def get_statistics(self):
-        n_instances = 0
+        """
+        Calculate statistics of the dataset
+
+        Returns
+        -------
+        n_instances : int
+            Numbers of instances of the dataset
+
+        min_instances : int
+            Number of instances in the bag with minimum number of instances
+
+        max_instances : int
+            Number of instances in the bag with maximum number of instances
+
+        distribution : dict
+            Distribution of number of instances in bags
+        """
+        n_instances = self.get_number_instances()
         max_instances = 0
         # TODO: check
         min_instances = float("inf")
         distribution = dict()
         for key in self.data:
-            instances_bag = len(self.get_bag(key)[0])
-            n_instances += instances_bag
+            instances_bag = self.get_bag(key).get_number_instances()
             if instances_bag in distribution:
                 distribution[instances_bag] += 1
             else:

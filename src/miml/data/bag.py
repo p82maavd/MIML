@@ -26,6 +26,7 @@ class Bag:
             Numbers of instances of a bag
 
         """
+        # TODO: Revisar
         return len(self.data)
 
     def get_instance(self, index):
