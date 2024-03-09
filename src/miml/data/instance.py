@@ -3,56 +3,92 @@ from tabulate import tabulate
 
 
 class Instance:
+    """
+    Class to manage MIML Instance data representation
+    """
 
-    def __init__(self, values, bag=None):
+    def __init__(self, values=None, bag=None):
+        """
+        Constructor of the class Instance
+        """
         self.bag = bag
         self.data = np.array(values)
-        # TODO: Estructura que almacene la informacion de los atributos(nombre, si es label, etc)
-
-    def get_number_attributes(self):
-        if self.bag is not None:
-            return self.bag.get_number_attributes()
-        else:
-            # TODO: Control de errores
-            return 0
 
     def get_attributes(self):
+        """
+        Get attributes name
+
+        Returns
+        ----------
+        attributes : List of string
+            Attributes name of the instance
+        """
         if self.bag is not None:
             return self.bag.get_attributes()
         else:
             # TODO: Control de errores
             return 0
 
-    def get_number_classes(self):
+    def get_number_attributes(self):
+        """
+        Get numbers of attributes of the instance
+
+        Returns
+        ----------
+         numbers of attributes: int
+            Numbers of attributes of the bag
+        """
         if self.bag is not None:
-            return self.bag.get_number_classes()
+            return self.bag.get_number_attributes()
         else:
             # TODO: Control de errores
             return 0
 
-    def get_classes(self):
+    def get_labels(self):
+        """
+        Get labels name
+
+        Returns
+        ----------
+        labels : List of string
+            Labels name of the instance
+        """
         if self.bag is not None:
-            return self.bag.get_classes()
+            return self.bag.get_labels()
         else:
             # TODO: Control de errores
             return 0
 
-    def get_attribute_by_index(self, index: int):
-        return self.data.item(index)
+    def get_number_labels(self):
+        """
+        Get numbers of labels of the instance
 
-    def get_attribute_by_name(self, attribute: str):
-        index = list(self.bag.get_attributes()).index(attribute)
-        return self.data.item(index)
+        Returns
+        ----------
+        numbers of labels: int
+            Numbers of labels of the instance
+        """
+        if self.bag is not None:
+            return self.bag.get_number_labels()
+        else:
+            # TODO: Control de errores
+            return 0
 
-    def set_attribute_by_index(self, index: int, value):
-        self.data[index] = value
+    def get_attribute(self,  attribute):
 
-    def set_attribute_by_name(self, attribute: str, value):
-        index = list(self.get_attributes()).index(attribute)
-        self.data[index] = value
+        if isinstance(attribute, int):
+            return self.data.item(attribute)
+        elif isinstance(attribute, str):
+            index = list(self.get_attributes()).index(attribute)
+            return self.data.item(index)
 
-    def set_bag(self, bag):
-        self.bag = bag
+    def set_attribute(self, attribute, value):
+
+        if isinstance(attribute, int):
+            self.data[attribute] = value
+        elif isinstance(attribute, str):
+            index = list(self.get_attributes()).index(attribute)
+            self.data[index] = value
 
     def add_attribute(self, value=0, position=None):
         if self.bag is None:
@@ -70,6 +106,9 @@ class Instance:
         else:
             # TODO: Control de errores
             pass
+
+    def set_bag(self, bag):
+        self.bag = bag
 
     def show_instance(self):
         # TODO: Check

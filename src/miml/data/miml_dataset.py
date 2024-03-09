@@ -1,18 +1,16 @@
 
-from src.miml.data.bag import Bag
+from data.bag import Bag
 
 
 class MIMLDataset:
-    """"
+    """
     Class to manage MIML data obtained from datasets
     """
 
     def __init__(self) -> None:
         """
         Constructor of the class MIMLDataset
-
         """
-
         # TODO: Si dataset leido en csv, el nombre poner el del archivo
         self.name = "undefined"
         self.attributes = dict()
@@ -80,7 +78,6 @@ class MIMLDataset:
          numbers of attributes: int
             Numbers of attributes of the dataset
         """
-
         return len(self.get_attributes())
 
     def set_labels(self, labels):
@@ -123,7 +120,6 @@ class MIMLDataset:
         numbers of labels: int
             Numbers of labels of the dataset
         """
-
         return len(self.get_labels())
 
     def get_bag(self, key):
@@ -135,8 +131,18 @@ class MIMLDataset:
         bag: Bag
             Instance of Bag class
         """
-
         return self.data[key]
+
+    def get_number_bags(self):
+        """
+        Get numbers of bags of the dataset
+
+        Returns
+        ----------
+        numbers of bags: int
+            Numbers of bags of the dataset
+        """
+        return len(self.data)
 
     def add_bag(self, bag: Bag):
         """
@@ -146,10 +152,20 @@ class MIMLDataset:
         ----------
         bag : Bag
             Instance of Bag class to be added
-
         """
         bag.set_dataset(self)
         self.data[bag.key] = bag
+
+    def delete_bag(self, key):
+        """
+        Delete a bag of the dataset
+
+        Parameters
+        ----------
+        key : string
+            key of the bag which contains the instance to be deleted
+        """
+        self.data.pop(key)
 
     def get_instance(self, key, index):
         """
@@ -167,35 +183,9 @@ class MIMLDataset:
         -------
         instance : Instance
             Instance of Instance class
-
         """
         # TODO: check
         return self.get_bag(key).get_instance(index)
-
-    def add_instance(self, key, instance):
-        """
-
-        Parameters
-        ----------
-        key : string
-            Key of the bag where the instance will be added
-        instance : Instance
-            Instance of Instance class to be added
-
-        """
-
-        self.get_bag(key).add_instance(instance)
-
-    def get_number_bags(self):
-        """
-        Get numbers of bags of the dataset
-
-        Returns
-        ----------
-        numbers of bags: int
-            Numbers of bags of the dataset
-        """
-        return len(self.data)
 
     def get_number_instances(self):
         """
@@ -206,8 +196,37 @@ class MIMLDataset:
         numbers of instances: int
             Numbers of instances of the dataset
         """
-
         return sum(self.data[bag].get_number_instances() for bag in self.data.keys())
+
+    def add_instance(self, key, instance):
+        """
+        Add an Instance to a Bag of the dataset
+
+        Parameters
+        ----------
+        key : string
+            Key of the bag where the instance will be added
+        instance : Instance
+            Instance of Instance class to be added
+        """
+        self.get_bag(key).add_instance(instance)
+
+    def delete_instance(self, bag, index):
+        """
+        Delete a instance of a bag of the dataset
+
+        Parameters
+        ----------
+        bag : string
+            key of the bag which contains the instance to be deleted
+
+        index : int
+            Index of the instance to be deleted
+        """
+        self.get_bag(bag).delete_instance(index)
+
+    def get_attribute(self, bag, instance, attribute):
+        self.get_instance(bag, instance).get_attribute(attribute)
 
     def set_attribute(self, key, index, attribute, value):
         """
@@ -227,8 +246,28 @@ class MIMLDataset:
             value: float
                 New value for the update
             """
+        self.get_instance(key, index).set_attribute(attribute, value)
 
-        self.get_instance(key, index).set_attribute_by_index(attribute, value)
+    def add_attribute(self, position, values=None):
+        """
+        Add attribute to the bag
+
+        Parameters
+        ----------
+        position : int
+            Index for the new attribute
+
+        values: 2d numpy array
+            Values for the new attribute
+        """
+        count = 0
+        for bag in self.data.keys():
+            self.data[bag].add_attribute(position, values[count])
+            count += 1
+
+    def delete_attribute(self, position):
+        for bag in self.data.keys():
+            self.data[bag].delete_attribute(position)
 
     def show_dataset(self, head=None, attributes=None, labels=None):
         """

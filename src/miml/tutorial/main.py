@@ -4,12 +4,14 @@ from sklearn.multioutput import MultiOutputClassifier
 
 from datasets.load_dataset import load_dataset
 from transformation.mimlTOml.arithmetic import ArithmeticTransformation
+from transformation.mimlTOml.geometric import GeometricTransformation
+from transformation.mimlTOml.minmax import MinMaxTransformation
 
 dataset_train = load_dataset("../datasets/miml_birds_random_80train.arff", delimiter="'")
 dataset_test = load_dataset("../datasets/miml_birds_random_20test.arff", delimiter="'")
 
-arithmetic_transformation_train = ArithmeticTransformation(dataset_train)
-arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
+arithmetic_transformation_train = MinMaxTransformation(dataset_train)
+arithmetic_transformation_test = MinMaxTransformation(dataset_test)
 
 X_train, y_train = arithmetic_transformation_train.transform_dataset()
 X_test, y_test = arithmetic_transformation_test.transform_dataset()

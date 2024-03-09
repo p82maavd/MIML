@@ -4,33 +4,72 @@ from tabulate import tabulate
 
 
 class Bag:
+    """
+    Class to manage MIML Bag data representation
+    """
 
     def __init__(self, instance, key):
-        # Crear numpy ndarray 3d con una instancia
+        """
+        Constructor of the class Bag
+        """
+        # TODO: Ver si quitar instance del constructor
         self.data = np.array(instance.data)
         self.key = key
         self.dataset = None
 
-    def get_number_instances(self):
+    def get_attributes(self):
         """
-        Get numbers of instances of a bag
-
-        Parameters
-        ----------
-        key : string
-            Key of the bag
+        Get attributes name
 
         Returns
         ----------
-        numbers of instances: int
-            Numbers of instances of a bag
-
+        attributes : List of string
+            Attributes name of the bag
         """
-        # TODO: Revisar
-        return len(self.data)
+        if self.dataset is not None:
+            return self.dataset.get_attributes()
+        else:
+            raise Exception("The bag isn't in any dataset, so there is no attributes info")
+
+    def get_number_attributes(self):
+        """
+        Get numbers of attributes of the bag
+
+        Returns
+        ----------
+         numbers of attributes: int
+            Numbers of attributes of the bag
+        """
+        return len(self.get_attributes())
+
+    def get_labels(self):
+        """
+        Get labels name
+
+        Returns
+        ----------
+        labels : List of string
+            Labels name of the bag
+        """
+        if self.dataset is not None:
+            return self.dataset.get_labels()
+        else:
+            raise Exception("The bag isn't in any dataset, so there is no label info")
+
+    def get_number_labels(self):
+        """
+        Get numbers of labels of the bag
+
+        Returns
+        ----------
+        numbers of labels: int
+            Numbers of labels of the bag
+        """
+        return len(self.get_labels())
 
     def get_instance(self, index):
         """
+        Get an Instance of the Bag
 
         Parameters
         ----------
@@ -40,78 +79,115 @@ class Bag:
 
         Returns
         -------
-        instance : tuple of ndarrays
-            Tuple with attribute values and label of the instance
-
+        instance : Instance
+            Instance of Instance class
         """
         instance = Instance(self.data[index], self)
         return instance
 
-    def get_attributes(self):
-        if self.dataset is not None:
-            return self.dataset.get_attributes()
-        else:
-            # TODO: Control de errores
-            return 0
+    def get_number_instances(self):
+        """
+        Get numbers of instances of a bag
+
+        Returns
+        ----------
+        numbers of instances: int
+            Numbers of instances of a bag
+        """
+        return len(self.data)
 
     def add_instance(self, instance):
         """
+        Add instance to the bag
 
         Parameters
         ----------
-        key : string
-            Key of the bag
-        values : ndarray
-            Values of the instance to be inserted
-
+        instance : Instance
+            Instance to be added
         """
         # TODO: Check same length
-
         self.data = np.vstack((self.data, instance.data))
 
-    def add_attribute(self, name, position, value=0):
-        if position is None:
-            position = len(self.data)
-        pass
+    def delete_instance(self, index):
+        """
+        Delete a instance of the bag
 
-    # TODO: Terminar funcion
+        Parameters
+        ----------
+        index : int
+            Index of the instance to be removed
+        """
+        self.data = np.delete(self.data, index, axis=0)
 
-    def set_attribute(self, index, attribute, value):
+    def get_attribute(self, instance, attribute):
+
+        if isinstance(attribute, int):
+            return self.data[instance].item(attribute)
+        elif isinstance(attribute, str):
+            index = list(self.get_attributes()).index(attribute)
+            return self.data[instance].item(index)
+
+    def set_attribute(self, instance, attribute, value):
         """
         Update value from attributes
 
         Parameters
         ----------
-        key : string
-            Bag key of the dataset
+        instance : string
+            Index of instance to me update
 
         attribute: string
-            Attribute of the dataset
+            Attribute name/index of the bag to be updated
 
         value: float
             New value for the update
         """
-        self.data[index][attribute] = value
+        if isinstance(attribute, int):
+            self.data[instance][attribute] = value
+        elif isinstance(attribute, str):
+            index = list(self.get_attributes()).index(attribute)
+            self.data[instance][index] = value
 
-    def set_attribute(self, name, value):
-        pass
+    def add_attribute(self, position, values=None):
+        """
+        Add attribute to the bag
 
-    def delete_instance(self, index):
-        pass
+        Parameters
+        ----------
+        position : int
+            Index for the new attribute
+
+        values: 1d numpy array
+            Values for the new attribute. If not provided, new values would be zero
+        """
+        if self.dataset is None:
+            if position is None:
+                position = len(self.data)
+            if values is None:
+                values = np.array([0]*self.get_number_instances())
+            else:
+                # TODO: Check size len(values) == self.get_number_instances
+                pass
+            self.data = np.insert(self.data, position, values, axis=1)
+        else:
+            pass
+
+    # TODO: Terminar funcion
 
     def delete_attribute(self, position):
-        pass
+        if self.dataset is None:
+            self.data = np.delete(self.data, position, axis=1)
+        else:
+            pass
 
-    def delete_attribute(self, name):
-        pass
-
-    def set_dataset(self,dataset):
-        self.dataset=dataset
+    def set_dataset(self, dataset):
+        # TODO: Ver como gestionar lo de la info de los atributos que este siempre actualizado
+        self.dataset = dataset
 
     def show_bag(self):
         # TODO: Check
 
-        table = [[self.key] + self.get_attributes()]
+        table = [[self.key] + self.get_attributes() + self.get_labels()]
         count = 0
         for instance in self.data:
             table.append([count] + list(instance))
