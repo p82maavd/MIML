@@ -26,29 +26,35 @@ class BinaryRelevanceTransformation:
         Target vector relative to X.
 
         """
-        datasets = []
         # TODO: Optimizar
-        # x = np.zeros(shape=(self.dataset.get_number_bags(), self.dataset.get_number_attributes()))
-        xs = []
-        y = np.empty(shape=(self.dataset.get_number_bags(), 1))
-        ys = []
-        for i in range(self.dataset.get_number_labels()):
-            ys.append(y.copy())
-        count = 0
-        for keys, pattern in self.dataset.data.items():
-            # print("-------------------")
-            xs.append(pattern[0])
-            for i in range(self.dataset.get_number_labels()):
-                # print(pattern[1][i])
-                # print(ys)
-                ys[i][count] = pattern[1][i]
-            count += 1
-        # xs = np.array(xs)
-
-        for i in ys:
-            datasets.append([xs, i])
+        datasets = []
+        x = self.dataset.get_features()
+        y = self.dataset.get_labels()
+        for i in range(len(self.dataset.get_number_labels())):
+            datasets.append([x, y[0:, i]])
 
         return datasets
+
+    def transform_bag(self, key):
+        """
+        Transform miml bag to multi instance bags
+
+        Parameters
+        ----------
+        key : string
+            Key of the bag to be transformed to multilabel instance
+
+        Returns
+        -------
+        instance : tuple
+        Tuple of numpy ndarray with attribute values and labels
+
+        """
+        bag = self.dataset.get_bag(key)
+        bags = []
+        for i in range(len(bag.get_number_labels())):
+            bags.append([bag.get_attributes(), bag.get_labels()[i]])
+        return bags
 
     def transform_instance(self, key):
         """
@@ -65,6 +71,7 @@ class BinaryRelevanceTransformation:
         Tuple of numpy ndarray with attribute values and labels
 
         """
-        return 0
+        bag = self.dataset.get_bag(key)
+        return []
 
     # TODO: Implementarlo

@@ -1,6 +1,6 @@
 from sklearn.metrics import classification_report, hamming_loss
 
-from classifier.knn_classifier import KNNClassifier
+from classifier.mimlTOml.ml_classifier import KNNClassifier
 from datasets.load_dataset import load_dataset
 from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
 

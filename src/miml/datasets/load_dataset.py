@@ -49,10 +49,10 @@ def load_dataset_csv(file, header=0):
     num_labels = int(csv_file.readline().replace("\n", ""))
 
     header_line = csv_file.readline().replace("\n", "").split(",")
-    attributes_name = header_line[1:-num_labels]
-    dataset.set_attributes(attributes_name)
+    features_name = header_line[1:-num_labels]
+    dataset.set_features_name(features_name)
     labels_name = header_line[-num_labels:]
-    dataset.set_labels(labels_name)
+    dataset.set_labels_name(labels_name)
 
     for line in csv_file:
 
@@ -87,7 +87,7 @@ def load_dataset_arff(file, delimiter="\""):
     """
     dataset = MIMLDataset()
     arff_file = open(file)
-    attributes_name = []
+    features_name = []
     labels_name = []
     flag = 0
     for line in arff_file:
@@ -107,7 +107,7 @@ def load_dataset_arff(file, delimiter="\""):
             elif line.startswith("@end bag"):
                 flag = 2
             elif flag == 1:
-                attributes_name.append(line.split(" ")[1])
+                features_name.append(line.split(" ")[1])
             elif flag == 2:
                 labels_name.append(line.split(" ")[1])
 
@@ -140,6 +140,6 @@ def load_dataset_arff(file, delimiter="\""):
                 else:
                     dataset.add_instance(key, instance)
 
-    dataset.set_attributes(attributes_name)
-    dataset.set_labels(labels_name)
+    dataset.set_features_name(features_name)
+    dataset.set_labels_name(labels_name)
     return dataset

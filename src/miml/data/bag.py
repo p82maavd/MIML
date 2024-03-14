@@ -17,7 +17,7 @@ class Bag:
         self.key = key
         self.dataset = None
 
-    def get_attributes(self):
+    def get_attributes_name(self):
         """
         Get attributes name
 
@@ -27,9 +27,12 @@ class Bag:
             Attributes name of the bag
         """
         if self.dataset is not None:
-            return self.dataset.get_attributes()
+            return self.dataset.get_attributes_name()
         else:
             raise Exception("The bag isn't in any dataset, so there is no attributes info")
+
+    def get_attributes(self):
+        return self.data
 
     def get_number_attributes(self):
         """
@@ -42,7 +45,38 @@ class Bag:
         """
         return len(self.get_attributes())
 
-    def get_labels(self):
+    def get_features_name(self):
+        """
+        Get features name
+
+        Returns
+        ----------
+        features : List of string
+            Features name of the bag
+        """
+        if self.dataset is not None:
+            return self.dataset.get_features_name()
+        else:
+            raise Exception("The bag isn't in any dataset, so there is no features info")
+
+    def get_features(self):
+        return self.data[0:, 0:self.get_number_features()]
+
+    def get_number_features(self):
+        """
+        Get numbers of attributes of the bag
+
+        Returns
+        ----------
+         numbers of attributes: int
+            Numbers of attributes of the bag
+        """
+        if self.dataset is not None:
+            return self.dataset.get_features_name()
+        else:
+            raise Exception("The bag isn't in any dataset, so there is no features info")
+
+    def get_labels_name(self):
         """
         Get labels name
 
@@ -56,6 +90,9 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no label info")
 
+    def get_labels(self):
+        return self.data[0, -self.get_number_labels():]
+
     def get_number_labels(self):
         """
         Get numbers of labels of the bag
@@ -65,7 +102,10 @@ class Bag:
         numbers of labels: int
             Numbers of labels of the bag
         """
-        return len(self.get_labels())
+        if self.dataset is not None:
+            return self.dataset.get_number_labels()
+        else:
+            raise Exception("The bag isn't in any dataset, so there is no label info")
 
     def get_instance(self, index):
         """
@@ -187,7 +227,7 @@ class Bag:
     def show_bag(self):
         # TODO: Check
 
-        table = [[self.key] + self.get_attributes() + self.get_labels()]
+        table = [[self.key] + self.get_attributes_name() + self.get_labels_name()]
         count = 0
         for instance in self.data:
             table.append([count] + list(instance))

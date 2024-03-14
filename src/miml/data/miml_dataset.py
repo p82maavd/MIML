@@ -1,3 +1,4 @@
+import numpy as np
 
 from data.bag import Bag
 
@@ -38,38 +39,54 @@ class MIMLDataset:
         """
         return self.name
 
-    def set_attributes(self, attributes):
+    def get_attributes_name(self):
+        attributes = []
+        for attribute in self.attributes.keys():
+            attributes.append(attribute)
+        return attributes
+
+    def get_number_attributes(self):
+        return len(self.get_attributes_name())
+
+    def set_features_name(self, features):
         """
-        Set function for dataset attributes name
+        Set function for dataset features name
 
         Parameters
         ----------
-        attributes : List of string
-            List of the attributes name of the dataset
+        features : List of string
+            List of the features name of the dataset
         """
         if len(self.attributes) != 0:
-            for attribute in self.attributes.keys():
-                if self.attributes[attribute] == 0:
-                    self.attributes.pop(attribute)
-        for attribute in attributes:
-            self.attributes[attribute] = 0
+            for feature in self.get_features_name():
+                if self.attributes[feature] == 0:
+                    self.attributes.pop(feature)
+        for feature in features:
+            self.attributes[feature] = 0
 
-    def get_attributes(self):
+    def get_features_name(self):
         """
-        Get function for dataset attributes name
+        Get function for dataset features name
 
         Returns
         ----------
         attributes : List of string
             Attributes name of the dataset
         """
-        attributes = []
-        for attribute in self.attributes.keys():
-            if self.attributes[attribute] == 0:
-                attributes.append(attribute)
-        return attributes
+        features = []
+        for feature in self.attributes.keys():
+            if self.attributes[feature] == 0:
+                features.append(feature)
+        return features
 
-    def get_number_attributes(self):
+    def get_features(self):
+        # TODO: Test
+        features = np.array((0,))
+        for key in self.data.keys():
+            features = np.append(features, self.get_bag(key).get_features())
+        return features
+
+    def get_number_features(self):
         """
         Get numbers of attributes of the dataset
 
@@ -78,9 +95,9 @@ class MIMLDataset:
          numbers of attributes: int
             Numbers of attributes of the dataset
         """
-        return len(self.get_attributes())
+        return len(self.get_features_name())
 
-    def set_labels(self, labels):
+    def set_labels_name(self, labels):
         """
         Set function for dataset labels name
 
@@ -90,13 +107,13 @@ class MIMLDataset:
             List of the labels name of the dataset
         """
         if len(self.attributes) != 0:
-            for attribute in self.attributes.keys():
-                if self.attributes[attribute] == 1:
-                    self.attributes.pop(attribute)
+            for label in self.get_labels_name():
+                if self.attributes[label] == 1:
+                    self.attributes.pop(label)
         for label in labels:
             self.attributes[label] = 1
 
-    def get_labels(self):
+    def get_labels_name(self):
         """
         Get function for dataset labels name
 
@@ -111,6 +128,12 @@ class MIMLDataset:
                 labels.append(attribute)
         return labels
 
+    def get_labels(self):
+        labels = np.array((0,))
+        for key in self.data.keys():
+            labels = np.append(labels, self.get_bag(key).get_labels())
+        return labels
+
     def get_number_labels(self):
         """
         Get numbers of labels of the dataset
@@ -120,7 +143,7 @@ class MIMLDataset:
         numbers of labels: int
             Numbers of labels of the dataset
         """
-        return len(self.get_labels())
+        return len(self.get_labels_name())
 
     def get_bag(self, key):
         """
@@ -288,8 +311,8 @@ class MIMLDataset:
         # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
         #  a mostrar opcionales
         print("Name: ", self.get_name())
-        print("Attributes: ", self.get_attributes())
-        print("Labels: ", self.get_labels())
+        print("Attributes: ", self.get_features_name())
+        print("Labels: ", self.get_labels_name())
         print("Bags:")
         count = 0
         for key in self.data:

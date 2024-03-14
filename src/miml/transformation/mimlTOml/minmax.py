@@ -26,12 +26,12 @@ class MinMaxTransformation:
         Target vector relative to X.
 
         """
-        x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_attributes() * 2))
+        x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features() * 2))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
         for keys, bag in self.dataset.data.items():
-            values = bag.data[0:, :self.dataset.get_number_attributes()]
-            labels = bag.data[0, self.dataset.get_number_attributes():]
+            values = bag.data[0:, :self.dataset.get_number_features()]
+            labels = bag.data[0, -self.dataset.get_number_labels():]
             min_values = np.min(values, axis=0)
             max_values = np.max(values, axis=0)
             x[count] = np.concatenate((min_values, max_values), axis=0)

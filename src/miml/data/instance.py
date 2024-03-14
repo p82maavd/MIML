@@ -14,7 +14,7 @@ class Instance:
         self.bag = bag
         self.data = np.array(values)
 
-    def get_attributes(self):
+    def get_attributes_name(self):
         """
         Get attributes name
 
@@ -24,10 +24,13 @@ class Instance:
             Attributes name of the instance
         """
         if self.bag is not None:
-            return self.bag.get_attributes()
+            return self.bag.get_attributes_name()
         else:
             # TODO: Control de errores
             return 0
+
+    def get_attributes(self):
+        return self.data
 
     def get_number_attributes(self):
         """
@@ -38,13 +41,42 @@ class Instance:
          numbers of attributes: int
             Numbers of attributes of the bag
         """
+        return len(self.get_attributes())
+
+    def get_features_name(self):
+        """
+        Get features name
+
+        Returns
+        ----------
+        features : List of string
+            features name of the instance
+        """
         if self.bag is not None:
-            return self.bag.get_number_attributes()
+            return self.bag.get_features_name()
         else:
             # TODO: Control de errores
             return 0
 
-    def get_labels(self):
+    def get_features(self):
+        return self.data[0:self.get_number_features()]
+
+    def get_number_features(self):
+        """
+        Get numbers of features of the instance
+
+        Returns
+        ----------
+         numbers of features: int
+            Numbers of features of the bag
+        """
+        if self.bag is not None:
+            return self.bag.get_number_features()
+        else:
+            # TODO: Control de errores
+            return 0
+
+    def get_labels_name(self):
         """
         Get labels name
 
@@ -58,6 +90,10 @@ class Instance:
         else:
             # TODO: Control de errores
             return 0
+
+    def get_labels(self):
+        # TODO: test
+        return self.data[-self.get_number_labels():]
 
     def get_number_labels(self):
         """
@@ -113,7 +149,7 @@ class Instance:
     def show_instance(self):
         # TODO: Check
 
-        table = [list(self.data)]
+        table = list(self.get_attributes())
 
         # table = [['col 1', 'col 2', 'col 3', 'col 4'], [1, 2222, 30, 500], [4, 55, 6777, 1]]
         # print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))

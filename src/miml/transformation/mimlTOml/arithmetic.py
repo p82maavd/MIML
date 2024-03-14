@@ -27,12 +27,12 @@ class ArithmeticTransformation:
 
         """
         x = np.empty(shape=(
-            self.dataset.get_number_bags(), self.dataset.get_number_attributes()))
+            self.dataset.get_number_bags(), self.dataset.get_number_features()))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
         for keys, bag in self.dataset.data.items():
-            values = bag.data[0:, :self.dataset.get_number_attributes()]
-            labels = bag.data[0, self.dataset.get_number_attributes():]
+            values = bag.data[0:, :self.dataset.get_number_features()]
+            labels = bag.data[0, -self.dataset.get_number_labels()]
             new_instance = np.mean(values, axis=0)
             x[count] = new_instance
             y[count] = labels
