@@ -1,5 +1,4 @@
 
-
 from classifier.abstract_classifier import *
 from transformation.mimlTOml.arithmetic import ArithmeticTransformation
 from transformation.mimlTOml.geometric import GeometricTransformation
@@ -23,17 +22,39 @@ class MLClassifier(AbstractClassifier):
             arithmetic_transformation_train = ArithmeticTransformation(dataset_train)
             x_train, y_train = arithmetic_transformation_train.transform_dataset()
             self.classifier.fit(x_train, y_train)
-        if self.transformation == "arithmetic":
+        elif self.transformation == "geometric":
             geometric_transformation_train = GeometricTransformation(dataset_train)
             x_train, y_train = geometric_transformation_train.transform_dataset()
             self.classifier.fit(x_train, y_train)
-        if self.transformation == "arithmetic":
+        elif self.transformation == "minmax":
             minmax_transformation_train = MinMaxTransformation(dataset_train)
             x_train, y_train = minmax_transformation_train.transform_dataset()
             self.classifier.fit(x_train, y_train)
 
-    def evaluate(self, dataset_test):
-        arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
-        x_test, y_test = arithmetic_transformation_test.transform_dataset()
-        self.classifier.evaluate(x_test, y_test)
+    def predict(self, dataset_test):
+        if self.transformation == "arithmetic":
+            arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
+            x_test, y_test = arithmetic_transformation_test.transform_dataset()
+            self.classifier.predict(x_test)
+        elif self.transformation == "geometric":
+            geometric_transformation_test = GeometricTransformation(dataset_test)
+            x_test, y_test = geometric_transformation_test.transform_dataset()
+            self.classifier.predict(x_test)
+        elif self.transformation == "minmax":
+            minmax_transformation_test = MinMaxTransformation(dataset_test)
+            x_test, y_test = minmax_transformation_test.transform_dataset()
+            self.classifier.predict(x_test)
 
+    def evaluate(self, dataset_test):
+        if self.transformation == "arithmetic":
+            arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
+            x_test, y_test = arithmetic_transformation_test.transform_dataset()
+            self.classifier.evaluate(x_test, y_test)
+        elif self.transformation == "geometric":
+            geometric_transformation_test = GeometricTransformation(dataset_test)
+            x_test, y_test = geometric_transformation_test.transform_dataset()
+            self.classifier.evaluate(x_test, y_test)
+        elif self.transformation == "minmax":
+            minmax_transformation_test = MinMaxTransformation(dataset_test)
+            x_test, y_test = minmax_transformation_test.transform_dataset()
+            self.classifier.evaluate(x_test, y_test)

@@ -16,7 +16,6 @@ class KNNClassifier:
 
     def evaluate(self, x_test, y_test):
         results = self.predict(x_test)
-        print(results)
         accuracy = accuracy_score(y_test, results)
         print(accuracy)
         print('Hamming Loss: ', round(hamming_loss(y_test, results), 2))

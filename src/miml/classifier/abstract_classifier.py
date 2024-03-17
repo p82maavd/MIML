@@ -7,18 +7,16 @@ class AbstractClassifier(ABC):
 
     def __init__(self):
         self.num_labels = None
-        self.model = None
+        self.classifier = None
 
     @abstractmethod
     def fit(self, training_dataset):
         pass
 
+    @abstractmethod
     def predict(self, test_data):
-        return self.model.predict(test_data)
+        pass
 
+    @abstractmethod
     def evaluate(self, dataset_test):
-
-        results = self.predict(dataset_test.get_features())
-        accuracy = accuracy_score(dataset_test.get_labels(), results)
-        print(accuracy)
-        print('Hamming Loss: ', round(hamming_loss(dataset_test.get_labels(), results), 2))
+        pass

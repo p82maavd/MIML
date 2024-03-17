@@ -26,7 +26,6 @@ class GeometricTransformation:
         Target vector relative to X.
 
         """
-
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features()))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0

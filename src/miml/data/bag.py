@@ -72,7 +72,7 @@ class Bag:
             Numbers of attributes of the bag
         """
         if self.dataset is not None:
-            return self.dataset.get_features_name()
+            return self.dataset.get_number_features()
         else:
             raise Exception("The bag isn't in any dataset, so there is no features info")
 
