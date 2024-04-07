@@ -351,9 +351,13 @@ class MIMLDataset:
         values: 2d numpy array
             Values for the new attribute
         """
+        # TODO: Test
         count = 0
         for bag in self.data.keys():
-            self.data[bag].add_attribute(position, values[count])
+            add_values = values[count]
+            if values is None:
+                add_values = np.zeros(self.data[bag].get_number_instances)
+            self.data[bag].add_attribute(position, add_values)
             count += 1
 
     def delete_attribute(self, position):

@@ -8,12 +8,12 @@ class Bag:
     Class to manage MIML Bag data representation
     """
 
-    def __init__(self, instance, key):
+    def __init__(self, key):
         """
         Constructor of the class Bag
         """
         # TODO: Ver si quitar instance del constructor
-        self.data = np.array(instance.data)
+        self.data = None
         self.key = key
         self.dataset = None
 
@@ -52,7 +52,7 @@ class Bag:
          numbers of attributes: int
             Numbers of attributes of the bag
         """
-        return len(self.get_attributes())
+        return len(self.get_attributes()[0])
 
     def get_features_name(self):
         """
@@ -171,11 +171,15 @@ class Bag:
         instance : Instance
             Instance to be added
         """
-        print("Self data: ", self.data)
-        if instance.get_number_attributes() == self.get_number_attributes():
+
+        if self.data is None:
+            self.data = np.zeros((1, instance.get_number_attributes()))
+            self.data[0] = instance.data
+        elif instance.get_number_attributes() == self.get_number_attributes():
             self.data = np.vstack((self.data, instance.data))
         else:
             raise Exception("The number of attributes of the bag and the instance to be added are different.")
+        instance.set_bag(self)
 
     def delete_instance(self, index):
         """

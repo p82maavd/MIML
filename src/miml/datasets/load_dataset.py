@@ -126,16 +126,16 @@ def load_dataset_arff(file, delimiter="\""):
 
             # El resto de la cadena se trata de las etiquetas
             labels = line[line.find(delimiter, 2) + 2:]
-            labels_values = np.array([int(i) for i in labels.split(",")], ndmin=2)
+            labels_values = np.array([int(i) for i in labels.split(",")], ndmin=1)
             # print("Labels: ", labels)
 
             values_list = []
             for v in values:
-                values_instance = np.array([float(i) for i in v.split(',')], ndmin=2)
+                values_instance = np.array([float(i) for i in v.split(',')], ndmin=1)
                 instance = Instance(np.hstack((values_instance, labels_values)))
-
                 if key not in dataset.data:
-                    bag = Bag(instance, key)
+                    bag = Bag(key)
+                    bag.add_instance(instance)
                     dataset.add_bag(bag)
                 else:
                     dataset.add_instance(key, instance)

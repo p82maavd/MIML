@@ -23,11 +23,10 @@ class Instance:
         attributes : List of string
             Attributes name of the instance
         """
-        if self.bag is not None:
-            return self.bag.get_attributes_name()
+        if self.bag is not None and self.bag.dataset is not None:
+            return self.bag.dataset.get_attributes_name()
         else:
-            # TODO: Control de errores
-            return 0
+            raise Exception("The instance isn't in any dataset, so there is no attributes info")
 
     def get_attributes(self):
         """
@@ -60,13 +59,21 @@ class Instance:
         features : List of string
             features name of the instance
         """
-        if self.bag is not None:
-            return self.bag.get_features_name()
+        if self.bag is not None and self.bag.dataset is not None:
+            return self.bag.dataset.get_features_name()
         else:
-            # TODO: Control de errores
-            return 0
+            raise Exception("The instance isn't in any dataset, so there is no features info")
 
     def get_features(self):
+        """
+        Get features values of the instance
+
+        Returns
+        -------
+        features data: numpy array
+            Values of the features of the instance
+
+        """
         return self.data[0:self.get_number_features()]
 
     def get_number_features(self):
@@ -78,11 +85,10 @@ class Instance:
          numbers of features: int
             Numbers of features of the bag
         """
-        if self.bag is not None:
-            return self.bag.get_number_features()
+        if self.bag is not None and self.bag.dataset is not None:
+            return self.bag.dataset.get_number_features()
         else:
-            # TODO: Control de errores
-            return 0
+            raise Exception("The instance isn't in any dataset, so there is no features info")
 
     def get_labels_name(self):
         """
@@ -93,14 +99,21 @@ class Instance:
         labels : List of string
             Labels name of the instance
         """
-        if self.bag is not None:
-            return self.bag.get_labels()
+        if self.bag is not None and self.bag.dataset is not None:
+            return self.bag.dataset.get_labels_name()
         else:
-            # TODO: Control de errores
-            return 0
+            raise Exception("The instance isn't in any dataset, so there is no labels info")
 
     def get_labels(self):
-        # TODO: test
+        """
+        Get labels values of the instance
+
+        Returns
+        -------
+        labels data : numpy array
+            Values of the labels of the instance
+
+                """
         return self.data[-self.get_number_labels():]
 
     def get_number_labels(self):
@@ -112,11 +125,10 @@ class Instance:
         numbers of labels : int
             Numbers of labels of the instance
         """
-        if self.bag is not None:
-            return self.bag.get_number_labels()
+        if self.bag is not None and self.bag.dataset is not None:
+            return self.bag.dataset.get_number_labels()
         else:
-            # TODO: Control de errores
-            return 0
+            raise Exception("The instance isn't in any dataset, so there is no labels info")
 
     def get_attribute(self,  attribute):
         """
@@ -140,7 +152,7 @@ class Instance:
 
     def set_attribute(self, attribute, value):
         """
-        Update value of a attribute of the instance
+        Update value of an attribute of the instance
 
         Parameters
         ----------
@@ -204,12 +216,8 @@ class Instance:
         """
         Show instance info in table format
         """
-        # TODO: Hacer que muestre el nombre de los atributos.
-        if self.bag is None:
-            table = list(self.get_attributes())
-            print(tabulate(table, tablefmt="grid", numalign="center"))
-        else:
+        table = []
+        if self.bag is not None and self.bag.dataset is not None:
             table = [self.get_features_name() + self.get_labels_name()]
-            table.append(list(self.get_attributes()))
-            print(tabulate(table, tablefmt="grid", numalign="center"))
-
+        table.append(list(self.get_attributes()))
+        print(tabulate(table, tablefmt="grid", numalign="center"))
