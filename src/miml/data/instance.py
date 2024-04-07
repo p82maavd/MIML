@@ -30,6 +30,14 @@ class Instance:
             return 0
 
     def get_attributes(self):
+        """
+        Get data attributes of the instance
+
+        Returns
+        ----------
+        attributes data: numpy array
+            Values of the attributes of the instance
+        """
         return self.data
 
     def get_number_attributes(self):
@@ -101,7 +109,7 @@ class Instance:
 
         Returns
         ----------
-        numbers of labels: int
+        numbers of labels : int
             Numbers of labels of the instance
         """
         if self.bag is not None:
@@ -111,7 +119,19 @@ class Instance:
             return 0
 
     def get_attribute(self,  attribute):
+        """
+        Get value of an attribute of the instance
 
+        Parameters
+        ----------
+        attribute : int/String
+            Index/Name of the attribute
+
+        Returns
+        -------
+        value : float
+            Value of the attribute
+        """
         if isinstance(attribute, int):
             return self.data.item(attribute)
         elif isinstance(attribute, str):
@@ -119,7 +139,17 @@ class Instance:
             return self.data.item(index)
 
     def set_attribute(self, attribute, value):
+        """
+        Update value of a attribute of the instance
 
+        Parameters
+        ----------
+        attribute : int/String
+            Index/Name of the attribute
+
+        value : float
+            New value for the attribute
+        """
         if isinstance(attribute, int):
             self.data[attribute] = value
         elif isinstance(attribute, str):
@@ -127,6 +157,17 @@ class Instance:
             self.data[index] = value
 
     def add_attribute(self, value=0, position=None):
+        """
+        Add an attribute to the instance
+
+        Parameters
+        ----------
+        value : float
+            Value for the attribute
+
+        position: int
+            Position for the attribute
+        """
         if self.bag is None:
             if position is None:
                 position = len(self.data)
@@ -136,6 +177,14 @@ class Instance:
             pass
 
     def delete_attribute(self, position):
+        """
+        Delete an attribute of the instance
+
+        Parameters
+        ----------
+        position: int
+            Position of the attribute
+        """
         # TODO: Check
         if self.bag is None:
             self.data = np.delete(self.data, position)
@@ -144,10 +193,21 @@ class Instance:
             pass
 
     def set_bag(self, bag):
+        """
+        Set the bag of the instance
+
+        Parameters
+        ----------
+        bag : Bag
+            Bag of the instance
+        """
         self.bag = bag
 
     def show_instance(self):
-        # TODO: Check
+        """
+        Show instance info in table format
+        """
+        # TODO: Check. Hacer que muestre el nombre de los atributos.
 
         table = list(self.get_attributes())
 

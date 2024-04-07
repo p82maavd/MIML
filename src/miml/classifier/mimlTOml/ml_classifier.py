@@ -8,6 +8,17 @@ from transformation.mimlTOml.minmax import MinMaxTransformation
 class MLClassifier(AbstractClassifier):
 
     def __init__(self, classifier, transformation="arithmetic"):
+        """
+        Constructor of the class MIClassifier
+
+        Parameters
+        ----------
+        classifier
+            Specific classifier to be used
+
+        transformation : String
+            Type of transformation to be used
+        """
         super().__init__()
         transformations = ["arithmetic", "geometric", "minmax"]
         if transformation.lower() not in transformations:
@@ -18,6 +29,12 @@ class MLClassifier(AbstractClassifier):
         self.classifier = classifier
 
     def fit(self, dataset_train):
+        """
+
+        Parameters
+        ----------
+        dataset_train
+        """
         if self.transformation == "arithmetic":
             arithmetic_transformation_train = ArithmeticTransformation(dataset_train)
             x_train, y_train = arithmetic_transformation_train.transform_dataset()
@@ -32,6 +49,12 @@ class MLClassifier(AbstractClassifier):
             self.classifier.fit(x_train, y_train)
 
     def predict(self, dataset_test):
+        """
+
+        Parameters
+        ----------
+        dataset_test
+        """
         if self.transformation == "arithmetic":
             arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
             x_test, y_test = arithmetic_transformation_test.transform_dataset()
@@ -46,6 +69,12 @@ class MLClassifier(AbstractClassifier):
             self.classifier.predict(x_test)
 
     def evaluate(self, dataset_test):
+        """
+
+        Parameters
+        ----------
+        dataset_test
+        """
         if self.transformation == "arithmetic":
             arithmetic_transformation_test = ArithmeticTransformation(dataset_test)
             x_test, y_test = arithmetic_transformation_test.transform_dataset()

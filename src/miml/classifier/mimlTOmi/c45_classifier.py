@@ -39,7 +39,7 @@ class C45Classifier:
         best_split_feature = None
         best_split_value = None
         best_information_gain = -1
-
+        print(x_train.shape)
         for feature in range(x_train.shape[1]):
             values = np.unique(x_train[:, feature])
             for value in values:

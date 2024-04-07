@@ -40,12 +40,41 @@ class MIMLDataset:
         return self.name
 
     def get_attributes_name(self):
+        """
+        Get attributes name
+
+        Returns
+        ----------
+        attributes : List of string
+            Attributes name of the dataset
+        """
+        # TODO: Ver si se puede hacer con list(self.attributes.keys)
         attributes = []
         for attribute in self.attributes.keys():
             attributes.append(attribute)
         return attributes
 
+    def get_attributes(self):
+        """
+        Get attributes values of the dataset
+
+        Returns
+        -------
+        attributes data: numpy array
+            Values of the attributes of the dataset
+        """
+        pass
+        # TODO: Ver si es necesario
+
     def get_number_attributes(self):
+        """
+        Get numbers of attributes of the bag
+
+        Returns
+        ----------
+        numbers of attributes: int
+            Numbers of attributes of the bag
+        """
         return len(self.get_attributes_name())
 
     def set_features_name(self, features):
@@ -80,10 +109,19 @@ class MIMLDataset:
         return features
 
     def get_features(self):
+        """
+        Get features values of the dataset
+
+        Returns
+        -------
+        features data: numpy array
+            Values of the features of the dataset
+
+        """
         # TODO: Test
-        features = np.array((0,))
+        features = []
         for key in self.data.keys():
-            features = np.append(features, self.get_bag(key).get_features())
+            features.append(self.get_bag(key).get_features())
         return features
 
     def get_number_features(self):
@@ -129,9 +167,20 @@ class MIMLDataset:
         return labels
 
     def get_labels(self):
-        labels = np.array((0,))
+        """
+        Get labels values of the dataset
+
+        Returns
+        -------
+        labels data : numpy array
+            Values of the labels of the dataset
+
+        """
+        labels = np.zeros((self.get_number_bags(), self.get_number_labels()))
+        count = 0
         for key in self.data.keys():
-            labels = np.append(labels, self.get_bag(key).get_labels())
+            labels[count] = self.get_bag(key).get_labels()
+            count += 1
         return labels
 
     def get_number_labels(self):
@@ -236,12 +285,12 @@ class MIMLDataset:
 
     def delete_instance(self, bag, index):
         """
-        Delete a instance of a bag of the dataset
+        Delete an instance of a bag of the dataset
 
         Parameters
         ----------
         bag : string
-            key of the bag which contains the instance to be deleted
+            Key of the bag which contains the instance to be deleted
 
         index : int
             Index of the instance to be deleted
@@ -249,6 +298,25 @@ class MIMLDataset:
         self.get_bag(bag).delete_instance(index)
 
     def get_attribute(self, bag, instance, attribute):
+        """
+        Get value of an attribute of the bag
+
+        Parameters
+        ----------
+        bag : String
+            Key of the bag which contains the attribute
+
+        instance : int
+            Index of the instance in the bag
+
+        attribute : int/String
+            Index/Name of the attribute
+
+        Returns
+        -------
+        value : float
+            Value of the attribute
+        """
         self.get_instance(bag, instance).get_attribute(attribute)
 
     def set_attribute(self, key, index, attribute, value):
@@ -311,7 +379,7 @@ class MIMLDataset:
         # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
         #  a mostrar opcionales
         print("Name: ", self.get_name())
-        print("Attributes: ", self.get_features_name())
+        print("Features: ", self.get_features_name())
         print("Labels: ", self.get_labels_name())
         print("Bags:")
         count = 0
@@ -327,6 +395,7 @@ class MIMLDataset:
                 if count >= head:
                     break
 
+    # TODO: Ver si separar esto
     def cardinality(self):
         """
         Computes the Cardinality as the average number of labels per pattern.
@@ -338,8 +407,8 @@ class MIMLDataset:
         """
         suma = 0
         for key in self.data:
-            suma += sum(self.data[key][1])
-        return suma / len(self.data)
+            suma += sum(self.get_bag(key).get_labels())
+        return suma / self.get_number_bags()
 
     def density(self):
         """
@@ -363,7 +432,7 @@ class MIMLDataset:
         """
         options = set()
         for key in self.data:
-            options.add(tuple(self.data[key][1]))
+            options.add(tuple(self.get_bag(key).get_labels()))
         return len(options) / (2 ** self.get_number_labels())
 
     def get_statistics(self):
