@@ -173,8 +173,7 @@ class Instance:
                 position = len(self.data)
             self.data = np.insert(self.data, position, value)
         else:
-            # TODO: Control de errores
-            pass
+            raise Exception("Can't add an attribute to an instance assigned to a bag")
 
     def delete_attribute(self, position):
         """
@@ -185,12 +184,10 @@ class Instance:
         position: int
             Position of the attribute
         """
-        # TODO: Check
         if self.bag is None:
             self.data = np.delete(self.data, position)
         else:
-            # TODO: Control de errores
-            pass
+            raise Exception("Can't delete an attribute of a bag assigned to a bag")
 
     def set_bag(self, bag):
         """
@@ -207,11 +204,12 @@ class Instance:
         """
         Show instance info in table format
         """
-        # TODO: Check. Hacer que muestre el nombre de los atributos.
+        # TODO: Hacer que muestre el nombre de los atributos.
+        if self.bag is None:
+            table = list(self.get_attributes())
+            print(tabulate(table, tablefmt="grid", numalign="center"))
+        else:
+            table = [self.get_features_name() + self.get_labels_name()]
+            table.append(list(self.get_attributes()))
+            print(tabulate(table, tablefmt="grid", numalign="center"))
 
-        table = list(self.get_attributes())
-
-        # table = [['col 1', 'col 2', 'col 3', 'col 4'], [1, 2222, 30, 500], [4, 55, 6777, 1]]
-        # print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
-        # print(tabulate([key], tablefmt="grid"))
-        print(tabulate(table, tablefmt="grid", numalign="center"))

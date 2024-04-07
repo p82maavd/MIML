@@ -287,13 +287,12 @@ class Bag:
         Show bag info in table format
         """
         # TODO: Check
-
-        table = [[self.key] + self.get_features_name() + self.get_labels_name()]
+        if self.dataset is None:
+            table = [[self.key]+[""]*self.get_number_attributes()]
+        else:
+            table = [[self.key] + self.get_features_name() + self.get_labels_name()]
         count = 0
         for i in range(self.get_number_instances()):
             table.append([count] + list(self.get_instance(i).get_attributes()))
             count += 1
-        # table = [['col 1', 'col 2', 'col 3', 'col 4'], [1, 2222, 30, 500], [4, 55, 6777, 1]]
-        # print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
-        # print(tabulate([key], tablefmt="grid"))
         print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
