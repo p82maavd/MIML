@@ -12,7 +12,7 @@ class DecisionNode:
 
 
 class C45Classifier:
-    def __init__(self, min_samples_split=2, max_depth=1):
+    def __init__(self, min_samples_split=2, max_depth=2):
         self.min_samples_split = min_samples_split  # Minimum number of samples required to split a node
         self.max_depth = max_depth  # Maximum depth of the tree
         self.tree = None

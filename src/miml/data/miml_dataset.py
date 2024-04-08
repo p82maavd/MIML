@@ -48,11 +48,7 @@ class MIMLDataset:
         attributes : List of string
             Attributes name of the dataset
         """
-        # TODO: Ver si se puede hacer con list(self.attributes.keys)
-        attributes = []
-        for attribute in self.attributes.keys():
-            attributes.append(attribute)
-        return attributes
+        return list(self.attributes.keys())
 
     def get_attributes(self):
         """
@@ -431,7 +427,7 @@ class MIMLDataset:
     def distinct(self):
         """
         Computes the numbers of labels combinations used in the dataset respect all the possible ones
-        
+
         Returns
         -------
         distinct : float

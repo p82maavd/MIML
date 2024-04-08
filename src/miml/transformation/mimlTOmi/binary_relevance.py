@@ -26,7 +26,6 @@ class BinaryRelevanceTransformation:
         Target vector relative to X.
 
         """
-        # TODO: Optimizar
         datasets = []
         x = self.dataset.get_features()
         y = self.dataset.get_labels()
