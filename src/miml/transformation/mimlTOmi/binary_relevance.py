@@ -31,7 +31,7 @@ class BinaryRelevanceTransformation:
         x = self.dataset.get_features()
         y = self.dataset.get_labels()
         for i in range(self.dataset.get_number_labels()):
-            datasets.append([x, y[i]])
+            datasets.append([x, y[:, i].reshape(-1, 1)])
 
         return datasets
 
@@ -53,7 +53,7 @@ class BinaryRelevanceTransformation:
         bag = self.dataset.get_bag(key)
         bags = []
         for i in range(len(bag.get_number_labels())):
-            bags.append([bag.get_attributes(), bag.get_labels()[i]])
+            bags.append([bag.get_attributes(), bag.get_labels()[0][i]])
         return bags
 
     def transform_instance(self, key):

@@ -114,14 +114,16 @@ class MIMLDataset:
 
         Returns
         -------
-        features data: numpy array
+        features: numpy array
             Values of the features of the dataset
-
         """
         # TODO: Test
-        features = []
+        features = np.zeros((self.get_number_instances(), self.get_number_features()))
+        count = 0
         for key in self.data.keys():
-            features.append(self.get_bag(key).get_features())
+            for instance in self.get_bag(key).get_features():
+                features[count] = instance
+                count += 1
         return features
 
     def get_number_features(self):
@@ -176,11 +178,12 @@ class MIMLDataset:
             Values of the labels of the dataset
 
         """
-        labels = np.zeros((self.get_number_bags(), self.get_number_labels()))
+        labels = np.zeros((self.get_number_instances(), self.get_number_labels()))
         count = 0
         for key in self.data.keys():
-            labels[count] = self.get_bag(key).get_labels()
-            count += 1
+            for instance in self.get_bag(key).get_labels():
+                labels[count] = instance
+                count += 1
         return labels
 
     def get_number_labels(self):
@@ -411,7 +414,7 @@ class MIMLDataset:
         """
         suma = 0
         for key in self.data:
-            suma += sum(self.get_bag(key).get_labels())
+            suma += sum(self.get_bag(key).get_labels()[0])
         return suma / self.get_number_bags()
 
     def density(self):
@@ -436,7 +439,7 @@ class MIMLDataset:
         """
         options = set()
         for key in self.data:
-            options.add(tuple(self.get_bag(key).get_labels()))
+            options.add(tuple(self.get_bag(key).get_labels()[0]))
         return len(options) / (2 ** self.get_number_labels())
 
     def get_statistics(self):

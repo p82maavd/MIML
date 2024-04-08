@@ -118,7 +118,7 @@ class Bag:
             Values of the labels of the bag
 
         """
-        return self.data[0, -self.get_number_labels():]
+        return self.data[0:, -self.get_number_labels():]
 
     def get_number_labels(self):
         """

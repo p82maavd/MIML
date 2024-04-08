@@ -29,11 +29,9 @@ class ArithmeticTransformation:
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features()))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
-        for keys, bag in self.dataset.data.items():
-            values = bag.data[0:, :self.dataset.get_number_features()]
-            labels = bag.data[0, -self.dataset.get_number_labels():]
-            new_instance = np.mean(values, axis=0)
-            x[count] = new_instance
+        for key in self.dataset.data.keys():
+            features, labels = self.transform_instance(key)
+            x[count] = features
             y[count] = labels
             count += 1
 
@@ -50,9 +48,14 @@ class ArithmeticTransformation:
 
         Returns
         -------
-        instance : tuple
-        Tuple of numpy ndarray with attribute values and labels
+        features : numpy array
+            Numpy array with feature values
 
+        labels : numpy array
+            Numpy array with label values
         """
-
-    # TODO: Implementarlo
+        # TODO: Test
+        features = self.dataset.get_bag(key).get_features()
+        labels = self.dataset.get_bag(key).get_labels()[0]
+        features = np.mean(features, axis=0)
+        return features, labels

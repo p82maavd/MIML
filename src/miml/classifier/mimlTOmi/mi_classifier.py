@@ -1,7 +1,7 @@
-
 import numpy as np
 
 from classifier.abstract_classifier import *
+from data.miml_dataset import MIMLDataset
 from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
 
 
@@ -32,7 +32,7 @@ class MIClassifier(AbstractClassifier):
         dataset_train: Numpy array
             Data to train the classifier
         """
-        self.classifiers = [self.classifier]*dataset_train.get_number_labels()
+        self.classifiers = [self.classifier] * dataset_train.get_number_labels()
         binary_relevance_transformation_train = BinaryRelevanceTransformation(dataset_train)
         datasets = binary_relevance_transformation_train.transform_dataset()
         for i in range(len(datasets)):
@@ -49,7 +49,7 @@ class MIClassifier(AbstractClassifier):
         """
         self.classifier.predict(test_data)
 
-    def evaluate(self, dataset_test):
+    def evaluate(self, dataset_test: MIMLDataset):
         """
 
         Parameters
@@ -58,14 +58,11 @@ class MIClassifier(AbstractClassifier):
         """
         binary_relevance_transformation_test = BinaryRelevanceTransformation(dataset_test)
         datasets = binary_relevance_transformation_test.transform_dataset()
-        results = []
+        results = np.zeros((dataset_test.get_number_instances(), dataset_test.get_number_labels()))
+        # Prediction of each label
         for i in range(len(datasets)):
-            results.append(self.classifiers[i].predict(datasets[i][0], datasets[i][1]))
-        for j in range(1, len(results)):
-            results[0] = np.hstack((results[0], results[j]))
+            results[:, i] = self.classifiers[i].predict(datasets[i][0])
 
-        accuracy = accuracy_score(dataset_test.get_labels(), results[0])
-        print(accuracy)
+        # accuracy = accuracy_score(dataset_test.get_labels(), results[0])
+        # print(accuracy)
         print('Hamming Loss: ', round(hamming_loss(dataset_test.get_labels(), results), 2))
-
-

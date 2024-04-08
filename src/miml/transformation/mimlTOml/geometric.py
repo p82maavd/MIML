@@ -29,13 +29,9 @@ class GeometricTransformation:
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features()))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
-        for keys, bag in self.dataset.data.items():
-            values = bag.data[0:, :self.dataset.get_number_features()]
-            labels = bag.data[0, -self.dataset.get_number_labels():]
-            min_values = np.min(values, axis=0)
-            max_values = np.max(values, axis=0)
-            new_instance = (min_values + max_values) / 2
-            x[count] = new_instance
+        for key in self.dataset.data.keys():
+            features, labels = self.transform_instance(key)
+            x[count] = features
             y[count] = labels
             count += 1
 
@@ -52,9 +48,18 @@ class GeometricTransformation:
 
         Returns
         -------
-        instance : tuple
-        Tuple of numpy ndarray with attribute values and labels
+        features : numpy array
+            Numpy array with feature values
 
+        labels : numpy array
+            Numpy array with label values
         """
+        # TODO: Test
+        features = self.dataset.get_bag(key).get_features()
+        labels = self.dataset.get_bag(key).get_labels()[0]
+        min_values = np.min(features, axis=0)
+        max_values = np.max(features, axis=0)
+        features = (min_values + max_values) / 2
+        return features, labels
 
     # TODO: Implementarlo
