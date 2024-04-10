@@ -1,17 +1,18 @@
 import numpy as np
 
 from data.miml_dataset import MIMLDataset
+from transformation.mimlTOml.miml_to_ml import MIMLtoML
 
 
-class ArithmeticTransformation:
+class ArithmeticTransformation(MIMLtoML):
     """
     Class that performs an arithmetic transformation to convert a MIMLDataset class to numpy ndarrays.
     """
 
-    def __init__(self, dataset: MIMLDataset):
-        self.dataset = dataset
+    def __init__(self):
+        super().__init__()
 
-    def transform_dataset(self):
+    def transform_dataset(self, dataset):
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
         attribute the mean value of the instances in the bag.
@@ -26,6 +27,7 @@ class ArithmeticTransformation:
         Target vector relative to X.
 
         """
+        self.dataset = dataset
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features()))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0

@@ -1,11 +1,11 @@
 import numpy as np
 
-from classifier.abstract_classifier import *
+from classifier.miml_classifier import *
 from data.miml_dataset import MIMLDataset
 from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
 
 
-class MIClassifier(AbstractClassifier):
+class MIClassifier(MIMLClassifier):
     """
     Class to represent a multiinstance classifier
     """

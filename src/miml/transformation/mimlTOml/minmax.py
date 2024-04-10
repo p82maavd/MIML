@@ -1,17 +1,18 @@
 import numpy as np
 
 from data.miml_dataset import MIMLDataset
+from transformation.mimlTOml.miml_to_ml import MIMLtoML
 
 
-class MinMaxTransformation:
+class MinMaxTransformation(MIMLtoML):
     """
     Class that performs a minmax transformation to convert a MIMLDataset class to numpy ndarrays.
     """
 
-    def __init__(self, dataset: MIMLDataset):
-        self.dataset = dataset
+    def __init__(self):
+        super().__init__()
 
-    def transform_dataset(self):
+    def transform_dataset(self, dataset):
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance with the min and max
         value of each attribute as two new attributes.
@@ -26,6 +27,7 @@ class MinMaxTransformation:
         Target vector relative to X.
 
         """
+        self.dataset = dataset
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features() * 2))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0

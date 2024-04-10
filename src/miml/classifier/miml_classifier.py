@@ -3,14 +3,14 @@ from abc import ABC, abstractmethod
 from sklearn.metrics import hamming_loss, accuracy_score
 
 
-class AbstractClassifier(ABC):
+class MIMLClassifier(ABC):
     """
     Class to represent an abstract classifier
     """
 
     def __init__(self):
         """
-        Constructor of the class AbstractClassifier
+        Constructor of the class MIMLClassifier
         """
 
     @abstractmethod
