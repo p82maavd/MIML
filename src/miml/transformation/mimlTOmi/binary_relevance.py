@@ -27,8 +27,8 @@ class BinaryRelevanceTransformation:
 
         """
         datasets = []
-        x = self.dataset.get_features()
-        y = self.dataset.get_labels()
+        x = self.dataset.get_features_by_bag()
+        y = self.dataset.get_labels_by_bag()
         for i in range(self.dataset.get_number_labels()):
             datasets.append([x, y[:, i].reshape(-1, 1)])
 

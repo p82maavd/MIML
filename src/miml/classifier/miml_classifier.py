@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
+import numpy as np
 from sklearn.metrics import hamming_loss, accuracy_score
+
+from data.miml_dataset import MIMLDataset
 
 
 class MIMLClassifier(ABC):
@@ -12,33 +15,42 @@ class MIMLClassifier(ABC):
         """
         Constructor of the class MIMLClassifier
         """
+        self.model_trained = False
 
     @abstractmethod
-    def fit(self, training_dataset):
+    def fit(self, dataset_train: MIMLDataset):
         """
 
         Parameters
         ----------
-        training_dataset
+        dataset_train
         """
-        pass
+        if not isinstance(dataset_train, MIMLDataset):
+            raise Exception("Fit function should receive a MIMLDataset as parameter")
+        self.model_trained = True
 
     @abstractmethod
-    def predict(self, test_data):
+    def predict(self, data_test: np.ndarray):
         """
 
         Parameters
         ----------
-        test_data
+        data_test
         """
-        pass
+        if not isinstance(data_test, np.ndarray):
+            raise Exception("Predict function should receive a Numpy array as parameter")
+        if not self.model_trained:
+            raise Exception("The model has not been trained")
 
     @abstractmethod
-    def evaluate(self, dataset_test):
+    def evaluate(self, dataset_test: MIMLDataset):
         """
 
         Parameters
         ----------
         dataset_test
         """
-        pass
+        if not isinstance(dataset_test, MIMLDataset):
+            raise Exception("Evaluate function should receive a MIMLDataset as parameter")
+        if not self.model_trained:
+            raise Exception("The model has not been trained")

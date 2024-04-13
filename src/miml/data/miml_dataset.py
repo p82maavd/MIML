@@ -122,6 +122,13 @@ class MIMLDataset:
                 count += 1
         return features
 
+    def get_features_by_bag(self):
+        features = []
+        count_bag = 0
+        for key in self.data.keys():
+            features.append(self.get_bag(key).get_features())
+        return np.array(features, dtype=object)
+
     def get_number_features(self):
         """
         Get numbers of attributes of the dataset
@@ -181,6 +188,15 @@ class MIMLDataset:
                 labels[count] = instance
                 count += 1
         return labels
+
+    def get_labels_by_bag(self):
+        labels = np.zeros((self.get_number_bags(), self.get_number_labels()))
+        count = 0
+        for key in self.data.keys():
+            labels[count] = self.get_bag(key).get_labels()[0]
+            count += 1
+        return labels
+
 
     def get_number_labels(self):
         """

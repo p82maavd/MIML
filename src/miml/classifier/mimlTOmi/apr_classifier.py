@@ -1,14 +1,16 @@
+import mil.models
 from sklearn.metrics import accuracy_score, hamming_loss
 from sklearn.tree import DecisionTreeClassifier
+from mil import *
 
 
-class DTClassifier:
+class APRClassifier:
 
     def __init__(self):
         """
 
         """
-        self.classifier = DecisionTreeClassifier()
+        self.classifier = mil.models.APR(step=10, verbose=0)
 
     def fit(self, x_train, y_train):
         """
