@@ -33,7 +33,7 @@ class MIMLtoMIClassifier(MIMLClassifier):
         """
         super().fit(dataset_train)
 
-    def predict(self, data_test):
+    def predict_bag(self, bag: Bag):
         """
         Predict labels of given data
 
@@ -42,8 +42,7 @@ class MIMLtoMIClassifier(MIMLClassifier):
         data_test : Numpy Array
             Data to predict their classes
         """
-        super().predict(data_test)
-        self.classifier.predict(data_test)
+        super().predict_bag(bag)
 
     def evaluate(self, dataset_test: MIMLDataset):
         """

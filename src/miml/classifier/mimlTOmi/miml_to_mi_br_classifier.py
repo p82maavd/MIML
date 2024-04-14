@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import numpy as np
 
 from classifier.mimlTOmi.miml_to_mi_classifier import MIMLtoMIClassifier
@@ -21,6 +23,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             Specific classifier to be used
         """
         super().__init__(classifier)
+        self.transformation = BinaryRelevanceTransformation()
         self.classifiers = []
 
     def fit(self, dataset_train):
@@ -33,23 +36,30 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             Data to train the classifier
         """
         super().fit(dataset_train)
-        self.classifiers = [self.classifier] * dataset_train.get_number_labels()
-        binary_relevance_transformation_train = BinaryRelevanceTransformation(dataset_train)
-        datasets = binary_relevance_transformation_train.transform_dataset()
+        for x in range(dataset_train.get_number_labels()):
+            classifier = deepcopy(self.classifier)
+            self.classifiers.append(classifier)
+
+        datasets = self.transformation.transform_dataset(dataset_train)
         for i in range(len(datasets)):
             self.classifiers[i].fit(datasets[i][0], datasets[i][1])
 
-    def predict(self, data_test):
+    def predict_bag(self, bag: Bag):
         """
         Predict labels of given data
 
         Parameters
         ----------
-        data_test : Numpy Array
-            Data to predict their classes
+        bag : Bag
+            Bag to predict their classes
         """
-        super().predict(data_test)
-        self.classifier.predict(data_test)
+        super().predict_bag(bag)
+        bags = self.transformation.transform_bag(bag)
+        results = np.zeros((bag.get_number_labels()))
+        # Prediction of each label
+        for i in range(len(bags)):
+            results[i] = self.classifiers[i].predict_bag(bags[i][0])
+        return results
 
     def evaluate(self, dataset_test: MIMLDataset):
         """
@@ -59,13 +69,13 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         dataset_test
         """
         super().evaluate(dataset_test)
-        binary_relevance_transformation_test = BinaryRelevanceTransformation(dataset_test)
-        datasets = binary_relevance_transformation_test.transform_dataset()
+
+        datasets = self.transformation.transform_dataset(dataset_test)
+
         results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
         # Prediction of each label
-        for i in range(len(datasets)):
-            results[:, i] = self.classifiers[i].predict(datasets[i][0])
-        # TODO: Here should be a call to classifier evaluate. Lo que pasa es que cada apr_classifier solo se encarga de clasificar una label por lo que no puede hacer el evaluate y se va a quedar en esta clase
+        for i in range(dataset_test.get_number_labels()):
+            results[:, i] = self.classifiers[i].evaluate(datasets[i][0], datasets[i][1]).flatten()
         accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results)
         print(accuracy)
         print('Hamming Loss: ', round(hamming_loss(dataset_test.get_labels_by_bag(), results), 2))

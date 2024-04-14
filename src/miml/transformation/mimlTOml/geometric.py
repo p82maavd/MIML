@@ -32,14 +32,14 @@ class GeometricTransformation(MIMLtoML):
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
         for key in self.dataset.data.keys():
-            features, labels = self.transform_instance(key)
+            features, labels = self.transform_bag(self.dataset.get_bag(key))
             x[count] = features
             y[count] = labels
             count += 1
 
         return x, y
 
-    def transform_instance(self, key):
+    def transform_bag(self, bag):
         """
         Transform the instances of a bag to a multilabel instance
 
@@ -57,11 +57,10 @@ class GeometricTransformation(MIMLtoML):
             Numpy array with label values
         """
         # TODO: Test
-        features = self.dataset.get_bag(key).get_features()
-        labels = self.dataset.get_bag(key).get_labels()[0]
+
+        features = bag.get_features()
+        labels = bag.get_labels()[0]
         min_values = np.min(features, axis=0)
         max_values = np.max(features, axis=0)
         features = (min_values + max_values) / 2
         return features, labels
-
-    # TODO: Implementarlo

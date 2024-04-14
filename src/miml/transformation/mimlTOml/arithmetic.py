@@ -1,5 +1,6 @@
 import numpy as np
 
+from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 from transformation.mimlTOml.miml_to_ml import MIMLtoML
 
@@ -32,20 +33,20 @@ class ArithmeticTransformation(MIMLtoML):
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
         count = 0
         for key in self.dataset.data.keys():
-            features, labels = self.transform_instance(key)
+            features, labels = self.transform_bag(self.dataset.get_bag(key))
             x[count] = features
             y[count] = labels
             count += 1
 
         return x, y
 
-    def transform_instance(self, key):
+    def transform_bag(self, bag: Bag):
         """
         Transform the instances of a bag to a multilabel instance
 
         Parameters
         ----------
-        key : string
+        bag : Bag
             Key of the bag to be transformed to multilabel instance
 
         Returns
@@ -57,7 +58,8 @@ class ArithmeticTransformation(MIMLtoML):
             Numpy array with label values
         """
         # TODO: Test
-        features = self.dataset.get_bag(key).get_features()
-        labels = self.dataset.get_bag(key).get_labels()[0]
+
+        features = bag.get_features()
+        labels = bag.get_labels()[0]
         features = np.mean(features, axis=0)
         return features, labels

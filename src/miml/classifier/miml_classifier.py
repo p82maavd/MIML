@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 from sklearn.metrics import hamming_loss, accuracy_score
 
+from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 
 
@@ -30,14 +31,14 @@ class MIMLClassifier(ABC):
         self.model_trained = True
 
     @abstractmethod
-    def predict(self, data_test: np.ndarray):
+    def predict_bag(self, bag: Bag):
         """
 
         Parameters
         ----------
-        data_test
+        bag
         """
-        if not isinstance(data_test, np.ndarray):
+        if not isinstance(bag, Bag):
             raise Exception("Predict function should receive a Numpy array as parameter")
         if not self.model_trained:
             raise Exception("The model has not been trained")

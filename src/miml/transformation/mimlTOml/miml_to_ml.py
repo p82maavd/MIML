@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 
+from data.bag import Bag
+from data.miml_dataset import MIMLDataset
+
 
 class MIMLtoML(ABC):
 
@@ -7,9 +10,9 @@ class MIMLtoML(ABC):
         self.dataset = None
 
     @abstractmethod
-    def transform_dataset(self, dataset):
+    def transform_dataset(self, dataset: MIMLDataset):
         pass
 
     @abstractmethod
-    def transform_instance(self, key):
+    def transform_bag(self, bag: Bag):
         pass

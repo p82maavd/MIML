@@ -1,5 +1,6 @@
 import numpy as np
 
+from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 
 
@@ -8,10 +9,10 @@ class BinaryRelevanceTransformation:
     Class that performs a binary relevance transformation to convert a MIMLDataset class to numpy ndarrays.
     """
 
-    def __init__(self, dataset: MIMLDataset):
-        self.dataset = dataset
+    def __init__(self):
+        self.dataset = None
 
-    def transform_dataset(self):
+    def transform_dataset(self, dataset):
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
         attribute the mean value of the instances in the bag.
@@ -26,6 +27,7 @@ class BinaryRelevanceTransformation:
         Target vector relative to X.
 
         """
+        self.dataset = dataset
         datasets = []
         x = self.dataset.get_features_by_bag()
         y = self.dataset.get_labels_by_bag()
@@ -34,14 +36,14 @@ class BinaryRelevanceTransformation:
 
         return datasets
 
-    def transform_bag(self, key):
+    def transform_bag(self, bag: Bag):
         """
         Transform miml bag to multi instance bags
 
         Parameters
         ----------
-        key : string
-            Key of the bag to be transformed to multilabel instance
+        bag :
+            Bag to be transformed to multiinstance bag
 
         Returns
         -------
@@ -49,28 +51,9 @@ class BinaryRelevanceTransformation:
         Tuple of numpy ndarray with attribute values and labels
 
         """
-        bag = self.dataset.get_bag(key)
         bags = []
-        for i in range(len(bag.get_number_labels())):
-            bags.append([bag.get_attributes(), bag.get_labels()[0][i]])
+        for i in range(bag.get_number_labels()):
+            bags.append([bag.get_features(), bag.get_labels()[0][i]])
         return bags
 
-    def transform_instance(self, key):
-        """
-        Transform the instances of a bag to a multilabel instance
 
-        Parameters
-        ----------
-        key : string
-            Key of the bag to be transformed to multilabel instance
-
-        Returns
-        -------
-        instance : tuple
-        Tuple of numpy ndarray with attribute values and labels
-
-        """
-        bag = self.dataset.get_bag(key)
-        return []
-
-    # TODO: Implementarlo

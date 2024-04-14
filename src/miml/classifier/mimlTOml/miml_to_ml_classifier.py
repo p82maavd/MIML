@@ -32,15 +32,17 @@ class MIMLtoMLClassifier(MIMLClassifier):
         x_train, y_train = self.transformation.transform_dataset(dataset_train)
         self.classifier.fit(x_train, y_train)
 
-    def predict(self, data_test: np.ndarray):
+    def predict_bag(self, bag: Bag):
         """
 
         Parameters
         ----------
-        data_test
+        bag
         """
-        super().predict(data_test)
-        self.classifier.predict(data_test)
+        # TODO: Check number attributes of bag with dataset
+        super().predict_bag(bag)
+        x_bag, _ = self.transformation.transform_bag(bag)
+        return self.classifier.predict_bag(x_bag)
 
     def evaluate(self, dataset_test: MIMLDataset):
         """
@@ -52,3 +54,4 @@ class MIMLtoMLClassifier(MIMLClassifier):
         super().evaluate(dataset_test)
         x_test, y_test = self.transformation.transform_dataset(dataset_test)
         self.classifier.evaluate(x_test, y_test)
+
