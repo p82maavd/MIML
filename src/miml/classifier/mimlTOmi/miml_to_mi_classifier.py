@@ -1,8 +1,6 @@
-import numpy as np
 
 from classifier.miml_classifier import *
 from data.miml_dataset import MIMLDataset
-from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
 
 
 class MIMLtoMIClassifier(MIMLClassifier):
@@ -39,8 +37,8 @@ class MIMLtoMIClassifier(MIMLClassifier):
 
         Parameters
         ----------
-        data_test : Numpy Array
-            Data to predict their classes
+        bag : Bag
+            Bag to predict their classes
         """
         super().predict_bag(bag)
 
@@ -52,4 +50,3 @@ class MIMLtoMIClassifier(MIMLClassifier):
         dataset_test
         """
         super().evaluate(dataset_test)
-

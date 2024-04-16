@@ -1,16 +1,24 @@
 import mil.models
-from sklearn.metrics import accuracy_score, hamming_loss
+from mil.bag_representation import MILESMapping
+from sklearn.svm import LinearSVC
 from sklearn.tree import DecisionTreeClassifier
-from mil import *
+import numpy as np
+
+from mil.models import SVC
 
 
 class MILESClassifier:
 
-    def __init__(self):
+    def __init__(self, sigma2=4.5 ** 2, c=0.5):
         """
 
         """
-        self.classifier = mil.models.MILES(C=10)
+        self.classifier = mil.models.MILES()
+        self.model = None
+        self.mapping = None
+        self.sigma2 = sigma2
+        self.c = c
+        self.trainer = None
 
     def fit(self, x_train, y_train):
         """
@@ -20,20 +28,36 @@ class MILESClassifier:
         x_train
         y_train
         """
-        self.classifier.fit(x_train, y_train.flatten())
+       
+        self.classifier.check_exceptions(x_train)
+        self.mapping = MILESMapping(self.sigma2)
+        mapped_bags = self.mapping.fit_transform(x_train)
 
-    def predict(self, x_test):
+        # train the SVM
+        # self.model = LinearSVC(penalty="l1", C=self.c, dual=False, class_weight='balanced',max_iter=100000)
+
+        self.model = DecisionTreeClassifier()
+        self.model.fit(mapped_bags, y_train.flatten())
+
+    def predict_bag(self, bag):
         """
 
         Parameters
         ----------
-        x_test
+        bag
 
         Returns
         -------
 
         """
-        return self.classifier.predict(x_test)
+
+        bag = bag.reshape(1, bag.shape[0], bag.shape[1])
+        # return self.classifier.predict(bag)
+
+        # testeo
+
+        mapped_bags = self.mapping.transform(bag)
+        return self.model.predict(mapped_bags)
 
     def evaluate(self, x_test, y_test):
         """
@@ -43,7 +67,11 @@ class MILESClassifier:
         x_test
         y_test
         """
-        results = self.predict(x_test)
-        accuracy = accuracy_score(y_test, results)
-        print(accuracy)
-        print('Hamming Loss: ', round(hamming_loss(y_test, results), 2))
+
+        results = np.zeros(y_test.shape)
+
+        for i, bag in enumerate(x_test):
+            result = self.predict_bag(bag)
+            results[i] = result
+
+        return results

@@ -1,6 +1,5 @@
 from copy import deepcopy
 
-import numpy as np
 
 from classifier.mimlTOmi.miml_to_mi_classifier import MIMLtoMIClassifier
 from classifier.miml_classifier import *
@@ -76,6 +75,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         # Prediction of each label
         for i in range(dataset_test.get_number_labels()):
             results[:, i] = self.classifiers[i].evaluate(datasets[i][0], datasets[i][1]).flatten()
+
         accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results)
         print(accuracy)
         print('Hamming Loss: ', round(hamming_loss(dataset_test.get_labels_by_bag(), results), 2))
