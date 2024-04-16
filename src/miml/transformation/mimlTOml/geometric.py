@@ -1,7 +1,7 @@
 import numpy as np
 
 from data.miml_dataset import MIMLDataset
-from transformation.mimlTOml.miml_to_ml import MIMLtoML
+from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoML
 
 
 class GeometricTransformation(MIMLtoML):

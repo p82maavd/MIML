@@ -4,7 +4,7 @@ from copy import deepcopy
 from classifier.mimlTOmi.miml_to_mi_classifier import MIMLtoMIClassifier
 from classifier.miml_classifier import *
 from data.miml_dataset import MIMLDataset
-from transformation.mimlTOmi.binary_relevance import BinaryRelevanceTransformation
+from transformation.mimlTOmi.binary_relevance_transformation import BinaryRelevanceTransformation
 
 
 class MIMLtoMIBRClassifier(MIMLtoMIClassifier):

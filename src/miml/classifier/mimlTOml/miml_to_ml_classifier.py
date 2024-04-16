@@ -1,6 +1,6 @@
 from classifier.miml_classifier import *
 
-from transformation.mimlTOml.miml_to_ml import MIMLtoML
+from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoML
 
 
 class MIMLtoMLClassifier(MIMLClassifier):
@@ -21,14 +21,13 @@ class MIMLtoMLClassifier(MIMLClassifier):
         self.classifier = classifier
         self.transformation = transformation
 
-    def fit(self, dataset_train: MIMLDataset):
+    def fit_internal(self, dataset_train: MIMLDataset):
         """
 
         Parameters
         ----------
         dataset_train
         """
-        super().fit(dataset_train)
         x_train, y_train = self.transformation.transform_dataset(dataset_train)
         self.classifier.fit(x_train, y_train)
 

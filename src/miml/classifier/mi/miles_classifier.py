@@ -28,7 +28,7 @@ class MILESClassifier:
         x_train
         y_train
         """
-       
+
         self.classifier.check_exceptions(x_train)
         self.mapping = MILESMapping(self.sigma2)
         mapped_bags = self.mapping.fit_transform(x_train)

@@ -16,9 +16,8 @@ class MIMLClassifier(ABC):
         """
         Constructor of the class MIMLClassifier
         """
-        self.model_trained = False
 
-    @abstractmethod
+
     def fit(self, dataset_train: MIMLDataset):
         """
 
@@ -28,7 +27,8 @@ class MIMLClassifier(ABC):
         """
         if not isinstance(dataset_train, MIMLDataset):
             raise Exception("Fit function should receive a MIMLDataset as parameter")
-        self.model_trained = True
+
+        self.fit_internal(dataset_train)
 
     @abstractmethod
     def predict_bag(self, bag: Bag):
@@ -40,8 +40,7 @@ class MIMLClassifier(ABC):
         """
         if not isinstance(bag, Bag):
             raise Exception("Predict function should receive a Numpy array as parameter")
-        if not self.model_trained:
-            raise Exception("The model has not been trained")
+
 
     @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset):
@@ -53,5 +52,8 @@ class MIMLClassifier(ABC):
         """
         if not isinstance(dataset_test, MIMLDataset):
             raise Exception("Evaluate function should receive a MIMLDataset as parameter")
-        if not self.model_trained:
-            raise Exception("The model has not been trained")
+
+
+    @abstractmethod
+    def fit_internal(self, dataset_train: MIMLDataset):
+        pass
