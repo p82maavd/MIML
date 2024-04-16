@@ -12,13 +12,13 @@ import numpy as np
 
 class APRClassifier:
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
 
         """
         self.classifier = mil.models.APR(verbose=0)
 
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train) -> None:
         """
 
         Parameters
@@ -28,7 +28,7 @@ class APRClassifier:
         """
         self.classifier.fit(x_train, y_train)
 
-    def predict_bag(self, bag):
+    def predict_bag(self, bag) -> np.array:
         """
 
         Parameters
@@ -42,16 +42,4 @@ class APRClassifier:
         bag = bag.reshape(1, bag.shape[0], bag.shape[1])
         return self.classifier.predict(bag)
 
-    def evaluate(self, x_test, y_test):
-        """
 
-        Parameters
-        ----------
-        x_test
-        y_test
-        """
-        results = np.zeros(y_test.shape)
-        for i, bag in enumerate(x_test):
-            result = self.predict_bag(bag)
-            results[i] = result
-        return results

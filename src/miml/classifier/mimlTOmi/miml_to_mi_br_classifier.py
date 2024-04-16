@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from sklearn.metrics import accuracy_score, average_precision_score, f1_score, hamming_loss, precision_score, \
+    recall_score
 
 from classifier.mimlTOmi.miml_to_mi_classifier import MIMLtoMIClassifier
 from classifier.miml_classifier import *
@@ -25,7 +27,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         self.transformation = BinaryRelevanceTransformation()
         self.classifiers = []
 
-    def fit(self, dataset_train):
+    def fit_internal(self, dataset_train):
         """
         Training the classifier
 
@@ -34,7 +36,6 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         dataset_train: Numpy array
             Data to train the classifier
         """
-        super().fit(dataset_train)
         for x in range(dataset_train.get_number_labels()):
             classifier = deepcopy(self.classifier)
             self.classifiers.append(classifier)
@@ -71,11 +72,25 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         datasets = self.transformation.transform_dataset(dataset_test)
 
-        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        results_dataset = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
         # Prediction of each label
         for i in range(dataset_test.get_number_labels()):
-            results[:, i] = self.classifiers[i].evaluate(datasets[i][0], datasets[i][1]).flatten()
+            results_label = np.zeros(dataset_test.get_number_bags())
+            for j, bag in enumerate(datasets[i][0]):
+                results_label[j] = self.classifiers[i].predict_bag(bag)
+            results_dataset[:, i] = results_label.flatten()
 
-        accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results)
-        print(accuracy)
-        print('Hamming Loss: ', round(hamming_loss(dataset_test.get_labels_by_bag(), results), 2))
+        accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results_dataset)
+        average_precision = average_precision_score(dataset_test.get_labels_by_bag(), results_dataset)
+        f1_macro = f1_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
+        f1_micro = f1_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
+        hamming_loss_score = hamming_loss(dataset_test.get_labels_by_bag(), results_dataset)
+        precision_macro = precision_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
+        precision_micro = precision_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
+        recall_macro = recall_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
+        recall_micro = recall_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
+
+        print(accuracy, average_precision, f1_macro, f1_micro, hamming_loss_score, precision_macro,precision_micro,
+              recall_macro, recall_micro)
+
+

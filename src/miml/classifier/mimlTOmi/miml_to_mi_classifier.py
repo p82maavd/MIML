@@ -20,16 +20,9 @@ class MIMLtoMIClassifier(MIMLClassifier):
         super().__init__()
         self.classifier = classifier
 
-    def fit(self, dataset_train):
-        """
-        Training the classifier
-
-        Parameters
-        ----------
-        dataset_train: Numpy array
-            Data to train the classifier
-        """
-        super().fit(dataset_train)
+    @abstractmethod
+    def fit_internal(self, dataset_train: MIMLDataset):
+        pass
 
     def predict_bag(self, bag: Bag):
         """

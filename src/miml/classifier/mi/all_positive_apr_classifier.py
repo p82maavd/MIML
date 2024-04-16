@@ -2,17 +2,19 @@ from copy import deepcopy
 
 import numpy as np
 
+from data.bag import Bag
+
 
 class AllPositiveAPRClassifier:
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
 
         """
         # self.classifier = mil.models.APR(step=10, verbose=0)
         self.apr = []
 
-    def fit(self, x_train, y_train):
+    def fit(self, x_train, y_train) -> None:
         """
 
         Parameters
@@ -22,12 +24,13 @@ class AllPositiveAPRClassifier:
         """
         self.generate_apr(x_train, y_train)
 
-    def predict_bag(self, bag):
+    def predict_bag(self, bag: np.array) -> int:
         """
 
         Parameters
         ----------
-        bag
+        bag: np.array
+            features values of a bag
 
         Returns
         -------
@@ -38,23 +41,7 @@ class AllPositiveAPRClassifier:
                 return 1
         return 0
 
-
-
-    def evaluate(self, x_test, y_test):
-        """
-
-        Parameters
-        ----------
-        x_test
-        y_test
-        """
-        results = np.zeros(y_test.shape)
-        for i, bag in enumerate(x_test):
-            result = self.predict_bag(bag)
-            results[i] = result
-        return results
-
-    def generate_apr(self, x_train, y_train):
+    def generate_apr(self, x_train, y_train) -> None:
 
         positive_bag_indices = np.where(y_train == 1)[0]
 
@@ -68,4 +55,3 @@ class AllPositiveAPRClassifier:
                 apr_max = np.maximum(apr_max, instance)
 
         self.apr = [apr_min, apr_max]
-

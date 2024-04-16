@@ -17,7 +17,6 @@ class MIMLClassifier(ABC):
         Constructor of the class MIMLClassifier
         """
 
-
     def fit(self, dataset_train: MIMLDataset):
         """
 
@@ -31,6 +30,10 @@ class MIMLClassifier(ABC):
         self.fit_internal(dataset_train)
 
     @abstractmethod
+    def fit_internal(self, dataset_train: MIMLDataset):
+        pass
+
+    @abstractmethod
     def predict_bag(self, bag: Bag):
         """
 
@@ -40,7 +43,6 @@ class MIMLClassifier(ABC):
         """
         if not isinstance(bag, Bag):
             raise Exception("Predict function should receive a Numpy array as parameter")
-
 
     @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset):
@@ -54,6 +56,3 @@ class MIMLClassifier(ABC):
             raise Exception("Evaluate function should receive a MIMLDataset as parameter")
 
 
-    @abstractmethod
-    def fit_internal(self, dataset_train: MIMLDataset):
-        pass

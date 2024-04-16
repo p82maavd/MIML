@@ -50,28 +50,7 @@ class MILESClassifier:
         -------
 
         """
-
         bag = bag.reshape(1, bag.shape[0], bag.shape[1])
-        # return self.classifier.predict(bag)
-
-        # testeo
-
         mapped_bags = self.mapping.transform(bag)
         return self.model.predict(mapped_bags)
 
-    def evaluate(self, x_test, y_test):
-        """
-
-        Parameters
-        ----------
-        x_test
-        y_test
-        """
-
-        results = np.zeros(y_test.shape)
-
-        for i, bag in enumerate(x_test):
-            result = self.predict_bag(bag)
-            results[i] = result
-
-        return results
