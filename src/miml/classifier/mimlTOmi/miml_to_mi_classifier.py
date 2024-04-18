@@ -23,6 +23,9 @@ class MIMLtoMIClassifier(MIMLClassifier):
     def fit_internal(self, dataset_train: MIMLDataset):
         pass
 
+    def predict(self, x: np.ndarray):
+        return self.classifier.predict(x)
+
     def predict_bag(self, bag: Bag):
         """
         Predict labels of given data

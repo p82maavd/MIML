@@ -1,8 +1,4 @@
-from copy import deepcopy
-
 import numpy as np
-
-from data.bag import Bag
 
 
 class AllPositiveAPRClassifier:
@@ -23,7 +19,7 @@ class AllPositiveAPRClassifier:
         """
         self.generate_apr(x_train, y_train)
 
-    def predict_bag(self, bag: np.array) -> int:
+    def predict(self, bag: np.array) -> int:
         """
 
         Parameters

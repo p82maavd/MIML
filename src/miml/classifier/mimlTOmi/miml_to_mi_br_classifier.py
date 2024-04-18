@@ -41,6 +41,13 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         for i in range(len(datasets)):
             self.classifiers[i].fit(datasets[i][0], datasets[i][1])
 
+    def predict(self, x):
+        results = np.zeros((len(self.classifiers)))
+        # Prediction of each label
+        for i in range(len(self.classifiers)):
+            results[i] = self.classifiers[i].predict(x)
+        return results
+
     def predict_bag(self, bag: Bag):
         """
         Predict labels of given data
@@ -52,11 +59,8 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         """
         super().predict_bag(bag)
         bags = self.transformation.transform_bag(bag)
-        results = np.zeros((bag.get_number_labels()))
-        # Prediction of each label
-        for i in range(len(bags)):
-            results[i] = self.classifiers[i].predict_bag(bags[i][0])
-        return results
+
+        return self.predict(bags[0][0])
 
     def evaluate(self, dataset_test: MIMLDataset):
         """
@@ -70,12 +74,8 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         datasets = self.transformation.transform_dataset(dataset_test)
 
         results_dataset = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
-        # Prediction of each label
-        for i in range(dataset_test.get_number_labels()):
-            results_label = np.zeros(dataset_test.get_number_bags())
-            for j, bag in enumerate(datasets[i][0]):
-                results_label[j] = self.classifiers[i].predict_bag(bag)
-            results_dataset[:, i] = results_label.flatten()
+        for i, bag in enumerate(datasets[0][0]):
+            results_dataset[i] = self.predict(bag)
 
         accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results_dataset)
         average_precision = average_precision_score(dataset_test.get_labels_by_bag(), results_dataset)
@@ -89,4 +89,3 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         print(accuracy, average_precision, f1_macro, f1_micro, hamming_loss_score, precision_macro, precision_micro,
               recall_macro, recall_micro)
-

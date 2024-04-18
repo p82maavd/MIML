@@ -34,6 +34,18 @@ class MIMLClassifier(ABC):
         pass
 
     @abstractmethod
+    def predict(self, x):
+        """
+
+        Parameters
+        ----------
+        x: np.ndarray
+            Input samples
+        """
+        # if not isinstance(x, np.ndarray):
+        #    raise Exception("Predict function should receive a Numpy array as parameter")
+
+    @abstractmethod
     def predict_bag(self, bag: Bag):
         """
 
@@ -41,8 +53,8 @@ class MIMLClassifier(ABC):
         ----------
         bag
         """
-        if not isinstance(bag, Bag):
-            raise Exception("Predict function should receive a Numpy array as parameter")
+        # if not isinstance(bag, Bag):
+        #    raise Exception("Predict function should receive a Numpy array as parameter")
 
     @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset):
@@ -54,4 +66,3 @@ class MIMLClassifier(ABC):
         """
         if not isinstance(dataset_test, MIMLDataset):
             raise Exception("Evaluate function should receive a MIMLDataset as parameter")
-

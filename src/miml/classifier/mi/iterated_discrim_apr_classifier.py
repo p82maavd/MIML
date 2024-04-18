@@ -12,6 +12,7 @@ class IteratedDiscrimAPRClassifier:
         # self.classifier = mil.models.APR(step=10, verbose=0)
         self.apr = []
         self.positive_bag_indices = None
+        raise Exception("Not implemented yet")
 
     def fit(self, x_train, y_train):
         """
