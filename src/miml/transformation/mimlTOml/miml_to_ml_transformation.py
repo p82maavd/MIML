@@ -4,7 +4,7 @@ from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 
 
-class MIMLtoML(ABC):
+class MIMLtoMLTransformation(ABC):
 
     def __init__(self):
         self.dataset = None

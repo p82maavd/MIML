@@ -7,14 +7,14 @@ class Instance:
     Class to manage MIML Instance data representation
     """
 
-    def __init__(self, values=None, bag=None):
+    def __init__(self, values=None, bag=None) -> None:
         """
         Constructor of the class Instance
         """
         self.bag = bag
         self.data = np.array(values)
 
-    def get_attributes_name(self):
+    def get_attributes_name(self) -> list[str]:
         """
         Get attributes name
 
@@ -28,7 +28,7 @@ class Instance:
         else:
             raise Exception("The instance isn't in any dataset, so there is no attributes info")
 
-    def get_attributes(self):
+    def get_attributes(self) -> np.ndarray:
         """
         Get data attributes of the instance
 
@@ -39,7 +39,7 @@ class Instance:
         """
         return self.data
 
-    def get_number_attributes(self):
+    def get_number_attributes(self) -> int:
         """
         Get numbers of attributes of the instance
 
@@ -50,7 +50,7 @@ class Instance:
         """
         return len(self.get_attributes())
 
-    def get_features_name(self):
+    def get_features_name(self) -> list[str]:
         """
         Get features name
 
@@ -64,7 +64,7 @@ class Instance:
         else:
             raise Exception("The instance isn't in any dataset, so there is no features info")
 
-    def get_features(self):
+    def get_features(self) -> np.ndarray:
         """
         Get features values of the instance
 
@@ -76,7 +76,7 @@ class Instance:
         """
         return self.data[0:self.get_number_features()]
 
-    def get_number_features(self):
+    def get_number_features(self) -> int:
         """
         Get numbers of features of the instance
 
@@ -90,7 +90,7 @@ class Instance:
         else:
             raise Exception("The instance isn't in any dataset, so there is no features info")
 
-    def get_labels_name(self):
+    def get_labels_name(self) -> list[str]:
         """
         Get labels name
 
@@ -104,7 +104,7 @@ class Instance:
         else:
             raise Exception("The instance isn't in any dataset, so there is no labels info")
 
-    def get_labels(self):
+    def get_labels(self) -> np.ndarray:
         """
         Get labels values of the instance
 
@@ -116,7 +116,7 @@ class Instance:
                 """
         return self.data[-self.get_number_labels():]
 
-    def get_number_labels(self):
+    def get_number_labels(self) -> int:
         """
         Get numbers of labels of the instance
 
@@ -130,7 +130,7 @@ class Instance:
         else:
             raise Exception("The instance isn't in any dataset, so there is no labels info")
 
-    def get_attribute(self,  attribute):
+    def get_attribute(self,  attribute) -> float:
         """
         Get value of an attribute of the instance
 
@@ -150,7 +150,7 @@ class Instance:
             index = list(self.get_attributes()).index(attribute)
             return self.data.item(index)
 
-    def set_attribute(self, attribute, value):
+    def set_attribute(self, attribute, value) -> None:
         """
         Update value of an attribute of the instance
 
@@ -168,7 +168,7 @@ class Instance:
             index = list(self.get_attributes()).index(attribute)
             self.data[index] = value
 
-    def add_attribute(self, value=0, position=None):
+    def add_attribute(self, value=0, position=None) -> None:
         """
         Add an attribute to the instance
 
@@ -187,7 +187,7 @@ class Instance:
         else:
             raise Exception("Can't add an attribute to an instance assigned to a bag")
 
-    def delete_attribute(self, position):
+    def delete_attribute(self, position) -> None:
         """
         Delete an attribute of the instance
 
@@ -201,7 +201,7 @@ class Instance:
         else:
             raise Exception("Can't delete an attribute of a bag assigned to a bag")
 
-    def set_bag(self, bag):
+    def set_bag(self, bag) -> None:
         """
         Set the bag of the instance
 
@@ -212,7 +212,7 @@ class Instance:
         """
         self.bag = bag
 
-    def show_instance(self):
+    def show_instance(self) -> None:
         """
         Show instance info in table format
         """

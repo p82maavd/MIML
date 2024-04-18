@@ -2,7 +2,6 @@ import mil.models
 from mil.bag_representation import MILESMapping
 from sklearn.svm import LinearSVC
 from sklearn.tree import DecisionTreeClassifier
-import numpy as np
 
 from mil.models import SVC
 
@@ -39,7 +38,7 @@ class MILESClassifier:
         self.model = DecisionTreeClassifier()
         self.model.fit(mapped_bags, y_train.flatten())
 
-    def predict_bag(self, bag):
+    def predict_bag(self, bag) -> int:
         """
 
         Parameters
@@ -53,4 +52,3 @@ class MILESClassifier:
         bag = bag.reshape(1, bag.shape[0], bag.shape[1])
         mapped_bags = self.mapping.transform(bag)
         return self.model.predict(mapped_bags)
-

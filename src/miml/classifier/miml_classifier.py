@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from sklearn.metrics import hamming_loss, accuracy_score
-
+from sklearn.metrics import average_precision_score, f1_score, precision_score, \
+    recall_score, accuracy_score, hamming_loss
 from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 
@@ -54,5 +54,4 @@ class MIMLClassifier(ABC):
         """
         if not isinstance(dataset_test, MIMLDataset):
             raise Exception("Evaluate function should receive a MIMLDataset as parameter")
-
 

@@ -2,10 +2,10 @@ import numpy as np
 
 from data.bag import Bag
 from data.miml_dataset import MIMLDataset
-from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoML
+from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
 
 
-class ArithmeticTransformation(MIMLtoML):
+class ArithmeticTransformation(MIMLtoMLTransformation):
     """
     Class that performs an arithmetic transformation to convert a MIMLDataset class to numpy ndarrays.
     """

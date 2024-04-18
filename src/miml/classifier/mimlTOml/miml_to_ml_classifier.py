@@ -1,27 +1,28 @@
+
 from classifier.miml_classifier import *
 
-from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoML
+from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
 
 
 class MIMLtoMLClassifier(MIMLClassifier):
 
-    def __init__(self, classifier, transformation: MIMLtoML):
+    def __init__(self, ml_classifier, transformation: MIMLtoMLTransformation) -> None:
         """
         Constructor of the class MIMLtoMIClassifier
 
         Parameters
         ----------
-        classifier
+        ml_classifier
             Specific classifier to be used
 
-        transformation : MIMLtoML
+        transformation : MIMLtoMLTransformation
             Transformation to be used
         """
         super().__init__()
-        self.classifier = classifier
+        self.classifier = ml_classifier
         self.transformation = transformation
 
-    def fit_internal(self, dataset_train: MIMLDataset):
+    def fit_internal(self, dataset_train: MIMLDataset) -> None:
         """
 
         Parameters
@@ -31,7 +32,7 @@ class MIMLtoMLClassifier(MIMLClassifier):
         x_train, y_train = self.transformation.transform_dataset(dataset_train)
         self.classifier.fit(x_train, y_train)
 
-    def predict_bag(self, bag: Bag):
+    def predict_bag(self, bag: Bag) -> np.ndarray:
         """
 
         Parameters
@@ -52,5 +53,19 @@ class MIMLtoMLClassifier(MIMLClassifier):
         """
         super().evaluate(dataset_test)
         x_test, y_test = self.transformation.transform_dataset(dataset_test)
-        self.classifier.evaluate(x_test, y_test)
+        results = np.zeros(y_test.shape)
+        for i, bag in enumerate(x_test):
+            results[i] = self.classifier.predict_bag(bag)
 
+        accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results)
+        average_precision = average_precision_score(dataset_test.get_labels_by_bag(), results)
+        f1_macro = f1_score(dataset_test.get_labels_by_bag(), results, average='macro')
+        f1_micro = f1_score(dataset_test.get_labels_by_bag(), results, average='micro')
+        hamming_loss_score = hamming_loss(dataset_test.get_labels_by_bag(), results)
+        precision_macro = precision_score(dataset_test.get_labels_by_bag(), results, average='macro')
+        precision_micro = precision_score(dataset_test.get_labels_by_bag(), results, average='micro')
+        recall_macro = recall_score(dataset_test.get_labels_by_bag(), results, average='macro')
+        recall_micro = recall_score(dataset_test.get_labels_by_bag(), results, average='micro')
+
+        print(accuracy, average_precision, f1_macro, f1_micro, hamming_loss_score, precision_macro, precision_micro,
+              recall_macro, recall_micro)

@@ -66,10 +66,9 @@ def load_dataset_csv(file, header=0):
         instance = Instance(values + labels)
 
         if key not in dataset.data:
-            bag = Bag(instance, key)
+            bag = Bag(key)
             dataset.add_bag(bag)
-        else:
-            dataset.add_instance(key, instance)
+        dataset.add_instance(key, instance)
 
     return dataset
 

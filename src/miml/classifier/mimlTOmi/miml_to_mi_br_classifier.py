@@ -1,8 +1,5 @@
 from copy import deepcopy
 
-from sklearn.metrics import accuracy_score, average_precision_score, f1_score, hamming_loss, precision_score, \
-    recall_score
-
 from classifier.mimlTOmi.miml_to_mi_classifier import MIMLtoMIClassifier
 from classifier.miml_classifier import *
 from data.miml_dataset import MIMLDataset
@@ -14,7 +11,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
     Class to represent a multiinstance classifier
     """
 
-    def __init__(self, classifier):
+    def __init__(self, classifier) -> None:
         """
         Constructor of the class MIMLtoMIBRClassifier
 
@@ -27,7 +24,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         self.transformation = BinaryRelevanceTransformation()
         self.classifiers = []
 
-    def fit_internal(self, dataset_train):
+    def fit_internal(self, dataset_train) -> None:
         """
         Training the classifier
 
@@ -90,7 +87,6 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         recall_macro = recall_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
         recall_micro = recall_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
 
-        print(accuracy, average_precision, f1_macro, f1_micro, hamming_loss_score, precision_macro,precision_micro,
+        print(accuracy, average_precision, f1_macro, f1_micro, hamming_loss_score, precision_macro, precision_micro,
               recall_macro, recall_micro)
-
 

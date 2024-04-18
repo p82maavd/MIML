@@ -8,16 +8,16 @@ class Bag:
     Class to manage MIML Bag data representation
     """
 
-    def __init__(self, key):
+    def __init__(self, key) -> None:
         """
         Constructor of the class Bag
         """
-        # TODO: Ver si quitar instance del constructor
+        # TODO: Ver si quitar instance del constructor, se puede poner como parametro opcional
         self.data = None
         self.key = key
         self.dataset = None
 
-    def get_attributes_name(self):
+    def get_attributes_name(self) -> list[str]:
         """
         Get attributes name
 
@@ -31,7 +31,7 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no attributes info")
 
-    def get_attributes(self):
+    def get_attributes(self) -> np.ndarray:
         """
         Get attributes values of the bag
 
@@ -43,7 +43,7 @@ class Bag:
         """
         return self.data
 
-    def get_number_attributes(self):
+    def get_number_attributes(self) -> int:
         """
         Get numbers of attributes of the bag
 
@@ -54,7 +54,7 @@ class Bag:
         """
         return len(self.get_attributes()[0])
 
-    def get_features_name(self):
+    def get_features_name(self) -> list[str]:
         """
         Get features name
 
@@ -68,7 +68,7 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no features info")
 
-    def get_features(self):
+    def get_features(self) -> np.ndarray:
         """
         Get features values of the bag
 
@@ -80,7 +80,7 @@ class Bag:
         """
         return self.data[0:, 0:self.get_number_features()]
 
-    def get_number_features(self):
+    def get_number_features(self) -> int:
         """
         Get numbers of features of the bag
 
@@ -94,7 +94,7 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no features info")
 
-    def get_labels_name(self):
+    def get_labels_name(self) -> list[str]:
         """
         Get labels name
 
@@ -108,7 +108,7 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no label info")
 
-    def get_labels(self):
+    def get_labels(self) -> np.ndarray:
         """
         Get labels values of the bag
 
@@ -120,7 +120,7 @@ class Bag:
         """
         return self.data[0:, -self.get_number_labels():]
 
-    def get_number_labels(self):
+    def get_number_labels(self) -> int:
         """
         Get numbers of labels of the bag
 
@@ -134,7 +134,7 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no label info")
 
-    def get_instance(self, index):
+    def get_instance(self, index) -> Instance:
         """
         Get an Instance of the Bag
 
@@ -151,7 +151,7 @@ class Bag:
         instance = Instance(self.data[index], self)
         return instance
 
-    def get_number_instances(self):
+    def get_number_instances(self) -> int:
         """
         Get numbers of instances of a bag
 
@@ -162,7 +162,7 @@ class Bag:
         """
         return len(self.data)
 
-    def add_instance(self, instance):
+    def add_instance(self, instance) -> None:
         """
         Add instance to the bag
 
@@ -181,9 +181,9 @@ class Bag:
             raise Exception("The number of attributes of the bag and the instance to be added are different.")
         instance.set_bag(self)
 
-    def delete_instance(self, index):
+    def delete_instance(self, index) -> None:
         """
-        Delete a instance of the bag
+        Delete an instance of the bag
 
         Parameters
         ----------
@@ -192,7 +192,7 @@ class Bag:
         """
         self.data = np.delete(self.data, index, axis=0)
 
-    def get_attribute(self, instance, attribute):
+    def get_attribute(self, instance, attribute) -> float:
         """
         Get value of an attribute of the bag
 
@@ -215,7 +215,7 @@ class Bag:
             index = list(self.get_attributes()).index(attribute)
             return self.data[instance].item(index)
 
-    def set_attribute(self, instance, attribute, value):
+    def set_attribute(self, instance, attribute, value) -> None:
         """
         Update value from attributes
 
@@ -236,7 +236,7 @@ class Bag:
             index = list(self.get_attributes()).index(attribute)
             self.data[instance][index] = value
 
-    def add_attribute(self, position, values=None):
+    def add_attribute(self, position, values=None) -> None:
         """
         Add attribute to the bag
 
@@ -260,7 +260,7 @@ class Bag:
         else:
             raise Exception("Can't add an attribute to a bag assigned to a dataset")
 
-    def delete_attribute(self, position):
+    def delete_attribute(self, position) -> None:
         """
         Delete attribute of the bag
 
@@ -274,7 +274,7 @@ class Bag:
         else:
             raise Exception("Can't delete an attribute of a bag assigned to a dataset")
 
-    def set_dataset(self, dataset):
+    def set_dataset(self, dataset) -> None:
         """
         Set dataset which contains the bag
 
@@ -286,7 +286,7 @@ class Bag:
         # TODO: Ver como gestionar lo de la info de los atributos que este siempre actualizado
         self.dataset = dataset
 
-    def show_bag(self):
+    def show_bag(self) -> None:
         """
         Show bag info in table format
         """

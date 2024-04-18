@@ -1,6 +1,5 @@
 
 from classifier.miml_classifier import *
-from data.miml_dataset import MIMLDataset
 
 
 class MIMLtoMIClassifier(MIMLClassifier):
@@ -8,17 +7,17 @@ class MIMLtoMIClassifier(MIMLClassifier):
     Class to represent a multiinstance classifier
     """
 
-    def __init__(self, classifier):
+    def __init__(self, mi_classifier):
         """
         Constructor of the class MIMLtoMIClassifier
 
         Parameters
         ----------
-        classifier
+        mi_classifier
             Specific classifier to be used
         """
         super().__init__()
-        self.classifier = classifier
+        self.classifier = mi_classifier
 
     @abstractmethod
     def fit_internal(self, dataset_train: MIMLDataset):

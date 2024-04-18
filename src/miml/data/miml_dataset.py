@@ -17,7 +17,7 @@ class MIMLDataset:
         self.attributes = dict()
         self.data = dict()
 
-    def set_name(self, name):
+    def set_name(self, name) -> None:
         """
         Set function for dataset name
 
@@ -28,18 +28,18 @@ class MIMLDataset:
         """
         self.name = name
 
-    def get_name(self):
+    def get_name(self) -> str:
         """
          Get function for dataset name
 
         Returns
         ----------
-        name : string
+        name : str
             Name of the dataset
         """
         return self.name
 
-    def get_attributes_name(self):
+    def get_attributes_name(self) -> list[str]:
         """
         Get attributes name
 
@@ -50,7 +50,7 @@ class MIMLDataset:
         """
         return list(self.attributes.keys())
 
-    def get_attributes(self):
+    def get_attributes(self) -> np.ndarray:
         """
         Get attributes values of the dataset
 
@@ -62,7 +62,7 @@ class MIMLDataset:
         pass
         # TODO: Ver si es necesario
 
-    def get_number_attributes(self):
+    def get_number_attributes(self) -> int:
         """
         Get numbers of attributes of the bag
 
@@ -73,7 +73,7 @@ class MIMLDataset:
         """
         return len(self.get_attributes_name())
 
-    def set_features_name(self, features):
+    def set_features_name(self, features) -> None:
         """
         Set function for dataset features name
 
@@ -89,13 +89,13 @@ class MIMLDataset:
         for feature in features:
             self.attributes[feature] = 0
 
-    def get_features_name(self):
+    def get_features_name(self) -> list[str]:
         """
         Get function for dataset features name
 
         Returns
         ----------
-        attributes : List of string
+        attributes : list[str]
             Attributes name of the dataset
         """
         features = []
@@ -104,7 +104,7 @@ class MIMLDataset:
                 features.append(feature)
         return features
 
-    def get_features(self):
+    def get_features(self) -> np.ndarray:
         """
         Get features values of the dataset
 
@@ -122,14 +122,13 @@ class MIMLDataset:
                 count += 1
         return features
 
-    def get_features_by_bag(self):
+    def get_features_by_bag(self) -> np.ndarray:
         features = []
-        count_bag = 0
         for key in self.data.keys():
             features.append(self.get_bag(key).get_features())
         return np.array(features, dtype=object)
 
-    def get_number_features(self):
+    def get_number_features(self) -> int:
         """
         Get numbers of attributes of the dataset
 
@@ -140,7 +139,7 @@ class MIMLDataset:
         """
         return len(self.get_features_name())
 
-    def set_labels_name(self, labels):
+    def set_labels_name(self, labels) -> None:
         """
         Set function for dataset labels name
 
@@ -156,7 +155,7 @@ class MIMLDataset:
         for label in labels:
             self.attributes[label] = 1
 
-    def get_labels_name(self):
+    def get_labels_name(self) -> list[str]:
         """
         Get function for dataset labels name
 
@@ -196,7 +195,6 @@ class MIMLDataset:
             labels[count] = self.get_bag(key).get_labels()[0]
             count += 1
         return labels
-
 
     def get_number_labels(self):
         """
@@ -363,7 +361,7 @@ class MIMLDataset:
         position : int
             Index for the new attribute
 
-        values: 2d numpy array
+        values:  numpy array
             Values for the new attribute
         """
         # TODO: Test

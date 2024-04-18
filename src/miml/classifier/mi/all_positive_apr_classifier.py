@@ -11,7 +11,6 @@ class AllPositiveAPRClassifier:
         """
 
         """
-        # self.classifier = mil.models.APR(step=10, verbose=0)
         self.apr = []
 
     def fit(self, x_train, y_train) -> None:

@@ -1,10 +1,10 @@
 import numpy as np
 
 from data.miml_dataset import MIMLDataset
-from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoML
+from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
 
 
-class MinMaxTransformation(MIMLtoML):
+class MinMaxTransformation(MIMLtoMLTransformation):
     """
     Class that performs a minmax transformation to convert a MIMLDataset class to numpy ndarrays.
     """

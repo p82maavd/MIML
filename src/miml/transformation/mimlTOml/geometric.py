@@ -1,10 +1,10 @@
 import numpy as np
 
 from data.miml_dataset import MIMLDataset
-from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoML
+from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
 
 
-class GeometricTransformation(MIMLtoML):
+class GeometricTransformation(MIMLtoMLTransformation):
     """
     Class that performs a geometric transformation to convert a MIMLDataset class to numpy ndarrays.
     """
