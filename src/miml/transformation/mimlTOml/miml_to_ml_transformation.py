@@ -6,7 +6,7 @@ from data.miml_dataset import MIMLDataset
 
 class MIMLtoMLTransformation(ABC):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.dataset = None
 
     @abstractmethod

@@ -42,7 +42,7 @@ def arff_to_csv(file, delimiter="'"):
 
             # Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
             key = line[0:line.find(",")]
-            # print("Key: ", key)
+            # print("Key: ", key_bag)
 
             # Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
             line = line[line.find(delimiter) + 1:]

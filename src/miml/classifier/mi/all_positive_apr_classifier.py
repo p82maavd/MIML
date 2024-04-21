@@ -41,8 +41,8 @@ class AllPositiveAPRClassifier:
         positive_bag_indices = np.where(y_train == 1)[0]
 
         initial_bag_index = np.random.choice(positive_bag_indices)
-        initial_instance_index = np.random.choice(x_train[initial_bag_index].shape[0])
-        apr_min = apr_max = x_train[initial_bag_index][initial_instance_index]
+        initial_index_instance = np.random.choice(x_train[initial_bag_index].shape[0])
+        apr_min = apr_max = x_train[initial_bag_index][initial_index_instance]
 
         for bag_index in positive_bag_indices:
             for instance in x_train[bag_index]:

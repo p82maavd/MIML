@@ -24,14 +24,14 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         self.transformation = BinaryRelevanceTransformation()
         self.classifiers = []
 
-    def fit_internal(self, dataset_train) -> None:
+    def fit_internal(self, dataset_train: MIMLDataset) -> None:
         """
         Training the classifier
 
         Parameters
         ----------
-        dataset_train: Numpy array
-            Data to train the classifier
+        dataset_train: MIMLDataset
+            Dataset to train the classifier
         """
         for x in range(dataset_train.get_number_labels()):
             classifier = deepcopy(self.classifier)

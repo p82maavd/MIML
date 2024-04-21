@@ -13,8 +13,11 @@ def load_dataset(file, delimiter="\""):
 
     Parameters
     ----------
-    file : string
+
+    file : str
         Path of the dataset file
+    delimiter : str
+        Character to separate instances in bag of the arff files
     """
     if file[-4:] == ".csv":
         return load_dataset_csv(file)
@@ -31,8 +34,13 @@ def load_dataset_csv(file, header=0):
 
     Parameters
     ----------
-    file : string
+    file : str
         Path of the dataset file
+
+    Returns
+    -------
+    dataset : MIMLDataset
+        Dataset loaded
     """
     # dataset = pd.read_csv(file, header=0)
     # TODO: Hay que ver como diferenciar los atributos de las labels
@@ -60,6 +68,7 @@ def load_dataset_csv(file, header=0):
 
         key = data[0]
 
+        # TODO: Revisar porque values tiene el ndmin=2
         values = np.array([float(i) for i in data[1:-num_labels]], ndmin=2)
         labels = np.array([int(i) for i in data[-num_labels:]])
 
@@ -79,7 +88,7 @@ def load_dataset_arff(file, delimiter="\""):
 
     Parameters
     ----------
-    file : string
+    file : str
         Path of the dataset file
     delimiter : str
         Delimiter of instances in a bag in the arff file

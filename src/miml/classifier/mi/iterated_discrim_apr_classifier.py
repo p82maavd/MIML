@@ -1,4 +1,3 @@
-from copy import deepcopy
 
 import numpy as np
 
@@ -62,8 +61,8 @@ class IteratedDiscrimAPRClassifier:
         self.positive_bag_indices = np.where(self.y_train == 1)[0]
 
         initial_bag_index = np.random.choice(self.positive_bag_indices)
-        initial_instance_index = np.random.choice(self.x_train[initial_bag_index].shape[0])
-        apr_min = apr_max = self.x_train[initial_bag_index][initial_instance_index]
+        initial_index_instance = np.random.choice(self.x_train[initial_bag_index].shape[0])
+        apr_min = apr_max = self.x_train[initial_bag_index][initial_index_instance]
 
         self.apr = [apr_min, apr_max]
 
@@ -72,7 +71,7 @@ class IteratedDiscrimAPRClassifier:
         not_positives_bag_in_apr = []
 
         for bag_index in self.positive_bag_indices:
-            for instance_index, instance in enumerate(self.x_train[bag_index]):
+            for instance in self.x_train[bag_index]:
                 if not np.all(instance >= self.apr[0]) or not np.all(instance <= self.apr[1]):
                     not_positives_bag_in_apr.append(bag_index)
 

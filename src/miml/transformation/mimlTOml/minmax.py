@@ -1,5 +1,6 @@
 import numpy as np
 
+from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
 
@@ -12,7 +13,7 @@ class MinMaxTransformation(MIMLtoMLTransformation):
     def __init__(self):
         super().__init__()
 
-    def transform_dataset(self, dataset):
+    def transform_dataset(self, dataset: MIMLDataset):
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance with the min and max
         value of each attribute as two new attributes.
@@ -20,28 +21,26 @@ class MinMaxTransformation(MIMLtoMLTransformation):
         Returns
         -------
 
-        X : {numpy ndarray} of shape (number of instances, number of attributes)
-        Training vector
+        X : ndarray of shape (n_bags, n_features*2)
+            Training vector
 
-        Y : {numpy ndarray} of shape (number of instances, number of labels)
-        Target vector relative to X.
+        Y : ndarray of shape (n_bags, n_labels)
+            Target vector relative to X.
 
         """
         self.dataset = dataset
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features() * 2))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
-        count = 0
-        for key in self.dataset.data.keys():
+        for bag_index, key in enumerate(self.dataset.data.keys()):
             features, labels = self.transform_bag(self.dataset.get_bag(key))
-            x[count] = features
-            y[count] = labels
-            count += 1
+            x[bag_index] = features
+            y[bag_index] = labels
 
         return x, y
 
-    def transform_bag(self, bag):
+    def transform_bag(self, bag: Bag):
         """
-        Transform the instances of a bag to a multilabel instance
+        Transform a bag to a multilabel instance
 
         Parameters
         ----------
@@ -50,13 +49,12 @@ class MinMaxTransformation(MIMLtoMLTransformation):
 
         Returns
         -------
-        features : numpy array
+        features : ndarray of shape (n_features*2)
             Numpy array with feature values
 
-        labels : numpy array
+        labels : ndarray of shape (n_labels)
             Numpy array with label values
         """
-        # TODO: Test
         features = bag.get_features()
         labels = bag.get_labels()[0]
         min_values = np.min(features, axis=0)

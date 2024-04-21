@@ -9,15 +9,15 @@ from data.miml_dataset import MIMLDataset
 
 class MIMLClassifier(ABC):
     """
-    Class to represent an abstract classifier
+    Class to represent a MIMLClassifier
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Constructor of the class MIMLClassifier
         """
 
-    def fit(self, dataset_train: MIMLDataset):
+    def fit(self, dataset_train: MIMLDataset) -> None:
         """
 
         Parameters

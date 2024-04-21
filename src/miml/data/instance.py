@@ -7,20 +7,27 @@ class Instance:
     Class to manage MIML Instance data representation
     """
 
-    def __init__(self, values=None, bag=None) -> None:
+    def __init__(self, values: np.ndarray = None, bag=None) -> None:
         """
         Constructor of the class Instance
+
+        Parameters
+        ----------
+        values : list[float], default=None
+            Values for the instance attributes
+        bag : Bag, default=None
+            Bag of the instance
         """
         self.bag = bag
         self.data = np.array(values)
 
     def get_attributes_name(self) -> list[str]:
         """
-        Get attributes name
+        Get attributes name of the instance
 
         Returns
         ----------
-        attributes : List of string
+        attributes : list[str]
             Attributes name of the instance
         """
         if self.bag is not None and self.bag.dataset is not None:
@@ -34,7 +41,7 @@ class Instance:
 
         Returns
         ----------
-        attributes data: numpy array
+        attributes data: ndarray of shape (n_attributes)
             Values of the attributes of the instance
         """
         return self.data
@@ -46,17 +53,17 @@ class Instance:
         Returns
         ----------
          numbers of attributes: int
-            Numbers of attributes of the bag
+            Numbers of attributes of the instance
         """
         return len(self.get_attributes())
 
     def get_features_name(self) -> list[str]:
         """
-        Get features name
+        Get features name of the instance
 
         Returns
         ----------
-        features : List of string
+        features : list[str]
             features name of the instance
         """
         if self.bag is not None and self.bag.dataset is not None:
@@ -70,8 +77,8 @@ class Instance:
 
         Returns
         -------
-        features data: numpy array
-            Values of the features of the instance
+        features data: ndarray of shape (n_features)
+             Values of the features of the instance
 
         """
         return self.data[0:self.get_number_features()]
@@ -83,7 +90,7 @@ class Instance:
         Returns
         ----------
          numbers of features: int
-            Numbers of features of the bag
+            Numbers of features of the instance
         """
         if self.bag is not None and self.bag.dataset is not None:
             return self.bag.dataset.get_number_features()
@@ -92,11 +99,11 @@ class Instance:
 
     def get_labels_name(self) -> list[str]:
         """
-        Get labels name
+        Get labels name of the instance
 
         Returns
         ----------
-        labels : List of string
+        labels : list[str]
             Labels name of the instance
         """
         if self.bag is not None and self.bag.dataset is not None:
@@ -110,7 +117,7 @@ class Instance:
 
         Returns
         -------
-        labels data : numpy array
+        labels data : ndarray of shape (n_labels)
             Values of the labels of the instance
 
                 """
@@ -130,13 +137,13 @@ class Instance:
         else:
             raise Exception("The instance isn't in any dataset, so there is no labels info")
 
-    def get_attribute(self,  attribute) -> float:
+    def get_attribute(self, attribute) -> float:
         """
         Get value of an attribute of the instance
 
         Parameters
         ----------
-        attribute : int/String
+        attribute : int/str
             Index/Name of the attribute
 
         Returns
@@ -156,7 +163,7 @@ class Instance:
 
         Parameters
         ----------
-        attribute : int/String
+        attribute : int/str
             Index/Name of the attribute
 
         value : float
@@ -174,10 +181,10 @@ class Instance:
 
         Parameters
         ----------
-        value : float
+        value : float, default=0
             Value for the attribute
 
-        position: int
+        position: int, default=None
             Position for the attribute
         """
         if self.bag is None:

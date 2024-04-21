@@ -1,6 +1,7 @@
 import numpy as np
 
 from data.bag import Bag
+from data.instance import Instance
 
 
 class MIMLDataset:
@@ -23,7 +24,7 @@ class MIMLDataset:
 
         Parameters
         ----------
-        name : string
+        name : str
             Name of the dataset
         """
         self.name = name
@@ -45,7 +46,7 @@ class MIMLDataset:
 
         Returns
         ----------
-        attributes : List of string
+        attributes : list[str]
             Attributes name of the dataset
         """
         return list(self.attributes.keys())
@@ -73,13 +74,13 @@ class MIMLDataset:
         """
         return len(self.get_attributes_name())
 
-    def set_features_name(self, features) -> None:
+    def set_features_name(self, features: list[str]) -> None:
         """
         Set function for dataset features name
 
         Parameters
         ----------
-        features : List of string
+        features : list[str]
             List of the features name of the dataset
         """
         if len(self.attributes) != 0:
@@ -139,13 +140,13 @@ class MIMLDataset:
         """
         return len(self.get_features_name())
 
-    def set_labels_name(self, labels) -> None:
+    def set_labels_name(self, labels: list[str]) -> None:
         """
         Set function for dataset labels name
 
         Parameters
         ----------
-        labels: List of string
+        labels: list[str]
             List of the labels name of the dataset
         """
         if len(self.attributes) != 0:
@@ -161,7 +162,7 @@ class MIMLDataset:
 
         Returns
         ----------
-        labels : List of string
+        labels : list[str]
             Labels name of the dataset
         """
         labels = []
@@ -176,9 +177,8 @@ class MIMLDataset:
 
         Returns
         -------
-        labels data : numpy array
+        labels: ndarray of shape (n_instances, n_labels)
             Values of the labels of the dataset
-
         """
         labels = np.zeros((self.get_number_instances(), self.get_number_labels()))
         count = 0
@@ -189,14 +189,20 @@ class MIMLDataset:
         return labels
 
     def get_labels_by_bag(self):
+        """
+        Get labels values of the dataset
+
+        Returns
+        -------
+        labels : ndarray of shape (n_bags, n_labels)
+            Values of the labels of the dataset
+        """
         labels = np.zeros((self.get_number_bags(), self.get_number_labels()))
-        count = 0
-        for key in self.data.keys():
-            labels[count] = self.get_bag(key).get_labels()[0]
-            count += 1
+        for bag_index, key in enumerate(self.data.keys()):
+            labels[bag_index] = self.get_bag(key).get_labels()[0]
         return labels
 
-    def get_number_labels(self):
+    def get_number_labels(self) -> int:
         """
         Get numbers of labels of the dataset
 
@@ -207,18 +213,23 @@ class MIMLDataset:
         """
         return len(self.get_labels_name())
 
-    def get_bag(self, key):
+    def get_bag(self, key_bag: str) -> Bag:
         """
         Get data of a bag of the dataset
+
+        Parameters
+        ----------
+        key_bag: str
+            Key of the bag to be obtained
 
         Returns
         ----------
         bag: Bag
             Instance of Bag class
         """
-        return self.data[key]
+        return self.data[key_bag]
 
-    def get_number_bags(self):
+    def get_number_bags(self) -> int:
         """
         Get numbers of bags of the dataset
 
@@ -229,7 +240,7 @@ class MIMLDataset:
         """
         return len(self.data)
 
-    def add_bag(self, bag: Bag):
+    def add_bag(self, bag: Bag) -> None:
         """
         Add a bag to the dataset
 
@@ -241,27 +252,27 @@ class MIMLDataset:
         bag.set_dataset(self)
         self.data[bag.key] = bag
 
-    def delete_bag(self, key):
+    def delete_bag(self, key_bag: str) -> None:
         """
         Delete a bag of the dataset
 
         Parameters
         ----------
-        key : string
-            key of the bag which contains the instance to be deleted
+        key_bag : str
+            Key of the bag which contains the instance to be deleted
         """
-        self.data.pop(key)
+        self.data.pop(key_bag)
 
-    def get_instance(self, key, index):
+    def get_instance(self, key_bag, index_instance):
         """
         Get an Instance of the dataset
 
         Parameters
         ----------
-        key : string
+        key_bag : str
             Key of the bag
             
-        index : int
+        index_instance : int
             Index of the instance in the bag
 
         Returns
@@ -270,7 +281,7 @@ class MIMLDataset:
             Instance of Instance class
         """
         # TODO: check
-        return self.get_bag(key).get_instance(index)
+        return self.get_bag(key_bag).get_instance(index_instance)
 
     def get_number_instances(self):
         """
@@ -283,32 +294,32 @@ class MIMLDataset:
         """
         return sum(self.data[bag].get_number_instances() for bag in self.data.keys())
 
-    def add_instance(self, key, instance):
+    def add_instance(self, key: str, instance: Instance) -> None:
         """
         Add an Instance to a Bag of the dataset
 
         Parameters
         ----------
-        key : string
+        key : str
             Key of the bag where the instance will be added
         instance : Instance
             Instance of Instance class to be added
         """
         self.get_bag(key).add_instance(instance)
 
-    def delete_instance(self, bag, index):
+    def delete_instance(self, key_bag: str, index_instance: int) -> None:
         """
         Delete an instance of a bag of the dataset
 
         Parameters
         ----------
-        bag : string
+        key_bag : str
             Key of the bag which contains the instance to be deleted
 
-        index : int
+        index_instance : int
             Index of the instance to be deleted
         """
-        self.get_bag(bag).delete_instance(index)
+        self.get_bag(key_bag).delete_instance(index_instance)
 
     def get_attribute(self, bag, instance, attribute):
         """
@@ -316,13 +327,13 @@ class MIMLDataset:
 
         Parameters
         ----------
-        bag : String
+        bag : str
             Key of the bag which contains the attribute
 
         instance : int
             Index of the instance in the bag
 
-        attribute : int/String
+        attribute : int/str
             Index/Name of the attribute
 
         Returns
@@ -332,25 +343,25 @@ class MIMLDataset:
         """
         self.get_instance(bag, instance).get_attribute(attribute)
 
-    def set_attribute(self, key, index, attribute, value):
+    def set_attribute(self, key_bag, index_instance, attribute, value):
         """
         Update value from attributes
 
             Parameters
             ----------
-            key : string
+            key_bag : string
                 Bag key of the dataset
 
-            index : int
+            index_instance : int
                 Index of the instance
 
-            attribute: int
+            attribute: int/str
                 Attribute of the dataset
 
             value: float
                 New value for the update
             """
-        self.get_instance(key, index).set_attribute(attribute, value)
+        self.get_instance(key_bag, index_instance).set_attribute(attribute, value)
 
     def add_attribute(self, position, values=None):
         """
@@ -365,13 +376,11 @@ class MIMLDataset:
             Values for the new attribute
         """
         # TODO: Test
-        count = 0
-        for bag in self.data.keys():
-            add_values = values[count]
+        for bag_index, bag in enumerate(self.data.keys()):
+            add_values = values[bag_index]
             if values is None:
                 add_values = np.zeros(self.data[bag].get_number_instances)
             self.data[bag].add_attribute(position, add_values)
-            count += 1
 
     def delete_attribute(self, position):
         for bag in self.data.keys():
@@ -403,7 +412,7 @@ class MIMLDataset:
         for key in self.data:
             # print("\n")
             bag = self.get_bag(key)
-            # print("Key: ", key)
+            # print("Key: ", key_bag)
             # print("Attributes: ", bag[0])
             # print("Labels: ", bag[1])
             bag.show_bag()

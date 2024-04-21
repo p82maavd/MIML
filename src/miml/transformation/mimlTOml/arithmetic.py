@@ -13,7 +13,7 @@ class ArithmeticTransformation(MIMLtoMLTransformation):
     def __init__(self):
         super().__init__()
 
-    def transform_dataset(self, dataset):
+    def transform_dataset(self, dataset: MIMLDataset) -> tuple:
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
         attribute the mean value of the instances in the bag.
@@ -21,43 +21,39 @@ class ArithmeticTransformation(MIMLtoMLTransformation):
         Returns
         -------
 
-        X : {numpy ndarray} of shape (number of instances, number of attributes)
-        Training vector
+        X : ndarray of shape (n_bags, n_features)
+            Training vector
 
-        Y : {numpy ndarray} of shape (number of instances, number of labels)
-        Target vector relative to X.
-
+        Y : ndarray of shape (n_bags, n_labels)
+            Target vector relative to X.
         """
         self.dataset = dataset
         x = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_features()))
         y = np.empty(shape=(self.dataset.get_number_bags(), self.dataset.get_number_labels()))
-        count = 0
-        for key in self.dataset.data.keys():
+        for bag_index, key in enumerate(self.dataset.data.keys()):
             features, labels = self.transform_bag(self.dataset.get_bag(key))
-            x[count] = features
-            y[count] = labels
-            count += 1
+            x[bag_index] = features
+            y[bag_index] = labels
 
         return x, y
 
     def transform_bag(self, bag: Bag):
         """
-        Transform the instances of a bag to a multilabel instance
+        Transform a bag to a multilabel instance
 
         Parameters
         ----------
         bag : Bag
-            Key of the bag to be transformed to multilabel instance
+            Key of the bag to be transformed
 
         Returns
         -------
-        features : numpy array
+        features : ndarray of shape (n_features)
             Numpy array with feature values
 
-        labels : numpy array
+        labels : ndarray of shape (n_labels)
             Numpy array with label values
         """
-        # TODO: Test
 
         features = bag.get_features()
         labels = bag.get_labels()[0]

@@ -12,19 +12,16 @@ class BinaryRelevanceTransformation:
     def __init__(self):
         self.dataset = None
 
-    def transform_dataset(self, dataset):
+    def transform_dataset(self, dataset: MIMLDataset) -> list:
         """
-        Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
-        attribute the mean value of the instances in the bag.
+        Transform the dataset to multiinstance datasets dividing the original dataset into n datasets with a single
+        label, where n is the number of labels.
 
         Returns
         -------
 
-        X : {numpy ndarray} of shape (number of instances, number of attributes)
-        Training vector
-
-        Y : {numpy ndarray} of shape (number of instances, number of labels)
-        Target vector relative to X.
+        datasets: list
+            Multi instance datasets
 
         """
         self.dataset = dataset
@@ -36,7 +33,7 @@ class BinaryRelevanceTransformation:
 
         return datasets
 
-    def transform_bag(self, bag: Bag):
+    def transform_bag(self, bag: Bag) -> list:
         """
         Transform miml bag to multi instance bags
 
@@ -47,13 +44,11 @@ class BinaryRelevanceTransformation:
 
         Returns
         -------
-        instance : tuple
+        bags : list[ndarray]
         Tuple of numpy ndarray with attribute values and labels
 
         """
-        bags = []
-        for i in range(bag.get_number_labels()):
-            bags.append([bag.get_features(), bag.get_labels()[0][i]])
+        bags = [[bag.get_features(), label] for label in bag.get_labels()[0]]
         return bags
 
 

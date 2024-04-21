@@ -13,7 +13,7 @@ from transformation.mimlTOml.minmax import MinMaxTransformation
 dataset_train = load_dataset("../datasets/miml_birds_random_80train.arff", delimiter="'")
 dataset_test = load_dataset("../datasets/miml_birds_random_20test.arff", delimiter="'")
 
-# classifier = MIMLtoMLClassifier(KNeighborsClassifier(), ArithmeticTransformation())
+#classifier = MIMLtoMLClassifier(KNeighborsClassifier(), ArithmeticTransformation())
 classifier = MIMLtoMIBRClassifier(AllPositiveAPRClassifier())
 
 classifier.fit(dataset_train)

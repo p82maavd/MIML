@@ -8,9 +8,14 @@ class Bag:
     Class to manage MIML Bag data representation
     """
 
-    def __init__(self, key) -> None:
+    def __init__(self, key: str) -> None:
         """
         Constructor of the class Bag
+
+        Parameters
+        ----------
+        key : str
+            Key of the bag
         """
         # TODO: Ver si quitar instance del constructor, se puede poner como parametro opcional
         self.data = None
@@ -19,11 +24,11 @@ class Bag:
 
     def get_attributes_name(self) -> list[str]:
         """
-        Get attributes name
+        Get attributes name of the bag
 
         Returns
         ----------
-        attributes : List of string
+        attributes : list[str]
             Attributes name of the bag
         """
         if self.dataset is not None:
@@ -37,7 +42,7 @@ class Bag:
 
         Returns
         -------
-        attributes data: numpy array
+        attributes data: ndarray of shape(n_instances, n_attributes)
             Values of the attributes of the bag
 
         """
@@ -56,11 +61,11 @@ class Bag:
 
     def get_features_name(self) -> list[str]:
         """
-        Get features name
+        Get features name of the bag
 
         Returns
         ----------
-        features : List of string
+        features : list[str]
             Features name of the bag
         """
         if self.dataset is not None:
@@ -74,7 +79,7 @@ class Bag:
 
         Returns
         -------
-        features data: numpy array
+        features data: ndarray of shape (n_instances, n_features)
             Values of the features of the bag
 
         """
@@ -96,11 +101,11 @@ class Bag:
 
     def get_labels_name(self) -> list[str]:
         """
-        Get labels name
+        Get labels name of the bag
 
         Returns
         ----------
-        labels : List of string
+        labels : list[str]
             Labels name of the bag
         """
         if self.dataset is not None:
@@ -114,7 +119,7 @@ class Bag:
 
         Returns
         -------
-        labels data : numpy array
+        labels data : ndarray of shape (n_instances, n_labels)
             Values of the labels of the bag
 
         """
@@ -134,7 +139,7 @@ class Bag:
         else:
             raise Exception("The bag isn't in any dataset, so there is no label info")
 
-    def get_instance(self, index) -> Instance:
+    def get_instance(self, index: int) -> Instance:
         """
         Get an Instance of the Bag
 
@@ -162,7 +167,7 @@ class Bag:
         """
         return len(self.data)
 
-    def add_instance(self, instance) -> None:
+    def add_instance(self, instance: Instance) -> None:
         """
         Add instance to the bag
 
@@ -171,7 +176,6 @@ class Bag:
         instance : Instance
             Instance to be added
         """
-
         if self.data is None:
             self.data = np.zeros((1, instance.get_number_attributes()))
             self.data[0] = instance.data
@@ -181,7 +185,7 @@ class Bag:
             raise Exception("The number of attributes of the bag and the instance to be added are different.")
         instance.set_bag(self)
 
-    def delete_instance(self, index) -> None:
+    def delete_instance(self, index: int) -> None:
         """
         Delete an instance of the bag
 
@@ -192,7 +196,7 @@ class Bag:
         """
         self.data = np.delete(self.data, index, axis=0)
 
-    def get_attribute(self, instance, attribute) -> float:
+    def get_attribute(self, instance: int, attribute) -> float:
         """
         Get value of an attribute of the bag
 
@@ -201,7 +205,7 @@ class Bag:
         instance : int
             Index of the instance in the bag
 
-        attribute : int/String
+        attribute : int/str
             Index/Name of the attribute
 
         Returns
@@ -215,17 +219,17 @@ class Bag:
             index = list(self.get_attributes()).index(attribute)
             return self.data[instance].item(index)
 
-    def set_attribute(self, instance, attribute, value) -> None:
+    def set_attribute(self, instance: int, attribute, value: float) -> None:
         """
         Update value from attributes
 
         Parameters
         ----------
         instance : string
-            Index of instance to me update
+            Index of instance to be updated
 
-        attribute: string
-            Attribute name/index of the bag to be updated
+        attribute: int/str
+            Attribute name/index_instance of the bag to be updated
 
         value: float
             New value for the update
@@ -236,7 +240,7 @@ class Bag:
             index = list(self.get_attributes()).index(attribute)
             self.data[instance][index] = value
 
-    def add_attribute(self, position, values=None) -> None:
+    def add_attribute(self, position: int, values=None) -> None:
         """
         Add attribute to the bag
 
@@ -245,7 +249,7 @@ class Bag:
         position : int
             Index for the new attribute
 
-        values: numpy array
+        values: array-like of shape (n_attributes)
             Values for the new attribute. If not provided, new values would be zero
         """
         if self.dataset is None:
@@ -260,7 +264,7 @@ class Bag:
         else:
             raise Exception("Can't add an attribute to a bag assigned to a dataset")
 
-    def delete_attribute(self, position) -> None:
+    def delete_attribute(self, position: int) -> None:
         """
         Delete attribute of the bag
 
@@ -283,20 +287,16 @@ class Bag:
         dataset : MIMLDataset
             Dataset for the bag
         """
-        # TODO: Ver como gestionar lo de la info de los atributos que este siempre actualizado
         self.dataset = dataset
 
     def show_bag(self) -> None:
         """
         Show bag info in table format
         """
-        # TODO: Check
         if self.dataset is None:
             table = [[self.key]+[""]*self.get_number_attributes()]
         else:
             table = [[self.key] + self.get_features_name() + self.get_labels_name()]
-        count = 0
-        for i in range(self.get_number_instances()):
-            table.append([count] + list(self.get_instance(i).get_attributes()))
-            count += 1
+        for index_instance in range(self.get_number_instances()):
+            table.append([index_instance] + list(self.get_instance(index_instance).get_attributes()))
         print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
