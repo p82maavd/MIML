@@ -6,12 +6,12 @@ build-backend = "hatchling.build"
 packages = ["src/miml"]
 
 [project]
-name = "miml-package"
+name = "miml-learning"
 version = "0.0.11"
 authors = [
     { name="Damian Martinez", email="damianmartinezavila@gmail.com" },
 ]
-description = "Multi-instance Multi-label learning package"
+description = "Multi-instance Multi-label learning library"
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
