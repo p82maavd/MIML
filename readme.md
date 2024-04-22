@@ -4,8 +4,6 @@ The aim of the library is to ease the development, testing and comparison of cla
 ## Table of Contents
 
 - [Installation](#installation)
-- [Features](#features)
-- [Usage](#usage)
 - [License](#license)
 
 ### Installation
