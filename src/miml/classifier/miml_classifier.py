@@ -4,9 +4,8 @@ import numpy as np
 
 from data.bag import Bag
 from data.miml_dataset import MIMLDataset
+from sklearn.metrics import classification_report, hamming_loss
 
-from sklearn.metrics import accuracy_score, average_precision_score, f1_score, hamming_loss, precision_score, \
-    recall_score
 
 class MIMLClassifier(ABC):
     """

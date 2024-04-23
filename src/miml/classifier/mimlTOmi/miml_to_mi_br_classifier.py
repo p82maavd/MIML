@@ -73,19 +73,14 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         datasets = self.transformation.transform_dataset(dataset_test)
 
-        results_dataset = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
         for i, bag in enumerate(datasets[0][0]):
-            results_dataset[i] = self.predict(bag)
+            results[i] = self.predict(bag)
 
-        accuracy = accuracy_score(dataset_test.get_labels_by_bag(), results_dataset)
-        average_precision = average_precision_score(dataset_test.get_labels_by_bag(), results_dataset)
-        f1_macro = f1_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
-        f1_micro = f1_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
-        hamming_loss_score = hamming_loss(dataset_test.get_labels_by_bag(), results_dataset)
-        precision_macro = precision_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
-        precision_micro = precision_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
-        recall_macro = recall_score(dataset_test.get_labels_by_bag(), results_dataset, average='macro')
-        recall_micro = recall_score(dataset_test.get_labels_by_bag(), results_dataset, average='micro')
+        print(classification_report(dataset_test.get_labels_by_bag(), results))
+        print("Hamming Loss: ", hamming_loss(dataset_test.get_labels_by_bag(), results))
 
-        print(accuracy, average_precision, f1_macro, f1_micro, hamming_loss_score, precision_macro, precision_micro,
-              recall_macro, recall_micro)
+        # TODO: To Csv file
+        # report = classification_report(y_test, y_pred, output_dict=True)
+        # df = pandas.DataFrame(report).transpose()
+        # df.to_csv
