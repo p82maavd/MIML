@@ -1,5 +1,3 @@
-import numpy as np
-
 from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 

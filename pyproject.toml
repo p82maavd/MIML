@@ -1,19 +1,23 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "pkginfo >= 1.10"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/miml"]
+packages = ["src/miml", "src/miml/*"]
+
+[metadata]
+version = "0.1.4"
+name = "mimllearning"
 
 [project]
-name = "miml-learning"
-version = "0.0.11"
+name = "mimllearning"
+version = "0.1.5"
 authors = [
-    { name="Damian Martinez", email="damianmartinezavila@gmail.com" },
+  { name="Damian Martinez", email="damianmartinezavila@gmail.com" },
 ]
-description = "Multi-instance Multi-label learning library"
+description = "MIML Learning Library"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -21,5 +25,4 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/p82maavd/miml"
-"Bug Tracker" = "https://github.com/p82maavd/miml"
+Homepage = "https://github.com/p82maavd/miml"

@@ -11,7 +11,7 @@ The aim of the library is to ease the development, testing and comparison of cla
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install miml.
 
 ```bash
-$ pip install miml-package
+$ pip install mimllearning
 ```
 #### Requirements
 The requirement packages for miml library are: numpy, scikit-learn, scipy, tensorflow or tensorflow-gpu.

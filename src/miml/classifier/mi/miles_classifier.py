@@ -1,9 +1,6 @@
 import mil.models
 from mil.bag_representation import MILESMapping
-from sklearn.svm import LinearSVC
 from sklearn.tree import DecisionTreeClassifier
-
-from mil.models import SVC
 
 
 class MILESClassifier:

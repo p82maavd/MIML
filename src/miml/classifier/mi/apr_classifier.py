@@ -1,12 +1,4 @@
-import random
-from copy import deepcopy
-
 import mil.models
-from sklearn.metrics import accuracy_score, hamming_loss
-from sklearn.tree import DecisionTreeClassifier
-from mil import *
-
-import numpy as np
 
 
 class APRClassifier:

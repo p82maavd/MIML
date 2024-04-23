@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 
 import numpy as np
-from sklearn.metrics import average_precision_score, f1_score, precision_score, \
-    recall_score, accuracy_score, hamming_loss
+
 from data.bag import Bag
 from data.miml_dataset import MIMLDataset
 
+from sklearn.metrics import accuracy_score, average_precision_score, f1_score, hamming_loss, precision_score, \
+    recall_score
 
 class MIMLClassifier(ABC):
     """
