@@ -1,14 +1,14 @@
-def arff_to_csv(file, delimiter="'"):
+def arff_to_csv(file: str, delimiter: str = "'") -> None:
     """
     Convert MIML Arff to CSV.
 
     Parameters
     ----------
-    file : string
+    file : str
         Filepath of the file to be converted
 
-    delimiter : string ( ' or " ), default = '
-        Delimiter used in arff file for the start and end of the bag values
+    delimiter : str, default = '
+        Delimiter used in arff file for the start and end of the bag values ( ' or " )
 
     """
 

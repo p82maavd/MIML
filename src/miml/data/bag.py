@@ -226,7 +226,7 @@ class Bag:
 
         Parameters
         ----------
-        instance : string
+        instance : int
             Index of instance to be updated
 
         attribute: int/str

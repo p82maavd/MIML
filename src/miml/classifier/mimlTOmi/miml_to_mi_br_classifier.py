@@ -73,7 +73,8 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         Parameters
         ----------
-        dataset_test
+        dataset_test: MIMLDataset
+            Dataset to test the classifier
         """
         super().evaluate(dataset_test)
 

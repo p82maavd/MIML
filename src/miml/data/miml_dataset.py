@@ -263,7 +263,7 @@ class MIMLDataset:
         """
         self.data.pop(key_bag)
 
-    def get_instance(self, key_bag, index_instance):
+    def get_instance(self, key_bag, index_instance) -> Instance:
         """
         Get an Instance of the dataset
 
@@ -283,7 +283,7 @@ class MIMLDataset:
         # TODO: check
         return self.get_bag(key_bag).get_instance(index_instance)
 
-    def get_number_instances(self):
+    def get_number_instances(self) -> int:
         """
         Get numbers of instances of the dataset
 
@@ -321,7 +321,7 @@ class MIMLDataset:
         """
         self.get_bag(key_bag).delete_instance(index_instance)
 
-    def get_attribute(self, bag, instance, attribute):
+    def get_attribute(self, bag, instance, attribute) -> float:
         """
         Get value of an attribute of the bag
 
@@ -341,15 +341,15 @@ class MIMLDataset:
         value : float
             Value of the attribute
         """
-        self.get_instance(bag, instance).get_attribute(attribute)
+        return self.get_instance(bag, instance).get_attribute(attribute)
 
-    def set_attribute(self, key_bag, index_instance, attribute, value):
+    def set_attribute(self, key_bag: str, index_instance: int, attribute, value: float) -> None:
         """
         Update value from attributes
 
             Parameters
             ----------
-            key_bag : string
+            key_bag : str
                 Bag key of the dataset
 
             index_instance : int
@@ -363,9 +363,9 @@ class MIMLDataset:
             """
         self.get_instance(key_bag, index_instance).set_attribute(attribute, value)
 
-    def add_attribute(self, position, values=None):
+    def add_attribute(self, position: int, values=None) -> None:
         """
-        Add attribute to the bag
+        Add attribute to the dataset
 
         Parameters
         ----------
@@ -382,11 +382,21 @@ class MIMLDataset:
                 add_values = np.zeros(self.data[bag].get_number_instances)
             self.data[bag].add_attribute(position, add_values)
 
-    def delete_attribute(self, position):
+    def delete_attribute(self, position: int) -> None:
+
+        """
+        Delete attribute of the dataset
+
+        Parameters
+        ----------
+        position : int
+            Index of the attribute to be deleted
+        """
+
         for bag in self.data.keys():
             self.data[bag].delete_attribute(position)
 
-    def show_dataset(self, head=None, attributes=None, labels=None):
+    def show_dataset(self, head: int = None, attributes=None, labels=None) -> None:
         """
         Function to show information about the dataset
 
@@ -401,7 +411,6 @@ class MIMLDataset:
             labels : List of string
                 Labels to show
         """
-        # TODO: Formatearlo para que se vea bonito
         # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
         #  a mostrar opcionales
         print("Name: ", self.get_name())

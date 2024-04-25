@@ -6,17 +6,21 @@ from .instance import Instance
 from .miml_dataset import MIMLDataset
 
 
-def load_dataset(file, delimiter="\""):
+def load_dataset(file: str, delimiter: str = "\"") -> MIMLDataset:
     """
     Function to load a dataset
 
     Parameters
     ----------
-
     file : str
         Path of the dataset file
     delimiter : str
         Character to separate instances in bag of the arff files
+
+    Returns
+    ----------
+    dataset : MIMLDataset
+        Dataset loaded
     """
     if file[-4:] == ".csv":
         return load_dataset_csv(file)
@@ -27,7 +31,7 @@ def load_dataset(file, delimiter="\""):
         # TODO: Control de errores
 
 
-def load_dataset_csv(file, header=0):
+def load_dataset_csv(file: str, header=0):
     """
     Function to load a dataset in csv format
 
@@ -81,7 +85,7 @@ def load_dataset_csv(file, header=0):
     return dataset
 
 
-def load_dataset_arff(file, delimiter="\""):
+def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
     """
     Function to load a dataset in arff format
 
@@ -91,6 +95,11 @@ def load_dataset_arff(file, delimiter="\""):
         Path of the dataset file
     delimiter : str
         Delimiter of instances in a bag in the arff file
+
+    Returns
+    -------
+    dataset : MIMLDataset
+        Dataset loaded
     """
     dataset = MIMLDataset()
     arff_file = open(file)
