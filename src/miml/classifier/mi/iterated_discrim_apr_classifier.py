@@ -1,4 +1,3 @@
-
 import numpy as np
 
 
@@ -80,7 +79,6 @@ class IteratedDiscrimAPRClassifier:
         new_aprs_size = []
         apr_min, apr_max = None, None
         for bag_index in not_positives_bag_in_apr:
-            apr = None
             for instance in self.x_train[bag_index]:
                 apr_min = np.minimum(self.apr[0], instance)
                 apr_max = np.maximum(self.apr[1], instance)

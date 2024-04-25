@@ -1,5 +1,7 @@
-from data.bag import Bag
-from data.miml_dataset import MIMLDataset
+import importlib
+
+Bag = importlib.import_module(".bag", package="miml.data").Bag
+MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
 
 
 class BinaryRelevanceTransformation:
@@ -48,5 +50,3 @@ class BinaryRelevanceTransformation:
         """
         bags = [[bag.get_features(), label] for label in bag.get_labels()[0]]
         return bags
-
-

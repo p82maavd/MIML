@@ -6,3 +6,6 @@ transformation/mimlTOml/__pycache__/
 dist/
 /pyproject.toml
 src/miml/tutorial/.pytest_cache
+update.bat
+.gitignore
+todo.md

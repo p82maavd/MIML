@@ -31,8 +31,7 @@ class TestData(unittest.TestCase):
         self.assertEqual(bag.get_number_attributes(), 5)
         instance.set_attribute(1, 1)
         self.assertEqual(list(bag.get_instance(0).get_attributes()), list(instance.get_attributes()))
-        #bag.add_instance(instance)
-
+        # bag.add_instance(instance)
 
     def test_mimldataset(self):
         # TODO:
@@ -50,9 +49,9 @@ class TestData(unittest.TestCase):
         dataset = MIMLDataset()
         dataset.set_features_name(["attr1", "attr2", "attr3"])
         dataset.set_labels_name(["label1", "label2"])
-        #instance1.show_instance()
+        # instance1.show_instance()
         dataset.add_bag(bag)
-        #instance1.show_instance()
+        # instance1.show_instance()
 
 
 if __name__ == '__main__':

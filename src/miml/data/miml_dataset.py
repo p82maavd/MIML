@@ -1,7 +1,7 @@
 import numpy as np
 
-from data.bag import Bag
-from data.instance import Instance
+from .bag import Bag
+from .instance import Instance
 
 
 class MIMLDataset:

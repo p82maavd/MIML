@@ -1,7 +1,7 @@
 import numpy as np
-from tabulate import tabulate
 
-from data.instance import Instance
+from tabulate import tabulate
+from .instance import Instance
 
 
 class Bag:
@@ -257,7 +257,7 @@ class Bag:
             if position is None:
                 position = len(self.data)
             if values is None:
-                values = np.array([0]*self.get_number_instances())
+                values = np.array([0] * self.get_number_instances())
             elif len(values) != self.get_number_instances():
                 raise Exception("Incorrect number of values for the new attribute. Should be the same as number of "
                                 "instances of the bag")
@@ -295,7 +295,7 @@ class Bag:
         Show bag info in table format
         """
         if self.dataset is None:
-            table = [[self.key]+[""]*self.get_number_attributes()]
+            table = [[self.key] + [""] * self.get_number_attributes()]
         else:
             table = [[self.key] + self.get_features_name() + self.get_labels_name()]
         for index_instance in range(self.get_number_instances()):

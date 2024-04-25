@@ -1,4 +1,3 @@
-from .classifier import *
-from .data import *
-from .datasets import *
-from .transformation import *
+from miml import data
+from miml import transformation
+from miml import classifier

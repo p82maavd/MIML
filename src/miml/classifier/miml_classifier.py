@@ -1,10 +1,11 @@
-from abc import ABC, abstractmethod
-
+import importlib
 import numpy as np
 
-from data.bag import Bag
-from data.miml_dataset import MIMLDataset
-from sklearn.metrics import classification_report, hamming_loss
+from abc import ABC, abstractmethod
+
+
+Bag = importlib.import_module(".bag", package="miml.data").Bag
+MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
 
 
 class MIMLClassifier(ABC):
@@ -24,8 +25,8 @@ class MIMLClassifier(ABC):
         ----------
         dataset_train
         """
-        if not isinstance(dataset_train, MIMLDataset):
-            raise Exception("Fit function should receive a MIMLDataset as parameter")
+        # if not isinstance(dataset_train, MIMLDataset):
+        #    raise Exception("Fit function should receive a MIMLDataset as parameter")
 
         self.fit_internal(dataset_train)
 
@@ -64,5 +65,5 @@ class MIMLClassifier(ABC):
         ----------
         dataset_test
         """
-        if not isinstance(dataset_test, MIMLDataset):
-            raise Exception("Evaluate function should receive a MIMLDataset as parameter")
+        # if not isinstance(dataset_test, MIMLDataset):
+        #    raise Exception("Evaluate function should receive a MIMLDataset as parameter")

@@ -1,8 +1,11 @@
+import importlib
+
 import numpy as np
 
-from data.bag import Bag
-from data.miml_dataset import MIMLDataset
-from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
+from .miml_to_ml_transformation import MIMLtoMLTransformation
+
+Bag = importlib.import_module(".bag", package="miml.data").Bag
+MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
 
 
 class GeometricTransformation(MIMLtoMLTransformation):
@@ -13,7 +16,7 @@ class GeometricTransformation(MIMLtoMLTransformation):
     def __init__(self):
         super().__init__()
 
-    def transform_dataset(self, dataset):
+    def transform_dataset(self, dataset: MIMLDataset):
         """
         Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
         attribute the geometric center of the instances in the bag.

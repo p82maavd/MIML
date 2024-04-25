@@ -1,7 +1,9 @@
+import importlib
+
 from abc import ABC, abstractmethod
 
-from data.bag import Bag
-from data.miml_dataset import MIMLDataset
+Bag = importlib.import_module(".bag", package="miml.data").Bag
+MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
 
 
 class MIMLtoMLTransformation(ABC):

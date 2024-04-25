@@ -1,8 +1,11 @@
+import importlib
+
 import numpy as np
 
-from data.bag import Bag
-from data.miml_dataset import MIMLDataset
-from transformation.mimlTOml.miml_to_ml_transformation import MIMLtoMLTransformation
+from .miml_to_ml_transformation import MIMLtoMLTransformation
+
+Bag = importlib.import_module(".bag", package="miml.data").Bag
+MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
 
 
 class MinMaxTransformation(MIMLtoMLTransformation):

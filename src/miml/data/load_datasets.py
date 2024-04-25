@@ -1,10 +1,9 @@
+import numpy as np
 import os
 
-import numpy as np
-
-from data.bag import Bag
-from data.instance import Instance
-from data.miml_dataset import MIMLDataset
+from .bag import Bag
+from .instance import Instance
+from .miml_dataset import MIMLDataset
 
 
 def load_dataset(file, delimiter="\""):

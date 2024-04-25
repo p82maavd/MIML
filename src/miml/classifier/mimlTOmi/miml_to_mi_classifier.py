@@ -1,5 +1,12 @@
+import importlib
+from abc import abstractmethod
 
-from classifier.miml_classifier import *
+import numpy as np
+
+from ..miml_classifier import MIMLClassifier
+
+Bag = importlib.import_module(".bag", package="miml.data").Bag
+MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
 
 
 class MIMLtoMIClassifier(MIMLClassifier):
