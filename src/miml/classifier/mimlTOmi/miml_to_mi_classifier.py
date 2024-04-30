@@ -28,27 +28,48 @@ class MIMLtoMIClassifier(MIMLClassifier):
 
     @abstractmethod
     def fit_internal(self, dataset_train: MIMLDataset):
+        """
+        Training the classifier
+
+        Parameters
+        ----------
+        dataset_train: MIMLDataset
+            Dataset to train the classifier
+        """
         pass
 
+    @abstractmethod
     def predict(self, x: np.ndarray):
-        return self.classifier.predict(x)
-
-    def predict_bag(self, bag: Bag):
         """
         Predict labels of given data
 
         Parameters
         ----------
-        bag : Bag
-            Bag to predict their classes
+        x : ndarray of shape (n, n_labels)
+            Data to predict their labels
         """
-        super().predict_bag(bag)
+        pass
 
-    def evaluate(self, dataset_test: MIMLDataset):
+    @abstractmethod
+    def predict_bag(self, bag: Bag):
         """
+        Predict labels of a given bag
 
         Parameters
         ----------
-        dataset_test
+        bag : Bag
+            Bag to predict their labels
         """
-        super().evaluate(dataset_test)
+        pass
+
+    @abstractmethod
+    def evaluate(self, dataset_test: MIMLDataset):
+        """
+        Evaluate the model on a test dataset
+
+        Parameters
+        ----------
+        dataset_test : MIMLDataset
+            Test dataset to evaluate the model on.
+        """
+        pass

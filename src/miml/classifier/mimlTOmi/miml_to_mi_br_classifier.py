@@ -47,7 +47,15 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         for i in range(len(datasets)):
             self.classifiers[i].fit(datasets[i][0], datasets[i][1])
 
-    def predict(self, x):
+    def predict(self, x: np.ndarray):
+        """
+        Predict labels of given data
+
+        Parameters
+        ----------
+        x : ndarray of shape (n, n_labels)
+            Data to predict their labels
+        """
         results = np.zeros((len(self.classifiers)))
         # Prediction of each label
         for i in range(len(self.classifiers)):
@@ -56,12 +64,12 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
     def predict_bag(self, bag: Bag):
         """
-        Predict labels of given data
+        Predict labels of a given bag
 
         Parameters
         ----------
         bag : Bag
-            Bag to predict their classes
+            Bag to predict their labels
         """
         super().predict_bag(bag)
         bags = self.transformation.transform_bag(bag)

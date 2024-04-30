@@ -20,10 +20,12 @@ class MIMLClassifier(ABC):
 
     def fit(self, dataset_train: MIMLDataset) -> None:
         """
+        Training the classifier
 
         Parameters
         ----------
-        dataset_train
+        dataset_train : MIMLDataset
+            Dataset to train the classifier
         """
         # if not isinstance(dataset_train, MIMLDataset):
         #    raise Exception("Fit function should receive a MIMLDataset as parameter")
@@ -32,16 +34,25 @@ class MIMLClassifier(ABC):
 
     @abstractmethod
     def fit_internal(self, dataset_train: MIMLDataset):
-        pass
-
-    @abstractmethod
-    def predict(self, x):
         """
+        Internal method to train the classifier
 
         Parameters
         ----------
-        x: np.ndarray
-            Input samples
+        dataset_train : MIMLDataset
+            Dataset to train the classifier
+        """
+        pass
+
+    @abstractmethod
+    def predict(self, x: np.ndarray):
+        """
+         Predict labels of given data
+
+         Parameters
+         ----------
+         x : ndarray of shape (n, n_labels)
+             Data to predict their labels
         """
         # if not isinstance(x, np.ndarray):
         #    raise Exception("Predict function should receive a Numpy array as parameter")
@@ -49,10 +60,12 @@ class MIMLClassifier(ABC):
     @abstractmethod
     def predict_bag(self, bag: Bag):
         """
+        Predict labels of a given bag
 
         Parameters
         ----------
-        bag
+        bag : Bag
+            Bag to predict their labels
         """
         # if not isinstance(bag, Bag):
         #    raise Exception("Predict function should receive a Numpy array as parameter")
@@ -60,10 +73,12 @@ class MIMLClassifier(ABC):
     @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset):
         """
+        Evaluate the model on a test dataset
 
         Parameters
         ----------
-        dataset_test
+        dataset_test : MIMLDataset
+            Test dataset to evaluate the model on.
         """
         # if not isinstance(dataset_test, MIMLDataset):
         #    raise Exception("Evaluate function should receive a MIMLDataset as parameter")

@@ -501,7 +501,7 @@ class MIMLDataset:
                 distribution[instances_bag] = 1
             if instances_bag < min_instances:
                 min_instances = instances_bag
-            elif instances_bag > max_instances:
+            if instances_bag > max_instances:
                 max_instances = instances_bag
         return n_instances, min_instances, max_instances, distribution
 

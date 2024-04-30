@@ -7,7 +7,7 @@ class Instance:
     Class to manage MIML Instance data representation
     """
 
-    def __init__(self, values: np.ndarray = None, bag=None) -> None:
+    def __init__(self, values: list = None, bag=None) -> None:
         """
         Constructor of the class Instance
 

@@ -142,13 +142,13 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
 
             # El resto de la cadena se trata de las etiquetas
             labels = line[line.find(delimiter, 2) + 2:]
-            labels_values = np.array([int(i) for i in labels.split(",")], ndmin=1)
+            labels_values = [int(i) for i in labels.split(",")]
             # print("Labels: ", labels)
 
             values_list = []
             for v in values:
-                values_instance = np.array([float(i) for i in v.split(',')], ndmin=1)
-                instance = Instance(np.hstack((values_instance, labels_values)))
+                values_instance = [float(i) for i in v.split(',')]
+                instance = Instance(values_instance+labels_values)
                 if key not in dataset.data:
                     bag = Bag(key)
                     bag.add_instance(instance)

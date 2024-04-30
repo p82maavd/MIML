@@ -1,8 +1,8 @@
 import unittest
 
-from data.bag import Bag
-from data.instance import Instance
-from data.miml_dataset import MIMLDataset
+from miml.data.bag import Bag
+from miml.data.instance import Instance
+from miml.data.miml_dataset import MIMLDataset
 
 
 class TestData(unittest.TestCase):
