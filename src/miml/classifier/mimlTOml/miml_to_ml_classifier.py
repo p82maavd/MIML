@@ -60,7 +60,7 @@ class MIMLtoMLClassifier(MIMLClassifier):
             Bag to predict their labels
         """
         # TODO: Check number attributes of bag with dataset
-        super().predict_bag(bag)
+        # super().predict_bag(bag)
         x_bag, _ = self.transformation.transform_bag(bag)
         x_bag = np.array(x_bag, ndmin=2)
         return self.predict(x_bag)

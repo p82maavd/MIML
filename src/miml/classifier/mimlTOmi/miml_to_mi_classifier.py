@@ -70,6 +70,6 @@ class MIMLtoMIClassifier(MIMLClassifier):
         Parameters
         ----------
         dataset_test : MIMLDataset
-            Test dataset to evaluate the model on.
+            Test dataset to evaluate the model on
         """
         pass

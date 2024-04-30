@@ -71,20 +71,21 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         bag : Bag
             Bag to predict their labels
         """
-        super().predict_bag(bag)
+        # super().predict_bag(bag)
         bags = self.transformation.transform_bag(bag)
 
         return self.predict(bags[0][0])
 
     def evaluate(self, dataset_test: MIMLDataset):
         """
+        Evaluate the model on a test dataset
 
         Parameters
         ----------
-        dataset_test: MIMLDataset
-            Dataset to test the classifier
+        dataset_test : MIMLDataset
+            Test dataset to evaluate the model on
         """
-        super().evaluate(dataset_test)
+        # super().evaluate(dataset_test)
 
         datasets = self.transformation.transform_dataset(dataset_test)
 
