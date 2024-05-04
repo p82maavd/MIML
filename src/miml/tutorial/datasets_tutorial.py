@@ -1,10 +1,11 @@
-import miml
+import pkg_resources
 from miml.data import Instance
 from miml.data import Bag
 from miml.data import MIMLDataset
 from miml.data import load_dataset
 
-dataset_test = load_dataset("../datasets/miml_birds_random_20test.arff", delimiter="'")
+dataset_test = load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'),
+                            delimiter="'")
 
 dataset_test.show_dataset(head=5)
 dataset_test.describe()

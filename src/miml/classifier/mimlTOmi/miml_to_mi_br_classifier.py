@@ -1,15 +1,11 @@
-import importlib
 import numpy as np
-
 from copy import deepcopy
 from sklearn.metrics import classification_report, hamming_loss
 
 from .miml_to_mi_classifier import MIMLtoMIClassifier
-
-BinaryRelevanceTransformation = importlib.import_module(
-    ".binary_relevance_transformation", package="miml.transformation.mimlTOmi").BinaryRelevanceTransformation
-Bag = importlib.import_module(".bag", package="miml.data").Bag
-MIMLDataset = importlib.import_module(".miml_dataset", package="miml.data").MIMLDataset
+from ...transformation import BinaryRelevanceTransformation
+from ...data import Bag
+from ...data import MIMLDataset
 
 
 class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
@@ -93,10 +89,4 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         for i, bag in enumerate(datasets[0][0]):
             results[i] = self.predict(bag)
 
-        print(classification_report(dataset_test.get_labels_by_bag(), results, zero_division=0))
-        print("Hamming Loss: ", hamming_loss(dataset_test.get_labels_by_bag(), results))
-
-        # TODO: To Csv file
-        # report = classification_report(y_test, y_pred, output_dict=True)
-        # df = pandas.DataFrame(report).transpose()
-        # df.to_csv
+        return results

@@ -24,7 +24,7 @@ class IteratedDiscrimAPRClassifier:
         self.x_train = x_train
         self.y_train = y_train
         self.generate_apr()
-        #for _ in range(3):
+        # for _ in range(3):
         self.grow()
         #    self.discriminate()
 
@@ -116,7 +116,7 @@ class IteratedDiscrimAPRClassifier:
                     if (instance[max_discrimination_feature] < self.apr[0][max_discrimination_feature] - margin or
                             instance[max_discrimination_feature] > self.apr[1][max_discrimination_feature] + margin):
                         pass
-                        #new_negative_instances_indices.append(instance_index)
+                        # new_negative_instances_indices.append(instance_index)
             negative_instances_indices = new_negative_instances_indices
 
         return selected_features

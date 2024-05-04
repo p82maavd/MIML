@@ -71,9 +71,9 @@ def load_dataset_csv(file: str, header=0):
 
         key = data[0]
 
-        # TODO: Revisar porque values tiene el ndmin=2
-        values = np.array([float(i) for i in data[1:-num_labels]], ndmin=2)
-        labels = np.array([int(i) for i in data[-num_labels:]])
+        # TODO: Check
+        values = [float(i) for i in data[1:-num_labels]]
+        labels = [int(i) for i in data[-num_labels:]]
 
         instance = Instance(values + labels)
 
