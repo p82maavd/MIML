@@ -32,8 +32,8 @@ class MIMLtoMLClassifier(MIMLClassifier):
         dataset_train : MIMLDataset
             Dataset to train the classifier
         """
-        x_train, y_train = self.transformation.transform_dataset(dataset_train)
-        self.classifier.fit(x_train, y_train)
+        transformed_dataset_train = self.transformation.transform_dataset(dataset_train)
+        self.classifier.fit(transformed_dataset_train.get_features(), transformed_dataset_train.get_labels())
 
     def predict(self, x: np.ndarray):
         """
@@ -55,11 +55,12 @@ class MIMLtoMLClassifier(MIMLClassifier):
         bag : Bag
             Bag to predict their labels
         """
-        # TODO: Check number attributes of bag with dataset
-        # super().predict_bag(bag)
-        x_bag, _ = self.transformation.transform_bag(bag)
-        x_bag = np.array(x_bag, ndmin=2)
-        return self.predict(x_bag)
+        # TODO: Ver como arreglar esto, no me gusta. La bolsa transformada tiene que tener un dataset asociado
+        #  transformado, sino no puede coger las features. En mi se ha hecho no llamando a delete, con numpy directamente
+        self.transformation.dataset = None
+        transformed_bag = self.transformation.transform_bag(bag)
+
+        return self.predict(transformed_bag.get_features())
 
     def evaluate(self, dataset_test: MIMLDataset):
         """
@@ -71,7 +72,7 @@ class MIMLtoMLClassifier(MIMLClassifier):
             Test dataset to evaluate the model on.
         """
         # super().evaluate(dataset_test)
-        x_test, y_test = self.transformation.transform_dataset(dataset_test)
-        results = self.predict(x_test)
+        transformed_dataset_test = self.transformation.transform_dataset(dataset_test)
+        results = self.predict(transformed_dataset_test.get_features())
 
         return results

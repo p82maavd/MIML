@@ -9,9 +9,10 @@ class MIMLtoMLTransformation(ABC):
         self.dataset = None
 
     @abstractmethod
-    def transform_dataset(self, dataset: MIMLDataset):
+    def transform_dataset(self, dataset: MIMLDataset) -> MIMLDataset:
         pass
 
     @abstractmethod
-    def transform_bag(self, bag: Bag):
+    def transform_bag(self, bag: Bag) -> Bag:
         pass
+

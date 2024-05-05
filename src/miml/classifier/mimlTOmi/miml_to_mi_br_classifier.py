@@ -40,8 +40,8 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             self.classifiers.append(classifier)
 
         datasets = self.transformation.transform_dataset(dataset_train)
-        for i in range(len(datasets)):
-            self.classifiers[i].fit(datasets[i][0], datasets[i][1])
+        for i, dataset in enumerate(datasets):
+            self.classifiers[i].fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
 
     def predict(self, x: np.ndarray):
         """
@@ -68,9 +68,10 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             Bag to predict their labels
         """
         # super().predict_bag(bag)
+
         bags = self.transformation.transform_bag(bag)
 
-        return self.predict(bags[0][0])
+        return self.predict(bags[0].get_features())
 
     def evaluate(self, dataset_test: MIMLDataset):
         """
@@ -86,7 +87,8 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         datasets = self.transformation.transform_dataset(dataset_test)
 
         results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
-        for i, bag in enumerate(datasets[0][0]):
+        # Features are the same in all datasets
+        for i, bag in enumerate(datasets[0].get_features_by_bag()):
             results[i] = self.predict(bag)
 
         return results

@@ -1,4 +1,5 @@
-
+import numpy as np
+from copy import deepcopy
 from ...data import Bag
 from ...data import MIMLDataset
 
@@ -25,10 +26,17 @@ class BinaryRelevanceTransformation:
         """
         self.dataset = dataset
         datasets = []
-        x = self.dataset.get_features_by_bag()
-        y = self.dataset.get_labels_by_bag()
         for i in range(self.dataset.get_number_labels()):
-            datasets.append([x, y[:, i].reshape(-1, 1)])
+            dataset = deepcopy(self.dataset)
+            count = 0
+            for j in range(self.dataset.get_number_labels()):
+                if i != j:
+                    dataset.delete_attribute(self.dataset.get_number_features()-count+j)
+                    labels_name = dataset.get_labels_name()
+                    labels_name.pop(j-count)
+                    dataset.set_labels_name(labels_name)
+                    count += 1
+            datasets.append(dataset)
 
         return datasets
 
@@ -43,9 +51,21 @@ class BinaryRelevanceTransformation:
 
         Returns
         -------
-        bags : list[ndarray]
-        Tuple of numpy ndarray with attribute values and labels
+        bags : list[Bag]
+            List of n_labels transformed bags
 
         """
-        bags = [[bag.get_features(), label] for label in bag.get_labels()[0]]
+        bags = []
+        for i in range(bag.get_number_labels()):
+            transformed_bag = deepcopy(bag)
+            count = 0
+            for j in range(bag.get_number_labels()):
+                if i != j:
+                    transformed_bag.data = np.delete(transformed_bag.data, bag.get_number_features() - count + j, axis=1)
+                    labels_name = transformed_bag.dataset.get_labels_name()
+                    labels_name.pop(j - count)
+                    transformed_bag.dataset.set_labels_name(labels_name)
+                    count += 1
+            bags.append(transformed_bag)
+
         return bags

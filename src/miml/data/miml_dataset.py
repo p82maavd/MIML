@@ -392,11 +392,10 @@ class MIMLDataset:
         position : int
             Index of the attribute to be deleted
         """
-
         for bag in self.data.keys():
-            self.data[bag].delete_attribute(position)
+            self.data[bag].data = np.delete(self.data[bag].data, position, axis=1)
 
-    def show_dataset(self, head: int = None, attributes=None, labels=None) -> None:
+    def show_dataset(self, head: int = None, attributes=None, labels=None, info=False) -> None:
         """
         Function to show information about the dataset
 
@@ -410,13 +409,17 @@ class MIMLDataset:
 
             labels : List of string
                 Labels to show
+
+            info: Boolean
+                Show more info
         """
         # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
         #  a mostrar opcionales
-        print("Name: ", self.get_name())
-        print("Features: ", self.get_features_name())
-        print("Labels: ", self.get_labels_name())
-        print("Bags:")
+        if info:
+            print("Name: ", self.get_name())
+            print("Features: ", self.get_features_name())
+            print("Labels: ", self.get_labels_name())
+            print("Bags:")
         count = 0
         for key in self.data:
             # print("\n")
