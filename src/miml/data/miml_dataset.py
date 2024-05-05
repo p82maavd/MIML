@@ -13,7 +13,6 @@ class MIMLDataset:
         """
         Constructor of the class MIMLDataset
         """
-        # TODO: Si dataset leido en csv, el nombre poner el del archivo
         self.name = "undefined"
         self.attributes = dict()
         self.data = dict()
@@ -57,11 +56,10 @@ class MIMLDataset:
 
         Returns
         -------
-        attributes data: numpy array
+        attributes data: ndarray of shape (n_instances, n_attributes)
             Values of the attributes of the dataset
         """
-        pass
-        # TODO: Ver si es necesario
+        return np.hstack((self.get_features(), self.get_labels()))
 
     def get_number_attributes(self) -> int:
         """
@@ -114,7 +112,6 @@ class MIMLDataset:
         features: ndarray of shape (n_instances, n_features)
             Values of the features of the dataset
         """
-        # TODO: Test
         features = np.zeros((self.get_number_instances(), self.get_number_features()))
         count = 0
         for key in self.data.keys():
@@ -281,7 +278,6 @@ class MIMLDataset:
         instance : Instance
             Instance of Instance class
         """
-        # TODO: check
         return self.get_bag(key_bag).get_instance(index_instance)
 
     def get_number_instances(self) -> int:
@@ -374,14 +370,14 @@ class MIMLDataset:
         position : int
             Index for the new attribute
 
-        values:  numpy array
+        values:  ndarray of shape(n_instances)
             Values for the new attribute
         """
         # TODO: Test
         for bag_index, bag in enumerate(self.data.keys()):
             add_values = values[bag_index]
             if values is None:
-                add_values = np.zeros(self.data[bag].get_number_instances)
+                add_values = np.zeros(self.data[bag].get_number_instances())
             self.data[bag].add_attribute(position, add_values)
 
     def delete_attribute(self, position: int) -> None:
@@ -397,7 +393,7 @@ class MIMLDataset:
         for bag in self.data.keys():
             self.data[bag].data = np.delete(self.data[bag].data, position, axis=1)
 
-    def show_dataset(self, head: int = None, attributes=None, labels=None, info=False) -> None:
+    def show_dataset(self, head: int = None, attributes=None, labels=None, info=True) -> None:
         """
         Function to show information about the dataset
 
@@ -495,7 +491,6 @@ class MIMLDataset:
         """
         n_instances = self.get_number_instances()
         max_instances = 0
-        # TODO: check
         min_instances = float("inf")
         distribution = dict()
         for key in self.data:
@@ -515,14 +510,11 @@ class MIMLDataset:
         Print statistics about the dataset
         """
 
-        # TODO: Ponerlo bonito con tabulate
-
         print("-----MULTILABEL-----")
         print("Cardinalidad: ", self.cardinality())
         print("Densidad: ", self.density())
         print("Distinct: ", self.distinct())
         print("")
-        # TODO: Testearlo
         n_instances, min_instances, max_instances, distribution = self.get_statistics()
         print("-----MULTIINSTANCE-----")
         print("Nº of bags: ", self.get_number_bags())

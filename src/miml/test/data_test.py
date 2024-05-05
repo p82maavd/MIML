@@ -21,7 +21,6 @@ class TestData(unittest.TestCase):
         self.assertEqual(error.exception.args[0], "The instance isn't in any dataset, so there is no features info")
 
     def test_bag(self):
-        # TODO:
         values = [2, 7, 5.09, 1, 0]
         instance = Instance(values)
         bag = Bag("1")
@@ -38,7 +37,6 @@ class TestData(unittest.TestCase):
         pass
 
     def test_final(self):
-        # TODO:
         values = [2, 7, 5.09, 1, 0]
         instance1 = Instance(values)
         instance2 = Instance(values)

@@ -9,7 +9,6 @@ def arff_to_csv(file: str, delimiter: str = "'") -> None:
 
     delimiter : str, default = '
         Delimiter used in arff file for the start and end of the bag values ( ' or " )
-
     """
 
     arff = open(file)
@@ -24,17 +23,12 @@ def arff_to_csv(file: str, delimiter: str = "'") -> None:
             continue
 
         if line.startswith("%") or line.startswith("@"):
-            if line.startswith("@attribute"):
-                if not (line.startswith("@attribute bag relational")):
-                    attrib.append(line[line.find(" ") + 1:line.find(" ", line.find(" ") + 1)])
+            if line.startswith("@attribute") and not line.startswith("@attribute bag relational"):
+                attrib.append(line.split()[1])
 
         else:
             if flag == 0:
-                for x in range(len(attrib)):
-                    if x == len(attrib) - 1:
-                        csv.write(attrib[x] + "\n")
-                    else:
-                        csv.write(attrib[x] + ",")
+                csv.write(','.join(attrib) + '\n')
                 flag = 1
 
             # Eliminanos el salto de línea del final de la cadena
@@ -57,7 +51,6 @@ def arff_to_csv(file: str, delimiter: str = "'") -> None:
 
             for v in values:
                 csv.write(key + "," + v + "," + labels + "\n")
-                # TODO: quizas separar en funciones para data y para atributos
                 # TODO: intentar optimizar la funcion, aprovechar que la string del arff
                 # es parecida, separar solo los values
                 # TODO: control de errores

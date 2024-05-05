@@ -65,9 +65,9 @@ class MIMLtoMLClassifier(MIMLClassifier):
          results : ndarray of shape (n_labels)
              Predicted labels of data
         """
-        # TODO: Ver como arreglar esto, no me gusta. La bolsa transformada tiene que tener un dataset asociado
-        #  transformado, sino no puede coger las features. En mi se ha hecho no llamando a delete, con numpy directamente
-        self.transformation.dataset = None
+
+        #TODO: La bag por parametro tambien tiene que tener un dataset asociada para coger las features,
+        # sino no se puede predecir. Mostrar error
         transformed_bag = self.transformation.transform_bag(bag)
 
         return self.predict(transformed_bag.get_features())

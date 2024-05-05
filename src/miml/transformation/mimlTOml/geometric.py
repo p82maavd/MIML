@@ -51,7 +51,6 @@ class GeometricTransformation(MIMLtoMLTransformation):
         labels : ndarray of shape (n_labels)
             Numpy array with label values
         """
-        # TODO: Test
 
         features = bag.get_features()
         labels = bag.get_labels()[0]
@@ -62,11 +61,10 @@ class GeometricTransformation(MIMLtoMLTransformation):
         transformed_bag = Bag(bag.key)
         transformed_bag.add_instance(Instance(list(np.hstack((features, labels)))))
 
-        if self.dataset is None:
-            self.dataset = MIMLDataset()
-            self.dataset.set_name(bag.dataset.get_name())
-            self.dataset.set_features_name(bag.dataset.get_features_name())
-            self.dataset.set_labels_name(bag.dataset.get_labels_name())
-            self.dataset.add_bag(transformed_bag)
+        dataset = MIMLDataset()
+        dataset.set_name(bag.dataset.get_name())
+        dataset.set_features_name(bag.dataset.get_features_name())
+        dataset.set_labels_name(bag.dataset.get_labels_name())
+        dataset.add_bag(transformed_bag)
 
         return transformed_bag

@@ -18,7 +18,6 @@ class Bag:
         key : str
             Key of the bag
         """
-        # TODO: Ver si quitar instance del constructor, se puede poner como parametro opcional
         self.data = None
         self.key = key
         self.dataset = None

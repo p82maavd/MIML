@@ -45,14 +45,10 @@ def load_dataset_csv(file: str, header=0):
     dataset : MIMLDataset
         Dataset loaded
     """
-    # dataset = pd.read_csv(file, header=0)
-    # TODO: Hay que ver como diferenciar los atributos de las labels
-    # TODO: Si no se puede implementar la funcionalidad de pandas "[]"
-    # TODO: y poner atributos y labels como parametros opcionales quizas
 
     dataset = MIMLDataset()
     csv_file = open(file)
-
+    dataset.set_name(file.split("/")[-1])
     file_name = os.path.basename(file)
     dataset.set_name(os.path.splitext(file_name)[0])
 
@@ -71,7 +67,6 @@ def load_dataset_csv(file: str, header=0):
 
         key = data[0]
 
-        # TODO: Check
         values = [float(i) for i in data[1:-num_labels]]
         labels = [int(i) for i in data[-num_labels:]]
 

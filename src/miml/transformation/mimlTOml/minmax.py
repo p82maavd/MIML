@@ -67,14 +67,14 @@ class MinMaxTransformation(MIMLtoMLTransformation):
         transformed_bag = Bag(bag.key)
         transformed_bag.add_instance(Instance(list(np.hstack((features, labels)))))
 
-        if self.dataset is None:
-            self.dataset = MIMLDataset()
-            self.dataset.set_name(bag.dataset.get_name())
-            features_name = self.dataset.get_features_name()
-            features_name_min = ["min_" + feature for feature in features_name]
-            features_name_max = ["max_" + feature for feature in features_name]
-            self.dataset.set_features_name(features_name_min+features_name_max)
-            self.dataset.set_labels_name(bag.dataset.get_labels_name())
-            self.dataset.add_bag(transformed_bag)
+        dataset = MIMLDataset()
+        dataset.set_name(bag.dataset.get_name())
+        features_name = self.dataset.get_features_name()
+        features_name_min = ["min_" + feature for feature in features_name]
+        features_name_max = ["max_" + feature for feature in features_name]
+        dataset.set_features_name(features_name_min+features_name_max)
+        dataset.set_labels_name(bag.dataset.get_labels_name())
+        dataset.add_bag(transformed_bag)
+
         return transformed_bag
 
