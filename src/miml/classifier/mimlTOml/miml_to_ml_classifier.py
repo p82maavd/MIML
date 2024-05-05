@@ -35,14 +35,19 @@ class MIMLtoMLClassifier(MIMLClassifier):
         transformed_dataset_train = self.transformation.transform_dataset(dataset_train)
         self.classifier.fit(transformed_dataset_train.get_features(), transformed_dataset_train.get_labels())
 
-    def predict(self, x: np.ndarray):
+    def predict(self, x: np.ndarray) -> np.ndarray:
         """
          Predict labels of given data
 
          Parameters
          ----------
-         x : ndarray of shape (n, n_labels)
+         x : ndarray of shape (n_instances, n_labels)
              Data to predict their labels
+
+         Returns
+         ----------
+         results : ndarray of shape (n_instances, n_labels)
+             Predicted labels of data
          """
         return self.classifier.predict(x)
 
@@ -54,6 +59,11 @@ class MIMLtoMLClassifier(MIMLClassifier):
         ----------
         bag : Bag
             Bag to predict their labels
+
+        Returns
+         ----------
+         results : ndarray of shape (n_labels)
+             Predicted labels of data
         """
         # TODO: Ver como arreglar esto, no me gusta. La bolsa transformada tiene que tener un dataset asociado
         #  transformado, sino no puede coger las features. En mi se ha hecho no llamando a delete, con numpy directamente
@@ -62,14 +72,19 @@ class MIMLtoMLClassifier(MIMLClassifier):
 
         return self.predict(transformed_bag.get_features())
 
-    def evaluate(self, dataset_test: MIMLDataset):
+    def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
         Evaluate the model on a test dataset
 
         Parameters
         ----------
         dataset_test : MIMLDataset
-            Test dataset to evaluate the model on.
+            Test dataset to evaluate the model on
+
+        Returns
+        ----------
+        results : ndarray of shape (n_bags, n_labels)
+            Predicted labels of dataset_test
         """
         # super().evaluate(dataset_test)
         transformed_dataset_test = self.transformation.transform_dataset(dataset_test)

@@ -34,9 +34,9 @@ class AllPositiveAPRClassifier:
 
         Parameters
         ----------
-        x_train : np.ndarray
+        x_train : ndarray of shape (n_bags, n_instances, n_features)
             Features values of bags in the training set.
-        y_train : np.ndarray
+        y_train : ndarray (n_bags, n_instances, n_labels)
             Labels of bags in the training set.
         """
         self.generate_apr(x_train, y_train)
@@ -67,9 +67,9 @@ class AllPositiveAPRClassifier:
 
         Parameters
         ----------
-        x_train : np.ndarray
+        x_train : np.ndarray of shape (n_bags, n_instances, n_features)
             Features values of bags in the training set.
-        y_train : np.ndarray
+        y_train : np.ndarray of shape    (n_bags, n_instances, n_features)
             Labels of bags in the training set.
         """
 

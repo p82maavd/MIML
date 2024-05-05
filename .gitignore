@@ -10,8 +10,6 @@ update.bat
 .gitignore
 todo.md
 src/miml/tutorial/classifiers_tutorial.py
-src/miml/tutorial/datasets_tutorial.py
 src/miml/tutorial/tests.py
-src/miml/tutorial/transformation_tutorial.py
 
 

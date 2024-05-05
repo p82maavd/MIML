@@ -10,7 +10,7 @@ class MIMLtoMIClassifier(MIMLClassifier):
     Class to represent a multiinstance classifier
     """
 
-    def __init__(self, mi_classifier):
+    def __init__(self, mi_classifier) -> None:
         """
         Constructor of the class MIMLtoMIClassifier
 
@@ -23,7 +23,7 @@ class MIMLtoMIClassifier(MIMLClassifier):
         self.classifier = mi_classifier
 
     @abstractmethod
-    def fit_internal(self, dataset_train: MIMLDataset):
+    def fit_internal(self, dataset_train: MIMLDataset) -> None:
         """
         Training the classifier
 
@@ -35,19 +35,24 @@ class MIMLtoMIClassifier(MIMLClassifier):
         pass
 
     @abstractmethod
-    def predict(self, x: np.ndarray):
+    def predict(self, x: np.ndarray) -> np.ndarray:
         """
         Predict labels of given data
 
         Parameters
         ----------
-        x : ndarray of shape (n, n_labels)
+        x : ndarray of shape (n_instances, n_labels)
             Data to predict their labels
+
+        Returns
+        -------
+        results : ndarray of shape (n_labels)
+            Predicted labels
         """
         pass
 
     @abstractmethod
-    def predict_bag(self, bag: Bag):
+    def predict_bag(self, bag: Bag) -> np.ndarray:
         """
         Predict labels of a given bag
 
@@ -55,11 +60,16 @@ class MIMLtoMIClassifier(MIMLClassifier):
         ----------
         bag : Bag
             Bag to predict their labels
+
+        Returns
+        -------
+        results : ndarray of shape (n_labels)
+            Predicted labels of the bag
         """
         pass
 
     @abstractmethod
-    def evaluate(self, dataset_test: MIMLDataset):
+    def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
         Evaluate the model on a test dataset
 
@@ -67,5 +77,10 @@ class MIMLtoMIClassifier(MIMLClassifier):
         ----------
         dataset_test : MIMLDataset
             Test dataset to evaluate the model on
+
+        Returns
+        ----------
+        results : ndarray of shape (n_bags, n_labels)
+            Predicted labels of dataset_test
         """
         pass

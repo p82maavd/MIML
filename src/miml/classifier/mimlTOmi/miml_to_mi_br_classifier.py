@@ -1,6 +1,5 @@
 import numpy as np
 from copy import deepcopy
-from sklearn.metrics import classification_report, hamming_loss
 
 from .miml_to_mi_classifier import MIMLtoMIClassifier
 from ...transformation import BinaryRelevanceTransformation
@@ -43,14 +42,19 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         for i, dataset in enumerate(datasets):
             self.classifiers[i].fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
 
-    def predict(self, x: np.ndarray):
+    def predict(self, x: np.ndarray) -> np.ndarray:
         """
         Predict labels of given data
 
         Parameters
         ----------
-        x : ndarray of shape (n, n_labels)
+        x : ndarray of shape (n_instances, n_labels)
             Data to predict their labels
+
+        Returns
+        -------
+        results : ndarray of shape (n_labels)
+            Predicted labels
         """
         results = np.zeros((len(self.classifiers)))
         # Prediction of each label
@@ -58,7 +62,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             results[i] = self.classifiers[i].predict(x)
         return results
 
-    def predict_bag(self, bag: Bag):
+    def predict_bag(self, bag: Bag) -> np.ndarray:
         """
         Predict labels of a given bag
 
@@ -66,6 +70,11 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         ----------
         bag : Bag
             Bag to predict their labels
+
+        Returns
+        -------
+        results : ndarray of shape (n_labels)
+            Predicted labels of the bag
         """
         # super().predict_bag(bag)
 
@@ -73,7 +82,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         return self.predict(bags[0].get_features())
 
-    def evaluate(self, dataset_test: MIMLDataset):
+    def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
         Evaluate the model on a test dataset
 
@@ -81,6 +90,11 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         ----------
         dataset_test : MIMLDataset
             Test dataset to evaluate the model on
+
+        Returns
+        ----------
+        results : ndarray of shape (n_bags, n_labels)
+            Predicted labels of dataset_test
         """
         # super().evaluate(dataset_test)
 

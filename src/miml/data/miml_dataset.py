@@ -111,7 +111,7 @@ class MIMLDataset:
 
         Returns
         -------
-        features: numpy array
+        features: ndarray of shape (n_instances, n_features)
             Values of the features of the dataset
         """
         # TODO: Test
@@ -124,6 +124,7 @@ class MIMLDataset:
         return features
 
     def get_features_by_bag(self) -> np.ndarray:
+        # TODO: Doc
         features = []
         for key in self.data.keys():
             features.append(self.get_bag(key).get_features())
@@ -302,6 +303,7 @@ class MIMLDataset:
         ----------
         key : str
             Key of the bag where the instance will be added
+
         instance : Instance
             Instance of Instance class to be added
         """
