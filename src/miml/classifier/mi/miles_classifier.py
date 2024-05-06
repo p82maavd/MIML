@@ -82,5 +82,6 @@ class MILESClassifier:
     def predict_proba(self, x: np.ndarray):
         # TODO: DOC y test, probar varias veces a ver si cambia el resultado, si cambia esta mal
         result = np.zeros(x.shape[0])
-        for i, bag in enumerate(x):
-            result[i] = self.predict(bag)
+        for i in range(x.shape[0]):
+            result[i] = self.predict(x[i])
+        return result
