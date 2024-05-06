@@ -82,6 +82,15 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         return self.predict(bags[0].get_features())
 
+    def predict_proba(self, dataset_test: MIMLDataset):
+        # TODO: DOC
+        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        datasets = self.transformation.transform_dataset(dataset_test)
+
+        for i in range(len(datasets)):
+            results[0:, i] = self.classifiers[i].predict_proba(datasets[i].get_features_by_bag())
+        return results
+
     def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
         Evaluate the model on a test dataset

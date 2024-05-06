@@ -61,6 +61,12 @@ class AllPositiveAPRClassifier:
                 return 1
         return 0
 
+    def predict_proba(self, x: np.ndarray):
+        result = np.zeros(x.shape[0])
+        for i in range(x.shape[0]):
+            result[i] = self.predict(x[i])
+        return result
+
     def generate_apr(self, x_train, y_train) -> None:
         """
         Generate the axis-parallel rectangle

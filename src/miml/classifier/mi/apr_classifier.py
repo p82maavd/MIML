@@ -1,4 +1,5 @@
 import mil.models
+import numpy as np
 
 
 class APRClassifier:
@@ -62,3 +63,8 @@ class APRClassifier:
         # TODO: Revisar dimensiones de x, que pasa si llamo a predict con varias bolsas
         x = x.reshape(1, x.shape[0], x.shape[1])
         return self.classifier.predict(x)
+
+    def predict_proba(self, x: np.ndarray):
+        result = np.zeros(x.shape[0])
+        for i, bag in enumerate(x):
+            result[i] = self.predict(bag)

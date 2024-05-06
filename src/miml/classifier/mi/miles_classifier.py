@@ -1,6 +1,7 @@
 import mil.models
 from mil.bag_representation import MILESMapping
 from sklearn.tree import DecisionTreeClassifier
+import numpy as np
 
 
 class MILESClassifier:
@@ -77,3 +78,9 @@ class MILESClassifier:
         bag = bag.reshape(1, bag.shape[0], bag.shape[1])
         mapped_bag = self.mapping.transform(bag)
         return self.model.predict(mapped_bag)
+
+    def predict_proba(self, x: np.ndarray):
+        # TODO: DOC y test, probar varias veces a ver si cambia el resultado, si cambia esta mal
+        result = np.zeros(x.shape[0])
+        for i, bag in enumerate(x):
+            result[i] = self.predict(bag)

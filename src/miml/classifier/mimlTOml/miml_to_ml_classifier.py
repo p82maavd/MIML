@@ -66,11 +66,21 @@ class MIMLtoMLClassifier(MIMLClassifier):
              Predicted labels of data
         """
 
-        #TODO: La bag por parametro tambien tiene que tener un dataset asociada para coger las features,
+        # TODO: La bag por parametro tambien tiene que tener un dataset asociada para coger las features,
         # sino no se puede predecir. Mostrar error
         transformed_bag = self.transformation.transform_bag(bag)
 
         return self.predict(transformed_bag.get_features())
+
+    def predict_proba(self, dataset_test: MIMLDataset) -> np.ndarray:
+        # TODO: DOC
+        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        transformed_dataset_test = self.transformation.transform_dataset(dataset_test)
+        probs = self.classifier.predict_proba(transformed_dataset_test.get_features())
+        for i, label in enumerate(probs):
+            # It takes the probability of being a positive class
+            results[0:, i] = label[0:, 1]
+        return results
 
     def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """

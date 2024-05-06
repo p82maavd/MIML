@@ -247,8 +247,11 @@ class MIMLDataset:
         bag : Bag
             Instance of Bag class to be added
         """
-        bag.set_dataset(self)
-        self.data[bag.key] = bag
+        if bag.get_number_attributes() == self.get_number_attributes():
+            bag.set_dataset(self)
+            self.data[bag.key] = bag
+        else:
+            raise Exception("The bag doesn't have the same attributes as the dataset")
 
     def delete_bag(self, key_bag: str) -> None:
         """

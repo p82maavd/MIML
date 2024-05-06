@@ -69,6 +69,13 @@ class MIMLtoMIClassifier(MIMLClassifier):
         pass
 
     @abstractmethod
+    def predict_proba(self, dataset_test: MIMLDataset):
+        """
+
+        """
+        pass
+
+    @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
         Evaluate the model on a test dataset

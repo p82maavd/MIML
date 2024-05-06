@@ -14,6 +14,7 @@ class MIMLClassifier(ABC):
         """
         Constructor of the class MIMLClassifier
         """
+        self.classifier = None
 
     def fit(self, dataset_train: MIMLDataset) -> None:
         """
@@ -76,6 +77,11 @@ class MIMLClassifier(ABC):
         """
         # if not isinstance(bag, Bag):
         #    raise Exception("Predict function should receive a Numpy array as parameter")
+
+    @abstractmethod
+    def predict_proba(self, dataset_test: MIMLDataset) -> np.ndarray:
+        # TODO: DOC
+        pass
 
     @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
