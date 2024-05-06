@@ -55,6 +55,10 @@ class BinaryRelevanceTransformation:
             List of n_labels transformed bags
 
         """
+        if bag.dataset is None:
+            raise Exception("Can't transform a bag without an assigned dataset, because we wouldn't have info about "
+                            "the features and labels")
+        
         bags = []
         for i in range(bag.get_number_labels()):
             transformed_bag = deepcopy(bag)

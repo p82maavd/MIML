@@ -59,6 +59,10 @@ class MinMaxTransformation(MIMLtoMLTransformation):
             Transformed bag
 
         """
+        if bag.dataset is None:
+            raise Exception("Can't transform a bag without an assigned dataset, because we wouldn't have info about "
+                            "the features and labels")
+
         features = bag.get_features()
         labels = bag.get_labels()[0]
         min_values = np.min(features, axis=0)

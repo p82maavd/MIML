@@ -11,8 +11,9 @@ class Report:
     """
 
     def __init__(self, classifier: MIMLClassifier, dataset_test: MIMLDataset, metrics: list[str] = None,
-                 header: bool = True, per_label: bool = False):
+                 header: bool = True, per_label: bool = True):
 
+        self.dataset = dataset_test
         self.y_true = dataset_test.get_labels_by_bag()
         self.y_pred = classifier.evaluate(dataset_test)
         self.probs = classifier.predict_proba(dataset_test)
@@ -21,10 +22,11 @@ class Report:
                        "average-precision-score-micro", "recall-score-macro", "recall-score-micro", "f1-score-macro",
                        "f1-score-micro", "fbeta-score-macro", "fbeta-score-micro", "accuracy-score", "hamming-loss",
                        "jaccard-score-macro", "jaccard-score-micro", "log-loss"]
-
         if per_label:
-            all_metrics += ["precision-score-per-label", "recall-score-per-label", "f1-score-per-label",
-                            "fbeta-score-per-label", "jaccard-score-per-label"]
+            per_label_metrics = ["precision-score", "recall-score", "f1-score", "fbeta-score", "jaccard-score"]
+            for metric in per_label_metrics:
+                for label in dataset_test.get_labels_name():
+                    all_metrics.append(metric+"-"+label)
 
         if metrics is None:
             metrics = all_metrics
@@ -76,17 +78,19 @@ class Report:
             self.metrics_value["log-loss"] = log_loss(self.y_true, self.probs)
 
         if self.per_label:
-            self.metrics_value["precision-score-per-label"] = list(precision_score(self.y_true, self.y_pred,
-                                                                                   average=None, zero_division=0))
-            self.metrics_value["recall-score-per-label"] = list(recall_score(self.y_true, self.y_pred, average=None,
-                                                                             zero_division=0))
-            self.metrics_value["f1-score-per-label"] = list(f1_score(self.y_true, self.y_pred, average=None,
-                                                                     zero_division=0))
-            self.metrics_value["fbeta-score-per-label"] = list(fbeta_score(self.y_true, self.y_pred, beta=1,
-                                                                           average=None, zero_division=0))
-            # self.metrics_value["roc-auc-score-per-label"] = roc_auc_score(self.y_true, self.probs, average="None")
-            self.metrics_value["jaccard-score-per-label"] = list(jaccard_score(self.y_true, self.y_pred, average=None,
-                                                                               zero_division=0))
+            precision_score_per_label = list(precision_score(self.y_true, self.y_pred, average=None, zero_division=0))
+            recall_score_per_label = list(recall_score(self.y_true, self.y_pred, average=None, zero_division=0))
+            f1_score_per_label = list(f1_score(self.y_true, self.y_pred, average=None, zero_division=0))
+            fbeta_score_per_label = list(fbeta_score(self.y_true, self.y_pred, beta=1, average=None, zero_division=0))
+            #roc_auc_score_per_label = list(roc_auc_score(self.y_true, self.probs, average="None"))
+            jaccard_score_per_label = list(jaccard_score(self.y_true, self.y_pred, average=None, zero_division=0))
+            for i, label in enumerate(self.dataset.get_labels_name()):
+                self.metrics_value["precision-score-"+label] = precision_score_per_label[i]
+                self.metrics_value["recall-score-"+label] = recall_score_per_label[i]
+                self.metrics_value["f1-score-"+label] = f1_score_per_label[i]
+                self.metrics_value["fbeta-score-"+label] = fbeta_score_per_label[i]
+                # self.metrics_value["roc-auc-score-"+label] = roc_auc_score_per_label[i]
+                self.metrics_value["jaccard-score-"+label] = jaccard_score_per_label[i]
 
     def to_csv(self, path=None):
         self.calculate_metrics()

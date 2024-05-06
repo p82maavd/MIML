@@ -1,6 +1,8 @@
 import numpy as np
 import os
 
+import pkg_resources
+
 from .bag import Bag
 from .instance import Instance
 from .miml_dataset import MIMLDataset
@@ -119,8 +121,10 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
                 flag = 2
             elif flag == 1:
                 features_name.append(line.split(" ")[1])
+                dataset.set_features_name(features_name)
             elif flag == 2:
                 labels_name.append(line.split(" ")[1])
+                dataset.set_labels_name(labels_name)
 
         else:
             # Eliminanos el salto de línea del final de la cadena
@@ -143,7 +147,7 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
             values_list = []
             for v in values:
                 values_instance = [float(i) for i in v.split(',')]
-                instance = Instance(values_instance+labels_values)
+                instance = Instance(values_instance + labels_values)
                 if key not in dataset.data:
                     bag = Bag(key)
                     bag.add_instance(instance)
@@ -151,6 +155,26 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
                 else:
                     dataset.add_instance(key, instance)
 
-    dataset.set_features_name(features_name)
-    dataset.set_labels_name(labels_name)
+
     return dataset
+
+
+def load_toy():
+    # TODO: Doc
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/toy.arff'), delimiter="'")
+
+def load_birds():
+    # TODO: Doc
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds.arff'),
+                        delimiter="'")
+
+def load_birds_train():
+    # TODO: Doc
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'),
+                        delimiter="'")
+
+
+def load_birds_test():
+    # TODO: Doc
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'),
+                        delimiter="'")
