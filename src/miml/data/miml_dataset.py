@@ -528,4 +528,6 @@ class MIMLDataset:
         print("Max Instances per bag: ", max_instances)
         print("Attributes per bag: ", self.get_number_attributes())
         # TODO: Implementarlo
-        # sb.append("\nDistribution of bags <nBags, nInstances>:");
+        print("\nDistribution of bags:")
+        for number_instances_in_bag, occurrences in distribution.items():
+            print("\tBags with ", number_instances_in_bag, " instances: ", occurrences)
