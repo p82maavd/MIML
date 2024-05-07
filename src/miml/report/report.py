@@ -58,9 +58,9 @@ class Report:
                                                                 zero_division=0)
         self.metrics_value["f1-score-macro"] = f1_score(self.y_true, self.y_pred, average="macro", zero_division=0)
         self.metrics_value["f1-score-micro"] = f1_score(self.y_true, self.y_pred, average="micro", zero_division=0)
-        self.metrics_value["fbeta-score-macro"] = fbeta_score(self.y_true, self.y_pred, beta=1, average="macro",
+        self.metrics_value["fbeta-score-macro"] = fbeta_score(self.y_true, self.y_pred, beta=0.5, average="macro",
                                                               zero_division=0)
-        self.metrics_value["fbeta-score-micro"] = fbeta_score(self.y_true, self.y_pred, beta=1, average="micro",
+        self.metrics_value["fbeta-score-micro"] = fbeta_score(self.y_true, self.y_pred, beta=0.5, average="micro",
                                                               zero_division=0)
         # TODO: ValueError: Only one class present in y_true. ROC AUC score is not defined in that case.
         # self.metrics_value["roc-auc-score-macro"] = roc_auc_score(self.y_true, self.probs, average="macro")
@@ -81,7 +81,7 @@ class Report:
             precision_score_per_label = list(precision_score(self.y_true, self.y_pred, average=None, zero_division=0))
             recall_score_per_label = list(recall_score(self.y_true, self.y_pred, average=None, zero_division=0))
             f1_score_per_label = list(f1_score(self.y_true, self.y_pred, average=None, zero_division=0))
-            fbeta_score_per_label = list(fbeta_score(self.y_true, self.y_pred, beta=1, average=None, zero_division=0))
+            fbeta_score_per_label = list(fbeta_score(self.y_true, self.y_pred, beta=0.5, average=None, zero_division=0))
             #roc_auc_score_per_label = list(roc_auc_score(self.y_true, self.probs, average="None"))
             jaccard_score_per_label = list(jaccard_score(self.y_true, self.y_pred, average=None, zero_division=0))
             for i, label in enumerate(self.dataset.get_labels_name()):
