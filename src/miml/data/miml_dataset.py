@@ -260,7 +260,7 @@ class MIMLDataset:
         Parameters
         ----------
         key_bag : str
-            Key of the bag which contains the instance to be deleted
+            Key of the bag to be deleted
         """
         self.data.pop(key_bag)
 
@@ -306,6 +306,7 @@ class MIMLDataset:
         instance : Instance
             Instance of Instance class to be added
         """
+        #TODO: Test if it works
         self.get_bag(key).add_instance(instance)
 
     def delete_instance(self, key_bag: str, index_instance: int) -> None:

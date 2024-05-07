@@ -6,12 +6,12 @@ build-backend = "hatchling.build"
 packages = ["src/miml", "src/miml/*"]
 
 [metadata]
-version = "0.3.3"
+version = "0.3.4"
 name = "mimllearning"
 
 [project]
 name = "mimllearning"
-version = "0.3.3"
+version = "0.3.4"
 authors = [
   { name="Damian Martinez", email="damianmartinezavila@gmail.com" },
 ]
