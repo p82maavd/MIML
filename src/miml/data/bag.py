@@ -289,14 +289,28 @@ class Bag:
         """
         self.dataset = dataset
 
-    def show_bag(self) -> None:
+    def show_bag(self, mode="table") -> None:
         """
         Show bag info in table format
+
+        Parameters
+        ----------
+        mode : str
+            Mode to show the bag. Modes available are "table" and "compact" (csv format)
         """
-        if self.dataset is None:
-            table = [[self.key] + [""] * self.get_number_attributes()]
+        header = [self.key] + [""] * self.get_number_attributes()
+        if self.dataset is not None:
+            header = [self.key] + self.get_features_name() + self.get_labels_name()
+        if mode == "table":
+            table = [header]
+            for index_instance in range(self.get_number_instances()):
+                table.append([index_instance] + list(self.get_instance(index_instance).get_attributes()))
+            print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
+
+        elif mode == "compact":
+            print(", ".join(header))
+            for index_instance in range(self.get_number_instances()):
+                print(", ".join([self.key] + list(self.get_instance(index_instance).get_attributes())))
+
         else:
-            table = [[self.key] + self.get_features_name() + self.get_labels_name()]
-        for index_instance in range(self.get_number_instances()):
-            table.append([index_instance] + list(self.get_instance(index_instance).get_attributes()))
-        print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
+            raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")

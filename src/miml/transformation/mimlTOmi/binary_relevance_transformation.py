@@ -32,9 +32,6 @@ class BinaryRelevanceTransformation:
             for j in range(self.dataset.get_number_labels()):
                 if i != j:
                     dataset.delete_attribute(self.dataset.get_number_features()-count+j)
-                    labels_name = dataset.get_labels_name()
-                    labels_name.pop(j-count)
-                    dataset.set_labels_name(labels_name)
                     count += 1
             datasets.append(dataset)
 

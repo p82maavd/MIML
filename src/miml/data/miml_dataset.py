@@ -1,3 +1,5 @@
+import random
+
 import numpy as np
 
 from .bag import Bag
@@ -211,21 +213,26 @@ class MIMLDataset:
         """
         return len(self.get_labels_name())
 
-    def get_bag(self, key_bag: str) -> Bag:
+    def get_bag(self, bag) -> Bag:
         """
         Get data of a bag of the dataset
 
         Parameters
         ----------
-        key_bag: str
-            Key of the bag to be obtained
+        bag: int/str
+            Index or key of the bag to be obtained
 
         Returns
         ----------
         bag: Bag
             Instance of Bag class
         """
-        return self.data[key_bag]
+        if isinstance(bag, int):
+            return list(self.data.values())[bag]
+        elif isinstance(bag, str):
+            return self.data[bag]
+        print(type(bag))
+        raise Exception("The bag can be obtained using an index (int) or his key (str)")
 
     def get_number_bags(self) -> int:
         """
@@ -294,34 +301,38 @@ class MIMLDataset:
         """
         return sum(self.data[bag].get_number_instances() for bag in self.data.keys())
 
-    def add_instance(self, key: str, instance: Instance) -> None:
+    def add_instance(self, bag, instance: Instance) -> None:
         """
         Add an Instance to a Bag of the dataset
 
         Parameters
         ----------
-        key : str
-            Key of the bag where the instance will be added
+        bag : int/str
+            Index or key of the bag where the instance will be added
 
         instance : Instance
             Instance of Instance class to be added
         """
         #TODO: Test if it works
-        self.get_bag(key).add_instance(instance)
+        new_bag = self.get_bag(bag)
+        new_bag.add_instance(instance)
+        self.data[new_bag.key] = new_bag
 
-    def delete_instance(self, key_bag: str, index_instance: int) -> None:
+    def delete_instance(self, bag, index_instance: int) -> None:
         """
         Delete an instance of a bag of the dataset
 
         Parameters
         ----------
-        key_bag : str
-            Key of the bag which contains the instance to be deleted
+        bag : int/str
+            Index or key of the bag which contains the instance to be deleted
 
         index_instance : int
             Index of the instance to be deleted
         """
-        self.get_bag(key_bag).delete_instance(index_instance)
+        new_bag = self.get_bag(bag)
+        new_bag.delete_instance(index_instance)
+        self.data[new_bag.key] = new_bag
 
     def get_attribute(self, bag, instance, attribute) -> float:
         """
@@ -345,25 +356,27 @@ class MIMLDataset:
         """
         return self.get_instance(bag, instance).get_attribute(attribute)
 
-    def set_attribute(self, key_bag: str, index_instance: int, attribute, value: float) -> None:
+    def set_attribute(self, bag, index_instance: int, attribute, value: float) -> None:
         """
         Update value from attributes
 
-            Parameters
-            ----------
-            key_bag : str
-                Bag key of the dataset
+        Parameters
+        ----------
+        bag : int/str
+            Index or key of the bag of the dataset
 
-            index_instance : int
-                Index of the instance
+        index_instance : int
+            Index of the instance
 
-            attribute: int/str
-                Attribute of the dataset
+        attribute: int/str
+            Attribute of the dataset
 
-            value: float
-                New value for the update
-            """
-        self.get_instance(key_bag, index_instance).set_attribute(attribute, value)
+        value: float
+            New value for the update
+        """
+        new_bag = self.get_bag(bag)
+        new_bag.set_attribute(index_instance, attribute, value)
+        self.data[new_bag.key] = new_bag
 
     def add_attribute(self, position: int, values=None) -> None:
         """
@@ -377,7 +390,7 @@ class MIMLDataset:
         values:  ndarray of shape(n_instances)
             Values for the new attribute
         """
-        # TODO: Test
+        # TODO: Arreglar
         for bag_index, bag in enumerate(self.data.keys()):
             add_values = values[bag_index]
             if values is None:
@@ -396,8 +409,9 @@ class MIMLDataset:
         """
         for bag in self.data.keys():
             self.data[bag].data = np.delete(self.data[bag].data, position, axis=1)
+        self.attributes.pop(list(self.attributes)[position])
 
-    def show_dataset(self, head: int = None, attributes=None, labels=None, info=True) -> None:
+    def show_dataset(self, mode: str="table", head: int = None, attributes=None, labels=None, info=True) -> None:
         """
         Function to show information about the dataset
 
@@ -422,18 +436,79 @@ class MIMLDataset:
             print("Features: ", self.get_features_name())
             print("Labels: ", self.get_labels_name())
             print("Bags:")
-        count = 0
-        for key in self.data:
-            # print("\n")
-            bag = self.get_bag(key)
-            # print("Key: ", key_bag)
-            # print("Attributes: ", bag[0])
-            # print("Labels: ", bag[1])
-            bag.show_bag()
-            count += 1
-            if head is not None:
-                if count >= head:
-                    break
+
+        if mode == "table":
+            for bag_index in range(self.get_number_bags()):
+                bag = self.get_bag(bag_index)
+                bag.show_bag()
+                if head is not None:
+                    if bag_index+1 >= head:
+                        break
+
+        elif mode == "compact":
+            header = [self.name] + self.get_features_name() + self.get_labels_name()
+            print(", ".join(header))
+            for bag_index in range(self.get_number_bags()):
+                bag = self.get_bag(bag_index)
+                for index_instance in range(bag.get_number_instances()):
+                    print(", ".join([bag.key] + list(bag.get_instance(index_instance).get_attributes())))
+
+                if head is not None:
+                    if bag_index+1 >= head:
+                        break
+
+        else:
+            raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")
+
+    def split_dataset(self, train_percentage: float=0.8, seed=0):
+
+        for count_label in np.sum(self.get_labels_by_bag(), 0):
+            #print(count_label)
+            if count_label == 0:
+                raise Exception("Dataset contain a label with no positive instance")
+
+        random.seed(seed)
+        labels_train = list(range(self.get_number_labels()))
+        bags_not_used = list(range(self.get_number_bags()))
+
+        number_bags_train = self.get_number_bags() * train_percentage
+
+        dataset_train = MIMLDataset()
+        dataset_train.set_name(self.get_name()+"_train")
+        dataset_train.set_features_name(self.get_features_name())
+        dataset_train.set_labels_name(self.get_labels_name())
+
+        dataset_test = MIMLDataset()
+        dataset_test.set_name(self.get_name() + "_test")
+        dataset_test.set_features_name(self.get_features_name())
+        dataset_test.set_labels_name(self.get_labels_name())
+
+        while bags_not_used and labels_train:
+            bag_index = random.randint(0, len(bags_not_used)-1)
+            bag = self.get_bag(bags_not_used[bag_index])
+            used = False
+
+            for label_index in range(bag.get_number_labels()):
+                if bag.get_labels()[0][label_index] == 1 and label_index in labels_train:
+                    used = True
+                    labels_train.remove(label_index)
+            if used:
+                dataset_train.add_bag(bag)
+                bags_not_used.pop(bag_index)
+
+        while dataset_train.get_number_bags() < number_bags_train :
+            bag_index = random.randint(0, len(bags_not_used) - 1)
+            bag = self.get_bag(bags_not_used[bag_index])
+            dataset_train.add_bag(bag)
+            bags_not_used.pop(bag_index)
+
+        while bags_not_used:
+            bag_index = random.randint(0, len(bags_not_used) - 1)
+            bag = self.get_bag(bags_not_used[bag_index])
+            dataset_test.add_bag(bag)
+            bags_not_used.pop(bag_index)
+
+        return dataset_train, dataset_test
 
     # TODO: Ver si separar esto
     def cardinality(self):
@@ -515,8 +590,8 @@ class MIMLDataset:
         """
 
         print("-----MULTILABEL-----")
-        print("Cardinalidad: ", self.cardinality())
-        print("Densidad: ", self.density())
+        print("Cardinality: ", self.cardinality())
+        print("Density: ", self.density())
         print("Distinct: ", self.distinct())
         print("")
         n_instances, min_instances, max_instances, distribution = self.get_statistics()
@@ -527,7 +602,6 @@ class MIMLDataset:
         print("Min Instances per bag: ", min_instances)
         print("Max Instances per bag: ", max_instances)
         print("Attributes per bag: ", self.get_number_attributes())
-        # TODO: Implementarlo
         print("\nDistribution of bags:")
-        for number_instances_in_bag, occurrences in distribution.items():
+        for number_instances_in_bag, occurrences in sorted(distribution.items()):
             print("\tBags with ", number_instances_in_bag, " instances: ", occurrences)

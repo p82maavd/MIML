@@ -1,4 +1,5 @@
 import warnings
+import numpy as np
 from sklearn.metrics import hamming_loss, accuracy_score, fbeta_score, jaccard_score, log_loss, \
     roc_auc_score, f1_score, precision_score, recall_score, average_precision_score
 from ..classifier import MIMLClassifier
@@ -20,13 +21,13 @@ class Report:
 
         all_metrics = ["precision-score-macro", "precision-score-micro", "average-precision-score-macro",
                        "average-precision-score-micro", "recall-score-macro", "recall-score-micro", "f1-score-macro",
-                       "f1-score-micro", "fbeta-score-macro", "fbeta-score-micro", "accuracy-score", "hamming-loss",
-                       "jaccard-score-macro", "jaccard-score-micro", "log-loss"]
+                       "f1-score-micro", "fbeta-score-macro", "fbeta-score-micro", "subset-accuracy-score",
+                       "hamming-loss", "jaccard-score-macro", "jaccard-score-micro", "log-loss"]
         if per_label:
             per_label_metrics = ["precision-score", "recall-score", "f1-score", "fbeta-score", "jaccard-score"]
             for metric in per_label_metrics:
                 for label in dataset_test.get_labels_name():
-                    all_metrics.append(metric+"-"+label)
+                    all_metrics.append(metric + "-" + label)
 
         if metrics is None:
             metrics = all_metrics
@@ -65,7 +66,8 @@ class Report:
         # TODO: ValueError: Only one class present in y_true. ROC AUC score is not defined in that case.
         # self.metrics_value["roc-auc-score-macro"] = roc_auc_score(self.y_true, self.probs, average="macro")
         # self.metrics_value["roc-auc-score-micro"] = roc_auc_score(self.y_true, self.probs, average="micro")
-        self.metrics_value["accuracy-score"] = accuracy_score(self.y_true, self.y_pred)
+        self.metrics_value["subset-accuracy-score"] = accuracy_score(self.y_true, self.y_pred)
+        # self.metrics_value["hamming-score"] = hamming_score(self.y_true, self.y_pred)
         self.metrics_value["hamming-loss"] = hamming_loss(self.y_true, self.y_pred)
         self.metrics_value["jaccard-score-macro"] = jaccard_score(self.y_true, self.y_pred, average="macro",
                                                                   zero_division=0)
@@ -82,15 +84,15 @@ class Report:
             recall_score_per_label = list(recall_score(self.y_true, self.y_pred, average=None, zero_division=0))
             f1_score_per_label = list(f1_score(self.y_true, self.y_pred, average=None, zero_division=0))
             fbeta_score_per_label = list(fbeta_score(self.y_true, self.y_pred, beta=0.5, average=None, zero_division=0))
-            #roc_auc_score_per_label = list(roc_auc_score(self.y_true, self.probs, average="None"))
+            # roc_auc_score_per_label = list(roc_auc_score(self.y_true, self.probs, average="None"))
             jaccard_score_per_label = list(jaccard_score(self.y_true, self.y_pred, average=None, zero_division=0))
             for i, label in enumerate(self.dataset.get_labels_name()):
-                self.metrics_value["precision-score-"+label] = precision_score_per_label[i]
-                self.metrics_value["recall-score-"+label] = recall_score_per_label[i]
-                self.metrics_value["f1-score-"+label] = f1_score_per_label[i]
-                self.metrics_value["fbeta-score-"+label] = fbeta_score_per_label[i]
+                self.metrics_value["precision-score-" + label] = precision_score_per_label[i]
+                self.metrics_value["recall-score-" + label] = recall_score_per_label[i]
+                self.metrics_value["f1-score-" + label] = f1_score_per_label[i]
+                self.metrics_value["fbeta-score-" + label] = fbeta_score_per_label[i]
                 # self.metrics_value["roc-auc-score-"+label] = roc_auc_score_per_label[i]
-                self.metrics_value["jaccard-score-"+label] = jaccard_score_per_label[i]
+                self.metrics_value["jaccard-score-" + label] = jaccard_score_per_label[i]
 
     def to_csv(self, path=None):
         self.calculate_metrics()
@@ -110,3 +112,11 @@ class Report:
         self.calculate_metrics()
         for metric in self.metrics_name:
             print(metric, ": ", self.metrics_value[metric])
+
+
+def hamming_score(y_true: np.ndarray, y_pred: np.ndarray):
+    numerator = (y_true & y_pred).sum(axis=1)
+    denominator = (y_true | y_pred).sum(axis=1)
+
+    return np.divide(numerator, denominator, out=np.ones_like(numerator, dtype=np.float_),
+                     where=denominator != 0).mean()

@@ -3,9 +3,9 @@ import os
 
 import pkg_resources
 
-from .bag import Bag
-from .instance import Instance
-from .miml_dataset import MIMLDataset
+from src.miml.data.bag import Bag
+from src.miml.data.instance import Instance
+from src.miml.data.miml_dataset import MIMLDataset
 
 
 def load_dataset(file: str, delimiter: str = "\"") -> MIMLDataset:
@@ -54,7 +54,7 @@ def load_dataset_csv(file: str, header=0):
     file_name = os.path.basename(file)
     dataset.set_name(os.path.splitext(file_name)[0])
 
-    # TODO: Hacer que se pueda pasar por parametro
+    # TODO: Make it possible to pass by parameter
     num_labels = int(csv_file.readline().replace("\n", ""))
 
     header_line = csv_file.readline().replace("\n", "").split(",")
@@ -105,7 +105,7 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
     flag = 0
     for line in arff_file:
 
-        # Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
+        # We check that the string does not contain spaces on the left and that it is not empty.
         line = line.lstrip()
 
         if not line or line.startswith("%") or line.startswith("@data"):
@@ -127,24 +127,22 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
                 dataset.set_labels_name(labels_name)
 
         else:
-            # Eliminanos el salto de línea del final de la cadena
+            # Remove line break at the end of the string
             line = line.strip("\n")
 
-            # Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
+            # We assume that the first element of each instance is the bag identifier
             key = line[0:line.find(",")]
 
-            # Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
+            # Start the bag data when we find the first '"' and end with the second '"'.
             line = line[line.find(delimiter) + 1:]
             values = line[:line.find(delimiter, 2)]
             # Separamos los valores por instancias de la bolsa
             values = values.split("\\n")
 
-            # El resto de la cadena se trata de las etiquetas
+            # The rest of the string consists of the following labels
             labels = line[line.find(delimiter, 2) + 2:]
             labels_values = [int(i) for i in labels.split(",")]
-            # print("Labels: ", labels)
 
-            values_list = []
             for v in values:
                 values_instance = [float(i) for i in v.split(',')]
                 instance = Instance(values_instance + labels_values)
@@ -155,7 +153,6 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
                 else:
                     dataset.add_instance(key, instance)
 
-
     return dataset
 
 
@@ -163,10 +160,12 @@ def load_toy():
     # TODO: Doc
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/toy.arff'), delimiter="'")
 
+
 def load_birds():
     # TODO: Doc
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds.arff'),
                         delimiter="'")
+
 
 def load_birds_train():
     # TODO: Doc
@@ -178,3 +177,66 @@ def load_birds_test():
     # TODO: Doc
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'),
                         delimiter="'")
+
+
+def arff_to_csv(file: str, delimiter: str = "'") -> None:
+    """
+    Convert MIML Arff to CSV.
+
+    Parameters
+    ----------
+    file : str
+        Filepath of the file to be converted
+
+    delimiter : str, default = '
+        Delimiter used in arff file for the start and end of the bag values ( ' or " )
+    """
+
+    arff = open(file)
+    csv = open(file[:-5] + ".csv", "w")
+    attrib = []
+    flag = 0
+
+    for line in arff:
+        # Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
+        line = line.lstrip()
+        if line == "":
+            continue
+
+        if line.startswith("%") or line.startswith("@"):
+            if line.startswith("@attribute") and not line.startswith("@attribute bag relational"):
+                attrib.append(line.split()[1])
+
+        else:
+            if flag == 0:
+                csv.write(','.join(attrib) + '\n')
+                flag = 1
+
+            # Eliminanos el salto de línea del final de la cadena
+            line = line.strip("\n")
+
+            # Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
+            key = line[0:line.find(",")]
+            # print("Key: ", key_bag)
+
+            # Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
+            line = line[line.find(delimiter) + 1:]
+            values = line[:line.find(delimiter, line.find(delimiter, line.find(delimiter)))]
+            # Separamos los valores por instancias de la bolsa
+            values = values.split("\\n")
+            # print("Values ", values)
+
+            # El resto de la cadena se trata de las etiquetas
+            labels = line[line.find(delimiter, line.find(delimiter, line.find(delimiter))) + 2:]
+            # print("Labels: ", labels)
+
+            for v in values:
+                csv.write(key + "," + v + "," + labels + "\n")
+                # TODO: intentar optimizar la funcion, aprovechar que la string del arff
+                # es parecida, separar solo los values
+                # TODO: control de errores
+
+    arff.close()
+    csv.close()
+
+

@@ -62,6 +62,8 @@ class ArithmeticTransformation(MIMLtoMLTransformation):
         transformed_bag = Bag(bag.key)
         transformed_bag.add_instance(Instance(list(np.hstack((features, labels)))))
 
+        # Create dataset with attribute data modified of original dataset of the bag in case we need to use get_features
+        # like in predict_bag
         dataset = MIMLDataset()
         dataset.set_name(bag.dataset.get_name())
         dataset.set_features_name(bag.dataset.get_features_name())
