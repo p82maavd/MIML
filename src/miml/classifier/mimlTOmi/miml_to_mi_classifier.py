@@ -7,7 +7,7 @@ from ...data import MIMLDataset
 
 class MIMLtoMIClassifier(MIMLClassifier):
     """
-    Class to represent a multiinstance classifier
+    Class to represent a multi-instance classifier
     """
 
     def __init__(self, mi_classifier) -> None:
@@ -65,6 +65,9 @@ class MIMLtoMIClassifier(MIMLClassifier):
         results : ndarray of shape (n_labels)
             Predicted labels of the bag
         """
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
+
         return self.predict(bag.get_features())
 
     @abstractmethod
@@ -99,6 +102,8 @@ class MIMLtoMIClassifier(MIMLClassifier):
         results : ndarray of shape (n_bags, n_labels)
             Predicted labels of dataset_test
         """
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
 
         results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
         # Features are the same in all datasets

@@ -14,7 +14,7 @@ class LabelPowersetTransformation:
 
     def transform_dataset(self, dataset: MIMLDataset) -> MIMLDataset:
         """
-        Transform the dataset to multiinstance datasets dividing the original dataset into n datasets with a single
+        Transform the dataset to multi-instance datasets dividing the original dataset into n datasets with a single
         label, where n is the number of labels.
 
         Returns
@@ -51,7 +51,7 @@ class LabelPowersetTransformation:
         Parameters
         ----------
         bag :
-            Bag to be transformed to multiinstance bag
+            Bag to be transformed to multi-instance bag
 
         Returns
         -------

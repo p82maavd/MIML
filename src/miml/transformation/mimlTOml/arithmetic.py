@@ -9,7 +9,7 @@ from ...data import MIMLDataset
 
 class ArithmeticTransformation(MIMLtoMLTransformation):
     """
-    Class that performs an arithmetic transformation to convert a MIMLDataset class to numpy ndarrays.
+    Class that performs an arithmetic transformation to convert a MIMLDataset class to numpy ndarray.
     """
 
     def __init__(self):

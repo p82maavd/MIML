@@ -15,6 +15,7 @@ class MIMLClassifier(ABC):
         Constructor of the class MIMLClassifier
         """
         self.classifier = None
+        self.trained = False
 
     def fit(self, dataset_train: MIMLDataset) -> None:
         """

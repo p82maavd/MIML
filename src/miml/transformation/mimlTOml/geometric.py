@@ -9,7 +9,7 @@ from ...data import MIMLDataset
 
 class GeometricTransformation(MIMLtoMLTransformation):
     """
-    Class that performs a geometric transformation to convert a MIMLDataset class to numpy ndarrays.
+    Class that performs a geometric transformation to convert a MIMLDataset class to numpy ndarray.
     """
 
     def __init__(self):

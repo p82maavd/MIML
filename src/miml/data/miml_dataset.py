@@ -313,7 +313,7 @@ class MIMLDataset:
         instance : Instance
             Instance of Instance class to be added
         """
-        #TODO: Test if it works
+        # TODO: Test if it works
         new_bag = self.get_bag(bag)
         new_bag.add_instance(instance)
         self.data[new_bag.key] = new_bag
@@ -390,7 +390,7 @@ class MIMLDataset:
         values:  ndarray of shape(n_instances)
             Values for the new attribute
         """
-        # TODO: Arreglar
+        # TODO: Fix
         for bag_index, bag in enumerate(self.data.keys()):
             add_values = values[bag_index]
             if values is None:
@@ -411,7 +411,7 @@ class MIMLDataset:
             self.data[bag].data = np.delete(self.data[bag].data, position, axis=1)
         self.attributes.pop(list(self.attributes)[position])
 
-    def show_dataset(self, mode: str="table", head: int = None, attributes=None, labels=None, info=True) -> None:
+    def show_dataset(self, mode: str = "table", head: int = None, attributes=None, labels=None, info=True) -> None:
         """
         Function to show information about the dataset
 
@@ -429,8 +429,7 @@ class MIMLDataset:
             info: Boolean
                 Show more info
         """
-        # TODO: Hacer algo como head y tail de pandas, ponerlo como parametro quizas, tambien lista atributos y labels
-        #  a mostrar opcionales
+        # TODO: implement head and tail functionality from pandas, optional attributes list too
         if info:
             print("Name: ", self.get_name())
             print("Features: ", self.get_features_name())
@@ -442,7 +441,7 @@ class MIMLDataset:
                 bag = self.get_bag(bag_index)
                 bag.show_bag()
                 if head is not None:
-                    if bag_index+1 >= head:
+                    if bag_index + 1 >= head:
                         break
 
         elif mode == "compact":
@@ -454,16 +453,16 @@ class MIMLDataset:
                     print(", ".join([bag.key] + list(bag.get_instance(index_instance).get_attributes())))
 
                 if head is not None:
-                    if bag_index+1 >= head:
+                    if bag_index + 1 >= head:
                         break
 
         else:
             raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")
 
-    def split_dataset(self, train_percentage: float=0.8, seed=0):
+    def split_dataset(self, train_percentage: float = 0.8, seed=0):
 
         for count_label in np.sum(self.get_labels_by_bag(), 0):
-            #print(count_label)
+            # print(count_label)
             if count_label == 0:
                 raise Exception("Dataset contain a label with no positive instance")
 
@@ -474,7 +473,7 @@ class MIMLDataset:
         number_bags_train = self.get_number_bags() * train_percentage
 
         dataset_train = MIMLDataset()
-        dataset_train.set_name(self.get_name()+"_train")
+        dataset_train.set_name(self.get_name() + "_train")
         dataset_train.set_features_name(self.get_features_name())
         dataset_train.set_labels_name(self.get_labels_name())
 
@@ -484,7 +483,7 @@ class MIMLDataset:
         dataset_test.set_labels_name(self.get_labels_name())
 
         while bags_not_used and labels_train:
-            bag_index = random.randint(0, len(bags_not_used)-1)
+            bag_index = random.randint(0, len(bags_not_used) - 1)
             bag = self.get_bag(bags_not_used[bag_index])
             used = False
 
@@ -496,7 +495,7 @@ class MIMLDataset:
                 dataset_train.add_bag(bag)
                 bags_not_used.pop(bag_index)
 
-        while dataset_train.get_number_bags() < number_bags_train :
+        while dataset_train.get_number_bags() < number_bags_train:
             bag_index = random.randint(0, len(bags_not_used) - 1)
             bag = self.get_bag(bags_not_used[bag_index])
             dataset_train.add_bag(bag)
@@ -510,7 +509,6 @@ class MIMLDataset:
 
         return dataset_train, dataset_test
 
-    # TODO: Ver si separar esto
     def cardinality(self):
         """
         Computes the Cardinality as the average number of labels per pattern.

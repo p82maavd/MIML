@@ -10,7 +10,7 @@ class APRClassifier:
     We call it the “iterated discrimination” algorithm, and it has three basic procedures:
     -Grow. An algorithm for growing an APR with “tight” bounds along a specified set
     of features.
-    -Discrim. An algorithm for choosing a set of discriminating features by analyzing
+    -Discriminate. An algorithm for choosing a set of discriminating features by analyzing
     an APR.
     -Expand. An algorithm for expanding the bounds of an APR to improve its generalization ability.
 
@@ -60,7 +60,7 @@ class APRClassifier:
         label: int
             Predicted label of the bag
         """
-        # TODO: Revisar dimensiones de x, que pasa si llamo a predict con varias bolsas
+        # TODO: Check x shape, what happens if i call predict with various bags
         x = x.reshape(1, x.shape[0], x.shape[1])
         return self.classifier.predict(x)
 

@@ -34,7 +34,7 @@ class Report:
         else:
             for metric in metrics:
                 if metric not in all_metrics:
-                    raise Exception("Metric ", metric, "is not valid\n", "Metrics availables: ", all_metrics)
+                    raise Exception("Metric ", metric, "is not valid\n", "Metrics available: ", all_metrics)
         self.header = header
         self.metrics_name = metrics
         self.per_label = per_label
@@ -76,7 +76,7 @@ class Report:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=UserWarning)
             # When log_loss called raise this warning, it is not true for multilabel classification
-            # UserWarning: The y_pred values do not sum to one. Starting from 1.5 thiswill result in an error.
+            # UserWarning: The y_pred values do not sum to one. Starting from 1.5 this will result in an error.
             self.metrics_value["log-loss"] = log_loss(self.y_true, self.probs)
 
         if self.per_label:

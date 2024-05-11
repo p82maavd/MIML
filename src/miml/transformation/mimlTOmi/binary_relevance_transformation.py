@@ -6,7 +6,7 @@ from ...data import MIMLDataset
 
 class BinaryRelevanceTransformation:
     """
-    Class that performs a binary relevance transformation to convert a MIMLDataset class to numpy ndarrays.
+    Class that performs a binary relevance transformation to convert a MIMLDataset class to numpy ndarray.
     """
 
     def __init__(self):
@@ -14,7 +14,7 @@ class BinaryRelevanceTransformation:
 
     def transform_dataset(self, dataset: MIMLDataset) -> list:
         """
-        Transform the dataset to multiinstance datasets dividing the original dataset into n datasets with a single
+        Transform the dataset to multi-instance datasets dividing the original dataset into n datasets with a single
         label, where n is the number of labels.
 
         Returns
@@ -44,7 +44,7 @@ class BinaryRelevanceTransformation:
         Parameters
         ----------
         bag :
-            Bag to be transformed to multiinstance bag
+            Bag to be transformed to multi-instance bag
 
         Returns
         -------
@@ -62,7 +62,8 @@ class BinaryRelevanceTransformation:
             count = 0
             for j in range(bag.get_number_labels()):
                 if i != j:
-                    transformed_bag.data = np.delete(transformed_bag.data, bag.get_number_features() - count + j, axis=1)
+                    transformed_bag.data = np.delete(transformed_bag.data, bag.get_number_features() - count + j,
+                                                     axis=1)
                     labels_name = transformed_bag.dataset.get_labels_name()
                     labels_name.pop(j - count)
                     transformed_bag.dataset.set_labels_name(labels_name)

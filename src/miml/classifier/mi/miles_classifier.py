@@ -7,7 +7,7 @@ import numpy as np
 class MILESClassifier:
 
     """
-    Mapping bags to a instance based feature space, from paper
+    Mapping bags to an instance based feature space, from paper
 
     Attributes
     ----------
@@ -93,7 +93,7 @@ class MILESClassifier:
         results: np.ndarray of shape (n_instances, n_features)
             Predicted probabilities for given data
         """
-        # TODO: test, esto esta mal por concepto. Ver como implementarlo
+        # TODO: fix, this is a patch. Dont know how to implement it
 
         result = np.zeros(x.shape[0])
         for i in range(x.shape[0]):

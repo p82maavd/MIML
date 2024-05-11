@@ -7,7 +7,7 @@ from ..data.instance import Instance
 from ..data.miml_dataset import MIMLDataset
 
 
-def load_dataset(file: str, delimiter: str = "\"") -> MIMLDataset:
+def load_dataset(file: str) -> MIMLDataset:
     """
     Function to load a dataset
 
@@ -15,8 +15,6 @@ def load_dataset(file: str, delimiter: str = "\"") -> MIMLDataset:
     ----------
     file : str
         Path of the dataset file
-    delimiter : str
-        Character to separate instances in bag of the arff files
 
     Returns
     ----------
@@ -26,10 +24,9 @@ def load_dataset(file: str, delimiter: str = "\"") -> MIMLDataset:
     if file[-4:] == ".csv":
         return load_dataset_csv(file)
     elif file[-5:] == ".arff":
-        return load_dataset_arff(file, delimiter)
+        return load_dataset_arff(file)
     else:
-        print("Error")
-        # TODO: Control de errores
+        raise Exception("Filetype is not admitted. You should use an .arff or .csv file")
 
 
 def load_dataset_csv(file: str, header=0):
@@ -81,7 +78,7 @@ def load_dataset_csv(file: str, header=0):
     return dataset
 
 
-def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
+def load_dataset_arff(file: str) -> MIMLDataset:
     """
     Function to load a dataset in arff format
 
@@ -89,8 +86,6 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
     ----------
     file : str
         Path of the dataset file
-    delimiter : str
-        Delimiter of instances in a bag in the arff file
 
     Returns
     -------
@@ -128,18 +123,20 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
         else:
             # Remove line break at the end of the string
             line = line.strip("\n")
+            line = line.replace(" ", "")
 
             # We assume that the first element of each instance is the bag identifier
             key = line[0:line.find(",")]
+            delimiter = line[line.find(",")+1]
 
             # Start the bag data when we find the first '"' and end with the second '"'.
             line = line[line.find(delimiter) + 1:]
-            values = line[:line.find(delimiter, 2)]
-            # Separamos los valores por instancias de la bolsa
+            values = line[:line.find(delimiter)]
+            # Split the values by instances of the stock exchange
             values = values.split("\\n")
 
             # The rest of the string consists of the following labels
-            labels = line[line.find(delimiter, 2) + 2:]
+            labels = line[line.find(delimiter) + 2:]
             labels_values = [int(i) for i in labels.split(",")]
 
             for v in values:
@@ -157,28 +154,25 @@ def load_dataset_arff(file: str, delimiter: str = "\"") -> MIMLDataset:
 
 def load_toy():
     # TODO: Doc
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/toy.arff'), delimiter="'")
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/toy.arff'))
 
 
 def load_birds():
     # TODO: Doc
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds.arff'),
-                        delimiter="'")
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds.arff'))
 
 
 def load_birds_train():
     # TODO: Doc
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'),
-                        delimiter="'")
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'))
 
 
 def load_birds_test():
     # TODO: Doc
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'),
-                        delimiter="'")
+    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'))
 
 
-def arff_to_csv(file: str, delimiter: str = "'") -> None:
+def arff_to_csv(file: str) -> None:
     """
     Convert MIML Arff to CSV.
 
@@ -186,9 +180,6 @@ def arff_to_csv(file: str, delimiter: str = "'") -> None:
     ----------
     file : str
         Filepath of the file to be converted
-
-    delimiter : str, default = '
-        Delimiter used in arff file for the start and end of the bag values ( ' or " )
     """
 
     arff = open(file)
@@ -197,7 +188,7 @@ def arff_to_csv(file: str, delimiter: str = "'") -> None:
     flag = 0
 
     for line in arff:
-        # Comprobamos que la cadena no contenga espacios en blanco a la izquierda ni que sea vacía
+        # We check that the string does not contain blank spaces on the left or that it is empty.
         line = line.lstrip()
         if line == "":
             continue
@@ -211,29 +202,25 @@ def arff_to_csv(file: str, delimiter: str = "'") -> None:
                 csv.write(','.join(attrib) + '\n')
                 flag = 1
 
-            # Eliminanos el salto de línea del final de la cadena
+            # Remove line break from the end of the string
             line = line.strip("\n")
-
-            # Asumimos que el primer elemento de cada instancia es el identificador de la bolsa
+            line = line.replace(" ", "")
+            # We assume that the first element of each instance is the identifier of the bag.
             key = line[0:line.find(",")]
             # print("Key: ", key_bag)
+            delimiter = line[line.find(",")+1]
 
-            # Empiezan los datos de la bolsa cuando encontremos la primera '"' y terminan con la segunda '"'
+            # Start the bag data when we find the first '“‘ and end with the second ’”'.
             line = line[line.find(delimiter) + 1:]
-            values = line[:line.find(delimiter, line.find(delimiter, line.find(delimiter)))]
-            # Separamos los valores por instancias de la bolsa
+            values = line[:line.find(delimiter)]
+            # Split the values by instances of the bag
             values = values.split("\\n")
-            # print("Values ", values)
 
-            # El resto de la cadena se trata de las etiquetas
-            labels = line[line.find(delimiter, line.find(delimiter, line.find(delimiter))) + 2:]
-            # print("Labels: ", labels)
+            # The rest of the string consists of the following labels
+            labels = line[line.find(delimiter) + 2:]
 
             for v in values:
                 csv.write(key + "," + v + "," + labels + "\n")
-                # TODO: intentar optimizar la funcion, aprovechar que la string del arff
-                # es parecida, separar solo los values
-                # TODO: control de errores
 
     arff.close()
     csv.close()

@@ -34,6 +34,7 @@ class MIMLtoMLClassifier(MIMLClassifier):
         """
         transformed_dataset_train = self.transformation.transform_dataset(dataset_train)
         self.classifier.fit(transformed_dataset_train.get_features(), transformed_dataset_train.get_labels())
+        self.trained = True
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -49,6 +50,9 @@ class MIMLtoMLClassifier(MIMLClassifier):
          results : ndarray of shape (n_instances, n_labels)
              Predicted labels of data
          """
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
+
         return self.classifier.predict(x)
 
     def predict_bag(self, bag: Bag) -> np.ndarray:
@@ -65,7 +69,8 @@ class MIMLtoMLClassifier(MIMLClassifier):
          results : ndarray of shape (n_labels)
              Predicted labels of data
         """
-
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
         transformed_bag = self.transformation.transform_bag(bag)
 
         return self.predict(transformed_bag.get_features())
@@ -84,6 +89,9 @@ class MIMLtoMLClassifier(MIMLClassifier):
         results: np.ndarray of shape (n_instances, n_features)
             Predicted probabilities for given dataset
         """
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
+
         results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
         transformed_dataset_test = self.transformation.transform_dataset(dataset_test)
         probs = self.classifier.predict_proba(transformed_dataset_test.get_features())
@@ -106,7 +114,9 @@ class MIMLtoMLClassifier(MIMLClassifier):
         results : ndarray of shape (n_bags, n_labels)
             Predicted labels of dataset_test
         """
-        # super().evaluate(dataset_test)
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
+
         transformed_dataset_test = self.transformation.transform_dataset(dataset_test)
         results = self.predict(transformed_dataset_test.get_features())
 

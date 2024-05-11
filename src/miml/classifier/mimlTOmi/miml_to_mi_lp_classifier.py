@@ -9,7 +9,7 @@ from ...data import MIMLDataset
 
 class MIMLtoMILPClassifier(MIMLtoMIClassifier):
     """
-    Class to represent a multiinstance classifier
+    Class to represent a multi-instance classifier
     """
 
     def __init__(self, classifier) -> None:
@@ -33,10 +33,9 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
         dataset_train: MIMLDataset
             Dataset to train the classifier
         """
-
         dataset = self.transformation.transform_dataset(dataset_train)
-
         self.classifier.fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
+        self.trained = True
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -52,6 +51,9 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
         results : ndarray of shape (n_labels)
             Predicted labels
         """
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
+
         # Prediction of each label
         results = self.classifier.predict(x)
         binary_str = np.binary_repr(results, width=self.transformation.dataset.get_number_labels())
@@ -71,6 +73,8 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
         results: np.ndarray of shape (n_instances, n_features)
             Predicted probabilities for given dataset
         """
+        if not self.trained:
+            raise Exception("The classifier is not trained. You need to call fit before predict anything")
 
         return self.classifier.predict_proba(dataset_test.get_features_by_bag())
 
