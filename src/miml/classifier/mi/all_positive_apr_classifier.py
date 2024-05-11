@@ -62,6 +62,19 @@ class AllPositiveAPRClassifier:
         return 0
 
     def predict_proba(self, x: np.ndarray):
+        """
+        Predict probabilities of given data of having a positive label
+
+        Parameters
+        ----------
+        x : np.ndarray of shape (n_instances, n_features)
+            Data to predict probabilities
+
+        Returns
+        -------
+        results: np.ndarray of shape (n_instances, n_features)
+            Predicted probabilities for given data
+        """
         result = np.zeros(x.shape[0])
         for i in range(x.shape[0]):
             result[i] = self.predict(x[i])

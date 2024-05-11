@@ -1,11 +1,10 @@
-import numpy as np
 import os
 
 import pkg_resources
 
-from src.miml.data.bag import Bag
-from src.miml.data.instance import Instance
-from src.miml.data.miml_dataset import MIMLDataset
+from ..data.bag import Bag
+from ..data.instance import Instance
+from ..data.miml_dataset import MIMLDataset
 
 
 def load_dataset(file: str, delimiter: str = "\"") -> MIMLDataset:

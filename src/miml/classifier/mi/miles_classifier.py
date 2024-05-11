@@ -60,7 +60,7 @@ class MILESClassifier:
         self.model = DecisionTreeClassifier()
         self.model.fit(mapped_bags, y_train.flatten())
 
-    def predict(self, bag) -> int:
+    def predict(self, bag: np.ndarray) -> int:
         """
         Predict the label of the bag
 
@@ -80,7 +80,21 @@ class MILESClassifier:
         return self.model.predict(mapped_bag)
 
     def predict_proba(self, x: np.ndarray):
-        # TODO: DOC y test, esto esta mal por concepto. Ver como implementarlo
+        """
+        Predict probabilities of given data
+
+        Parameters
+        ----------
+        x : np.ndarray of shape (n_instances, n_features)
+            Probabilities of data of being a positive label.
+
+        Returns
+        -------
+        results: np.ndarray of shape (n_instances, n_features)
+            Predicted probabilities for given data
+        """
+        # TODO: test, esto esta mal por concepto. Ver como implementarlo
+
         result = np.zeros(x.shape[0])
         for i in range(x.shape[0]):
             result[i] = self.predict(x[i])

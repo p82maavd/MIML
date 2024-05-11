@@ -51,7 +51,6 @@ class MIMLtoMIClassifier(MIMLClassifier):
         """
         pass
 
-    @abstractmethod
     def predict_bag(self, bag: Bag) -> np.ndarray:
         """
         Predict labels of a given bag
@@ -66,16 +65,26 @@ class MIMLtoMIClassifier(MIMLClassifier):
         results : ndarray of shape (n_labels)
             Predicted labels of the bag
         """
-        pass
+        return self.predict(bag.get_features())
 
     @abstractmethod
-    def predict_proba(self, dataset_test: MIMLDataset):
+    def predict_proba(self, dataset_test: MIMLDataset) -> np.ndarray:
+        """
+        Predict probabilities of given dataset of having a positive label
+
+        Parameters
+        ----------
+        dataset_test : MIMLDataset
+            Dataset to predict probabilities
+
+        Returns
+        -------
+        results: np.ndarray of shape (n_instances, n_features)
+            Predicted probabilities for given dataset
         """
 
-        """
         pass
 
-    @abstractmethod
     def evaluate(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
         Evaluate the model on a test dataset
@@ -90,4 +99,10 @@ class MIMLtoMIClassifier(MIMLClassifier):
         results : ndarray of shape (n_bags, n_labels)
             Predicted labels of dataset_test
         """
-        pass
+
+        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        # Features are the same in all datasets
+        for i, bag in enumerate(dataset_test.get_features_by_bag()):
+            results[i] = self.predict(bag)
+
+        return results

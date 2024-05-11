@@ -24,7 +24,7 @@ class BinaryRelevanceTransformation:
             Multi instance datasets
 
         """
-        self.dataset = dataset
+        self.dataset = deepcopy(dataset)
         datasets = []
         for i in range(self.dataset.get_number_labels()):
             dataset = deepcopy(self.dataset)

@@ -2,19 +2,19 @@ import numpy as np
 from copy import deepcopy
 
 from .miml_to_mi_classifier import MIMLtoMIClassifier
-from ...transformation import BinaryRelevanceTransformation
+from ...transformation import LabelPowersetTransformation
 from ...data import Bag
 from ...data import MIMLDataset
 
 
-class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
+class MIMLtoMILPClassifier(MIMLtoMIClassifier):
     """
     Class to represent a multiinstance classifier
     """
 
     def __init__(self, classifier) -> None:
         """
-        Constructor of the class MIMLtoMIBRClassifier
+        Constructor of the class MIMLtoMILPClassifier
 
         Parameters
         ----------
@@ -22,8 +22,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             Specific classifier to be used
         """
         super().__init__(classifier)
-        self.transformation = BinaryRelevanceTransformation()
-        self.classifiers = []
+        self.transformation = LabelPowersetTransformation()
 
     def fit_internal(self, dataset_train: MIMLDataset) -> None:
         """
@@ -34,13 +33,10 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         dataset_train: MIMLDataset
             Dataset to train the classifier
         """
-        for x in range(dataset_train.get_number_labels()):
-            classifier = deepcopy(self.classifier)
-            self.classifiers.append(classifier)
 
-        datasets = self.transformation.transform_dataset(dataset_train)
-        for i, dataset in enumerate(datasets):
-            self.classifiers[i].fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
+        dataset = self.transformation.transform_dataset(dataset_train)
+
+        self.classifier.fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
 
     def predict(self, x: np.ndarray) -> np.ndarray:
         """
@@ -48,7 +44,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         Parameters
         ----------
-        x : ndarray of shape (n_instances, n_labels)
+        x : ndarray of shape (n_instances, n_features)
             Data to predict their labels
 
         Returns
@@ -56,17 +52,16 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         results : ndarray of shape (n_labels)
             Predicted labels
         """
-        results = np.zeros((len(self.classifiers)))
         # Prediction of each label
-        for i in range(len(self.classifiers)):
-            results[i] = self.classifiers[i].predict(x)
-        return results
+        results = self.classifier.predict(x)
+        binary_str = np.binary_repr(results, width=self.transformation.dataset.get_number_labels())
+        return np.array([int(bit) for bit in binary_str])
 
     def predict_proba(self, dataset_test: MIMLDataset):
         """
         Predict probabilities of given dataset of having a positive label
 
-       Parameters
+        Parameters
         ----------
         dataset_test : MIMLDataset
             Dataset to predict probabilities
@@ -77,8 +72,5 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
             Predicted probabilities for given dataset
         """
 
-        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        return self.classifier.predict_proba(dataset_test.get_features_by_bag())
 
-        for i in range(len(self.classifiers)):
-            results[0:, i] = self.classifiers[i].predict_proba(dataset_test.get_features_by_bag())
-        return results
