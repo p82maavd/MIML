@@ -28,7 +28,7 @@ class AllPositiveAPRClassifier:
         """
         self.apr = []
 
-    def fit(self, x_train, y_train) -> None:
+    def fit(self, x_train: np.ndarray, y_train: np.ndarray) -> None:
         """
         Fit the classifier to the training data.
 
@@ -39,7 +39,21 @@ class AllPositiveAPRClassifier:
         y_train : ndarray (n_bags, n_instances, n_labels)
             Labels of bags in the training set.
         """
-        self.generate_apr(x_train, y_train)
+
+        positive_bag_indices = np.where(y_train == 1)[0]
+
+        # Select a random instance as starting apr
+        initial_bag_index = np.random.choice(positive_bag_indices)
+        initial_index_instance = np.random.choice(x_train[initial_bag_index].shape[0])
+        apr_min = apr_max = x_train[initial_bag_index][initial_index_instance]
+
+        # We check all positive instances and expand apr to minimum and maximum attribute values
+        for bag_index in positive_bag_indices:
+            for instance in x_train[bag_index]:
+                apr_min = np.minimum(apr_min, instance)
+                apr_max = np.maximum(apr_max, instance)
+
+        self.apr = [apr_min, apr_max]
 
     def predict(self, bag: np.array) -> int:
         """
@@ -56,6 +70,7 @@ class AllPositiveAPRClassifier:
             Predicted label of the bag
 
         """
+        # If all instances of the bag and all feature values inside of apr, it is a positive bag
         if np.all(bag >= self.apr[0]):
             if np.all(bag <= self.apr[1]):
                 return 1
@@ -80,27 +95,4 @@ class AllPositiveAPRClassifier:
             result[i] = self.predict(x[i])
         return result
 
-    def generate_apr(self, x_train, y_train) -> None:
-        """
-        Generate the axis-parallel rectangle
 
-        Parameters
-        ----------
-        x_train : np.ndarray of shape (n_bags, n_instances, n_features)
-            Features values of bags in the training set.
-        y_train : np.ndarray of shape    (n_bags, n_instances, n_features)
-            Labels of bags in the training set.
-        """
-
-        positive_bag_indices = np.where(y_train == 1)[0]
-
-        initial_bag_index = np.random.choice(positive_bag_indices)
-        initial_index_instance = np.random.choice(x_train[initial_bag_index].shape[0])
-        apr_min = apr_max = x_train[initial_bag_index][initial_index_instance]
-
-        for bag_index in positive_bag_indices:
-            for instance in x_train[bag_index]:
-                apr_min = np.minimum(apr_min, instance)
-                apr_max = np.maximum(apr_max, instance)
-
-        self.apr = [apr_min, apr_max]

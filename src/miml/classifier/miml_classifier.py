@@ -81,7 +81,19 @@ class MIMLClassifier(ABC):
 
     @abstractmethod
     def predict_proba(self, dataset_test: MIMLDataset) -> np.ndarray:
-        # TODO: DOC
+        """
+        Predict probabilities of given dataset of having a positive label
+
+        Parameters
+        ----------
+        dataset_test : MIMLDataset
+            Dataset to predict probabilities
+
+        Returns
+        -------
+        results: np.ndarray of shape (n_instances, n_features)
+            Predicted probabilities for given dataset
+        """
         pass
 
     @abstractmethod

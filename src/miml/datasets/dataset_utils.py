@@ -29,7 +29,7 @@ def load_dataset(file: str) -> MIMLDataset:
         raise Exception("Filetype is not admitted. You should use an .arff or .csv file")
 
 
-def load_dataset_csv(file: str, header=0):
+def load_dataset_csv(file: str):
     """
     Function to load a dataset in csv format
 
@@ -153,22 +153,50 @@ def load_dataset_arff(file: str) -> MIMLDataset:
 
 
 def load_toy():
-    # TODO: Doc
+    """
+    Load toy dataset from package
+
+    Returns
+    ----------
+    dataset : MIMLDataset
+        Dataset loaded
+    """
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/toy.arff'))
 
 
 def load_birds():
-    # TODO: Doc
+    """
+    Load birds dataset from package
+
+    Returns
+    ----------
+    dataset : MIMLDataset
+        Dataset loaded
+    """
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds.arff'))
 
 
 def load_birds_train():
-    # TODO: Doc
+    """
+    Load a train partition of birds dataset from package
+
+    Returns
+    ----------
+    dataset : MIMLDataset
+        Dataset loaded
+    """
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'))
 
 
 def load_birds_test():
-    # TODO: Doc
+    """
+    Load a test partition of birds dataset from package
+
+    Returns
+    ----------
+    dataset : MIMLDataset
+        Dataset loaded
+    """
     return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'))
 
 
@@ -224,5 +252,3 @@ def arff_to_csv(file: str) -> None:
 
     arff.close()
     csv.close()
-
-

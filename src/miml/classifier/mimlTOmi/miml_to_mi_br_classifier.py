@@ -9,7 +9,7 @@ from ...data import MIMLDataset
 
 class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
     """
-    Class to represent a multi-instance classifier
+    Class to represent a multi-instance classifier using a binary relevance transformation
     """
 
     def __init__(self, classifier) -> None:
@@ -34,10 +34,13 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
         dataset_train: MIMLDataset
             Dataset to train the classifier
         """
+
+        # Create as many classifier as labels
         for x in range(dataset_train.get_number_labels()):
             classifier = deepcopy(self.classifier)
             self.classifiers.append(classifier)
 
+        # Obtain converted datasets and train each classifier
         datasets = self.transformation.transform_dataset(dataset_train)
         for i, dataset in enumerate(datasets):
             self.classifiers[i].fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())

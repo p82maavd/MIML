@@ -9,7 +9,7 @@ from ...data import MIMLDataset
 
 class MIMLtoMILPClassifier(MIMLtoMIClassifier):
     """
-    Class to represent a multi-instance classifier
+    Class to represent a multi-instance classifier using a label powerset transformation
     """
 
     def __init__(self, classifier) -> None:

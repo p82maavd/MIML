@@ -33,7 +33,7 @@ class APRClassifier:
         """
         self.classifier = mil.models.APR(verbose=0)
 
-    def fit(self, x_train, y_train) -> None:
+    def fit(self, x_train: np.ndarray, y_train: np.ndarray) -> None:
         """
         Fit the classifier to the training data.
 
@@ -46,7 +46,7 @@ class APRClassifier:
         """
         self.classifier.fit(x_train, y_train)
 
-    def predict(self, x) -> int:
+    def predict(self, x: np.ndarray) -> int:
         """
         Predict the label of the bag
 

@@ -289,28 +289,55 @@ class Bag:
         """
         self.dataset = dataset
 
-    def show_bag(self, mode="table") -> None:
+    def show_bag(self, start: int = 0, end: int = None, attributes: list[str] = None, mode="table") -> None:
         """
         Show bag info in table format
 
         Parameters
         ----------
+        start : int
+            Index of instance to start showing
+
+        end : int
+            Index of instance to end showing
+
         mode : str
             Mode to show the bag. Modes available are "table" and "compact" (csv format)
+        attributes : list[str]
+            List of attributes to display. If empty, all attributes will be displayed.
         """
-        header = [self.key] + [""] * self.get_number_attributes()
-        if self.dataset is not None:
-            header = [self.key] + self.get_features_name() + self.get_labels_name()
+        header = [self.key]
+
+        if end is None:
+            end = self.get_number_instances()
+        if not attributes:
+            header += [""] * self.get_number_attributes()
+            if self.dataset is not None:
+                header = [self.key] + self.get_features_name() + self.get_labels_name()
+        else:
+            header = [self.key] + attributes
+
         if mode == "table":
             table = [header]
-            for index_instance in range(self.get_number_instances()):
-                table.append([index_instance] + list(self.get_instance(index_instance).get_attributes()))
+            for index_instance in range(start, end):
+                instance_attributes = list(self.get_instance(index_instance).get_attributes())
+                if not attributes:
+                    table.append([index_instance] + instance_attributes)
+                else:
+                    filtered_instance_attributes = [instance_attributes[i] for i in range(len(instance_attributes)) if
+                                                    self.get_attributes_name()[i] in attributes]
+                    table.append([index_instance] + filtered_instance_attributes)
+
             print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
 
         elif mode == "compact":
             print(", ".join(header))
-            for index_instance in range(self.get_number_instances()):
-                print(", ".join([self.key] + list(self.get_instance(index_instance).get_attributes())))
+            for index_instance in range(start, end):
+                instance_attributes = list(self.get_instance(index_instance).get_attributes())
+                if attributes:
+                    instance_attributes = [instance_attributes[i] for i in range(len(instance_attributes))
+                                           if header[i + 1] in attributes]
+                print(", ".join([self.key] + instance_attributes))
 
         else:
             raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")

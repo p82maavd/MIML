@@ -38,7 +38,7 @@ class MILESClassifier:
         self.mapping = None
         self.sigma2 = sigma2
 
-    def fit(self, x_train, y_train) -> None:
+    def fit(self, x_train: np.array, y_train: np.array) -> None:
         """
         Fit the classifier to the training data.
 

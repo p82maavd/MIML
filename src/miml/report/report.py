@@ -14,6 +14,9 @@ class Report:
     def __init__(self, classifier: MIMLClassifier, dataset_test: MIMLDataset, metrics: list[str] = None,
                  header: bool = True, per_label: bool = True):
 
+        """
+        Constructor of the class report
+        """
         self.dataset = dataset_test
         self.y_true = dataset_test.get_labels_by_bag()
         self.y_pred = classifier.evaluate(dataset_test)
@@ -41,6 +44,9 @@ class Report:
         self.metrics_value = dict()
 
     def calculate_metrics(self):
+        """
+        Calculate metrics of the predicted data
+        """
         self.metrics_value["precision-score-macro"] = precision_score(self.y_true, self.y_pred, average="macro",
                                                                       zero_division=0)
         self.metrics_value["precision-score-micro"] = precision_score(self.y_true, self.y_pred, average="micro",
@@ -84,7 +90,7 @@ class Report:
             recall_score_per_label = list(recall_score(self.y_true, self.y_pred, average=None, zero_division=0))
             f1_score_per_label = list(f1_score(self.y_true, self.y_pred, average=None, zero_division=0))
             fbeta_score_per_label = list(fbeta_score(self.y_true, self.y_pred, beta=0.5, average=None, zero_division=0))
-            # roc_auc_score_per_label = list(roc_auc_score(self.y_true, self.probs, average="None"))
+            # roc_auc_score_per_label = list(roc_auc_score(self.y_true, self.probs, average=None))
             jaccard_score_per_label = list(jaccard_score(self.y_true, self.y_pred, average=None, zero_division=0))
             for i, label in enumerate(self.dataset.get_labels_name()):
                 self.metrics_value["precision-score-" + label] = precision_score_per_label[i]
@@ -94,7 +100,16 @@ class Report:
                 # self.metrics_value["roc-auc-score-"+label] = roc_auc_score_per_label[i]
                 self.metrics_value["jaccard-score-" + label] = jaccard_score_per_label[i]
 
-    def to_csv(self, path=None):
+    def to_csv(self, path: str = None):
+        """
+        Print/save data as csv format
+
+        Parameters
+        ----------
+        path : str, default=None
+            Path to csv where the data would be stored
+
+        """
         self.calculate_metrics()
         header = ""
         if self.header:
@@ -109,12 +124,26 @@ class Report:
                 f.write(values)
 
     def to_string(self):
+        """
+        Print data as string format
+        """
         self.calculate_metrics()
         for metric in self.metrics_name:
             print(metric, ": ", self.metrics_value[metric])
 
 
 def hamming_score(y_true: np.ndarray, y_pred: np.ndarray):
+    """
+    Calculate hamming score of given data
+
+    Parameters
+    ----------
+    y_true : np.ndarray of shape (n_bags, n_labels)
+       Labels from the test dataset
+
+    y_pred : np.ndarray of shape (n_bags, n_labels)
+       Predicted labels from the test dataset
+    """
     numerator = (y_true & y_pred).sum(axis=1)
     denominator = (y_true | y_pred).sum(axis=1)
 

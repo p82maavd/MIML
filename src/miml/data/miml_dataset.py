@@ -32,7 +32,7 @@ class MIMLDataset:
 
     def get_name(self) -> str:
         """
-         Get function for dataset name
+        Get function for dataset name
 
         Returns
         ----------
@@ -50,7 +50,7 @@ class MIMLDataset:
         attributes : list[str]
             Attributes name of the dataset
         """
-        return list(self.attributes.keys())
+        return self.get_features_name()+self.get_labels_name()
 
     def get_attributes(self) -> np.ndarray:
         """
@@ -116,14 +116,21 @@ class MIMLDataset:
         """
         features = np.zeros((self.get_number_instances(), self.get_number_features()))
         count = 0
-        for key in self.data.keys():
+        for key in range(self.get_number_bags()):
             for instance in self.get_bag(key).get_features():
                 features[count] = instance
                 count += 1
         return features
 
     def get_features_by_bag(self) -> np.ndarray:
-        # TODO: Doc
+        """
+        Get features values of the dataset by bag
+
+        Returns
+        -------
+        features: ndarray of shape (n_bags, n_instances, n_features)
+            Values of the features of the dataset
+        """
         features = []
         for key in self.data.keys():
             features.append(self.get_bag(key).get_features())
@@ -378,24 +385,51 @@ class MIMLDataset:
         new_bag.set_attribute(index_instance, attribute, value)
         self.data[new_bag.key] = new_bag
 
-    def add_attribute(self, position: int, values=None) -> None:
+    def add_attribute(self, name: str, position: int = None, values: np.ndarray = None, feature: bool = True) -> None:
         """
         Add attribute to the dataset
 
         Parameters
         ----------
-        position : int
+        name : str
+            Name of the new attribute
+
+        position : int, default = None
             Index for the new attribute
 
         values:  ndarray of shape(n_instances)
             Values for the new attribute
+
+        feature : bool
+            Boolean value to determine if the attribute added is a feature or a label
         """
-        # TODO: Fix
-        for bag_index, bag in enumerate(self.data.keys()):
-            add_values = values[bag_index]
-            if values is None:
-                add_values = np.zeros(self.data[bag].get_number_instances())
-            self.data[bag].add_attribute(position, add_values)
+        # TODO: Test on tutorial
+        count = 0
+        if position is None:
+            position = self.get_number_features()
+            if not feature:
+                position = self.get_number_attributes()
+        if values is not None:
+            if values.shape[0] != self.get_number_instances():
+                raise Exception("Incorrect number of values for the new attribute. Should be the same as number of "
+                                "instances of the dataset")
+        for bag_index in range(self.get_number_bags()):
+            bag = self.get_bag(bag_index)
+            add_values = np.zeros(self.data[bag.key].get_number_instances())
+            if values is not None:
+                add_values = values[count:bag.get_number_instances()+count]
+            self.data[bag.key].data = np.insert(self.data[bag.key].data, position, add_values, axis=1)
+            count += bag.get_number_instances()
+        if feature:
+            self.attributes[name] = 0
+            features_name = self.get_features_name()
+            features_name.insert(position, name)
+            self.set_features_name(features_name)
+        if not feature:
+            self.attributes[name] = 1
+            labels_name = self.get_features_name()
+            labels_name.insert(position, name)
+            self.set_features_name(labels_name)
 
     def delete_attribute(self, position: int) -> None:
 
@@ -409,53 +443,56 @@ class MIMLDataset:
         """
         for bag in self.data.keys():
             self.data[bag].data = np.delete(self.data[bag].data, position, axis=1)
-        self.attributes.pop(list(self.attributes)[position])
+        self.attributes.pop(list(self.get_attributes_name())[position])
 
-    def show_dataset(self, mode: str = "table", head: int = None, attributes=None, labels=None, info=True) -> None:
+    def show_dataset(self, start: int = 0, end: int = None, attributes=None, mode: str = "table", info=False) -> None:
         """
         Function to show information about the dataset
 
         Parameters
         ----------
-            head : int
-                Number of the nth firsts bag to show
+            start : int
+                Index of bag to start showing
+
+            end : int
+                Index of bag to end showing
 
             attributes: List of string
                 Attributes to show
 
-            labels : List of string
-                Labels to show
+            mode : str
+                Mode to show the dataset. Modes available are "table" and "compact" (csv format)
 
             info: Boolean
                 Show more info
         """
-        # TODO: implement head and tail functionality from pandas, optional attributes list too
         if info:
             print("Name: ", self.get_name())
             print("Features: ", self.get_features_name())
             print("Labels: ", self.get_labels_name())
             print("Bags:")
 
+        if end is None:
+            end = self.get_number_bags()
+
         if mode == "table":
-            for bag_index in range(self.get_number_bags()):
+            for bag_index in range(start, end):
                 bag = self.get_bag(bag_index)
-                bag.show_bag()
-                if head is not None:
-                    if bag_index + 1 >= head:
-                        break
+                bag.show_bag(attributes=attributes)
 
         elif mode == "compact":
-            header = [self.name] + self.get_features_name() + self.get_labels_name()
+            header = ["bag_id"] + self.get_features_name() + self.get_labels_name()
+            if attributes:
+                header = ["bag_id"] + attributes
             print(", ".join(header))
-            for bag_index in range(self.get_number_bags()):
+            for bag_index in range(start, end):
                 bag = self.get_bag(bag_index)
                 for index_instance in range(bag.get_number_instances()):
-                    print(", ".join([bag.key] + list(bag.get_instance(index_instance).get_attributes())))
-
-                if head is not None:
-                    if bag_index + 1 >= head:
-                        break
-
+                    instance_attributes = list(bag.get_instance(index_instance).get_attributes().astype(str))
+                    if attributes:
+                        instance_attributes = [instance_attributes[i] for i in range(len(instance_attributes))
+                                               if self.get_attributes_name()[i] in attributes]
+                    print(",".join(list([bag.key] + instance_attributes)))
         else:
             raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")
 
@@ -506,6 +543,9 @@ class MIMLDataset:
             bag = self.get_bag(bags_not_used[bag_index])
             dataset_test.add_bag(bag)
             bags_not_used.pop(bag_index)
+
+        if dataset_test.get_number_bags() == 0:
+            raise Exception("Dataset is too small to split")
 
         return dataset_train, dataset_test
 
