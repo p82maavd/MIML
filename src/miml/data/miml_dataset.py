@@ -498,6 +498,25 @@ class MIMLDataset:
 
     def split_dataset(self, train_percentage: float = 0.8, seed=0):
 
+        """
+        Split dataset in two parts, one for training and the other for test
+
+        Parameters
+        ----------
+        train_percentage : float
+            Percentage of bags in train dataset
+
+        seed: int
+            Seed to generate random numbers
+
+        Returns
+        ----------
+        dataset_trein : MIMLDataset
+            Train dataset
+
+        dataset_test:MIMLDataset
+            Test dataset
+        """
         for count_label in np.sum(self.get_labels_by_bag(), 0):
             # print(count_label)
             if count_label == 0:
