@@ -8,7 +8,6 @@ dist/
 src/miml/tutorial/.pytest_cache
 update.bat
 .gitignore
-todo.md
 src/miml/tutorial/classifiers_tutorial.py
 src/miml/tutorial/tests.py
 

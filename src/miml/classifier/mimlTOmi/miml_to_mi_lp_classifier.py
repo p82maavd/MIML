@@ -34,7 +34,8 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
             Dataset to train the classifier
         """
         dataset = self.transformation.transform_dataset(dataset_train)
-        self.classifier.fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
+        # TODO: Temporal fix. Make sure it is okey
+        self.classifier.fit(dataset.get_features(), dataset.get_labels())
         self.trained = True
 
     def predict(self, x: np.ndarray) -> np.ndarray:
