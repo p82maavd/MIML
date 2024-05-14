@@ -4,10 +4,7 @@
 https://github.com/kdis-lab/MIML/blob/master/mavenProject/src/main/java/miml/data/MIMLInstances.java -> 
 https://github.com/tsoumakas/mulan/blob/master/mulan/src/main/java/mulan/data/MultiLabelInstances.java
 - Ver si hacer funciones a parte para load_cada_dataset y no tener que llamar a pkg_resources que queda feo, se
-  puede mirar como esta implementado en https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/datasets/_base.py,
-  esta ya implementado en load_datasets, falta importarlos en el init.py
-- Para algunas metricas, se necesita el predict_proba. En los clasificadores mi esta implementado que obtiene las probs de
-  las clases predichas.
+  puede mirar como esta implementado en https://github.com/scikit-learn/scikit-learn/blob/main/sklearn/datasets/_base.py, esta ya implementado en dataset_utils.py
 - Llamar evaluate fuera report pasandoselo al init, si hago esto tengo que pasar dataset.get_features_by_bag(), 
   resultado_evaluate y nombre_etiquetas. Tampoco podria pasarle detalles como el clasificador, algoritmo y transformacion usada
 - sk multilearn brknn, mlknn. Lo he probado pero no funciona, parece que esta desactualizada la libreria
