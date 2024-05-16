@@ -403,7 +403,6 @@ class MIMLDataset:
         feature : bool
             Boolean value to determine if the attribute added is a feature or a label
         """
-        # TODO: Test on tutorial
         count = 0
         if position is None:
             position = self.get_number_features()
