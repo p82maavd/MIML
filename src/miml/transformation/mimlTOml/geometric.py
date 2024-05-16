@@ -20,8 +20,15 @@ class GeometricTransformation(MIMLtoMLTransformation):
         Transform the dataset to multilabel dataset converting each bag into a single instance being the value of each
         attribute the geometric center of the instances in the bag.
 
+        Parameters
+        -------
+        dataset : MIMLDataset
+            Dataset to transform
+
         Returns
         -------
+        transformed_dataset : MIMLDataset
+            Transformed dataset
         """
         self.dataset = dataset
         transformed_dataset = MIMLDataset()

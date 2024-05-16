@@ -157,7 +157,7 @@ class Instance:
             index = list(self.get_attributes()).index(attribute)
             return self.data.item(index)
 
-    def set_attribute(self, attribute, value) -> None:
+    def set_attribute(self, attribute, value: float) -> None:
         """
         Update value of an attribute of the instance
 

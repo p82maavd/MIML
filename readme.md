@@ -63,5 +63,4 @@ report.to_csv(dataset_test.get_labels_by_bag(), results_ml)
 ```
 
 ### License
-[![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
-- **[MIT license](http://opensource.org/licenses/mit-license.php)**
+MIML library is released under the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html).

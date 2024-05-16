@@ -21,6 +21,9 @@ class ArithmeticTransformation(MIMLtoMLTransformation):
         attribute the mean value of the instances in the bag.
 
         Parameters
+        -------
+        dataset : MIMLDataset
+            Dataset to transform
 
         Returns
         -------
@@ -46,10 +49,13 @@ class ArithmeticTransformation(MIMLtoMLTransformation):
         Parameters
         ----------
         bag : Bag
-            Bag to be transformed
+            Bag to transform
 
         Returns
         -------
+        transformed_bag : Bag
+            Transformed bag
+
         """
         if bag.dataset is None:
             raise Exception("Can't transform a bag without an assigned dataset, because we wouldn't have info about "

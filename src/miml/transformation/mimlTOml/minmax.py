@@ -20,14 +20,15 @@ class MinMaxTransformation(MIMLtoMLTransformation):
         Transform the dataset to multilabel dataset converting each bag into a single instance with the min and max
         value of each attribute as two new attributes.
 
+        Parameters
+        -------
+        dataset : MIMLDataset
+            Dataset to transform
+
         Returns
         -------
-
-        X : ndarray of shape (n_bags, n_features*2)
-            Training vector
-
-        Y : ndarray of shape (n_bags, n_labels)
-            Target vector relative to X.
+        transformed_dataset : MIMLDataset
+            Transformed dataset
 
         """
         self.dataset = dataset

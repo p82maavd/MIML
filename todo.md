@@ -11,7 +11,6 @@ https://github.com/tsoumakas/mulan/blob/master/mulan/src/main/java/mulan/data/Mu
 - Llamar evaluate fuera report pasandoselo al init, si hago esto tengo que pasar dataset.get_features_by_bag(), 
   resultado_evaluate y nombre_etiquetas. Tampoco podria pasarle detalles como el clasificador, algoritmo y transformacion usada
 - sk multilearn brknn, mlknn. Lo he probado pero no funciona, parece que esta desactualizada la libreria
-- split dataset con bolsas en vez de con instancias
 - A la hora de ejecutar un label powerset classifier, los clasificadores mi que hay implementados solo son capaces de 
   realizar una clasificacion binaria. Probar a incorporar CitationKNN https://github.com/arjunssharma/Citation-KNN/tree/master
 
@@ -20,22 +19,29 @@ https://github.com/tsoumakas/mulan/blob/master/mulan/src/main/java/mulan/data/Mu
 - Revisar todos los nombres
 
 ### Data
+- Revisar split dataset
 
 ### Datasets
 - Tener todos dataset en arff y csv
+- Load from libray
+- Transformacion lp to multilabel que convierta lp label to lista de label binarias
+- Random MI
 
 ### Classifiers
 - Que el predict_bag de ml devuelva un array solo, y ver el tipo con el que devuelve las labels
 - Arreglar predict_proba MILESClassifier
 
 ### Report
-- Arreglar la metrica de la curva roc, creo que al hacer el particionado del dataset pseudo-aleatorio se arreglaría, 
-  no se arregla.
+
 
 ### Tutorials
 - tutorial particionado datasets con varios clasificadores y sus reports
 - Ejecutarlos todos de nuevo
+- Que se entienda mejor, mas prints y tal.
 
 ### Otros
 - Añadir info a pyproject.toml
-
+- Licencia libreria java gpl-3
+- documentacion bonita del codigo a web. Usar sphinx
+- Train_test experiment
+- Pequeño experimento

@@ -76,7 +76,7 @@ class AllPositiveAPRClassifier:
                 return 1
         return 0
 
-    def predict_proba(self, x: np.ndarray):
+    def predict_proba(self, x: np.ndarray) -> np.ndarray:
         """
         Predict probabilities of given data of having a positive label
 

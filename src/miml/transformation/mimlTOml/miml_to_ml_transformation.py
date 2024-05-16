@@ -5,6 +5,10 @@ from ...data import MIMLDataset
 
 class MIMLtoMLTransformation(ABC):
 
+    """
+    Abstract class to represent a MIMLtoML Transformation
+    """
+
     def __init__(self) -> None:
         self.dataset = None
 
