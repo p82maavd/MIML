@@ -34,8 +34,7 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
             Dataset to train the classifier
         """
         dataset = self.transformation.transform_dataset(dataset_train)
-        # TODO: Temporal fix. Make sure it is okey
-        self.classifier.fit(dataset.get_features(), dataset.get_labels())
+        self.classifier.fit(dataset.get_features_by_bag(), dataset.get_labels_by_bag())
         self.trained = True
 
     def predict(self, x: np.ndarray) -> np.ndarray:
@@ -55,10 +54,9 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
         if not self.trained:
             raise Exception("The classifier is not trained. You need to call fit before predict anything")
 
-        # Prediction of each label
-        results = self.classifier.predict(x)
-        binary_str = np.binary_repr(results, width=self.transformation.dataset.get_number_labels())
-        return np.array([int(bit) for bit in binary_str])
+        lp_label = self.classifier.predict(x)
+
+        return self.transformation.lp_to_ml_label(lp_label)
 
     def predict_proba(self, dataset_test: MIMLDataset):
         """
@@ -77,5 +75,15 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
         if not self.trained:
             raise Exception("The classifier is not trained. You need to call fit before predict anything")
 
-        return self.classifier.predict_proba(dataset_test.get_features_by_bag())
+        bags_prob = self.classifier.predict_proba(dataset_test.get_features_by_bag())
+        results = np.zeros((dataset_test.get_number_bags(), dataset_test.get_number_labels()))
+        for bag_prob_index, bag_prob in enumerate(bags_prob):
+            ml_probs = np.zeros(self.transformation.number_labels)
+            for lp_label_index, lp_label_prob in enumerate(bag_prob):
+                if lp_label_prob != 0:
+                    ml_labels = self.transformation.lp_to_ml_label(self.classifier.classes_[lp_label_index])
+                    ml_probs += ml_labels*lp_label_prob
+            results[bag_prob_index] = ml_probs
+
+        return results
 

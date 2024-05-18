@@ -1,37 +1,32 @@
-import mil.models
 import numpy as np
 
 
 class APRClassifier:
+
     """
-    Approach is to construct an APR by starting with
-    a single positive instance and “growing” the APR by expanding it to cover additional
-    positive instances.
-    We call it the “iterated discrimination” algorithm, and it has three basic procedures:
-    -Grow. An algorithm for growing an APR with “tight” bounds along a specified set
-    of features.
-    -Discriminate. An algorithm for choosing a set of discriminating features by analyzing
-    an APR.
-    -Expand. An algorithm for expanding the bounds of an APR to improve its generalization ability.
+    Classifier for All-Positive Bags using Axis-Aligned Positive Region.
+
+    This classifier assigns a positive label to bags that contain instances within a predefined
+    axis-parallel rectangle (APR) defined by the minimum and maximum feature values of positive
+    instances in the training set.
 
     Attributes
     ----------
-    classifier
-        Classifier used from mil library
+    apr : list
+        List containing the minimum and maximum feature values defining the APR.
 
     References
     ----------
-    Thomas G. Dietterich, Richard H. Lathrop, Tomas Lozano-Perez "Solving the multiple instance problem
-    with axis-parallel rectangles" 1997
-    Model implementation https://github.com/rosasalberto/mil/blob/master/mil/models/instance_level/apr.py
-    Matlab implementation https://github.com/DMJTax/mil
+    Dietterich, Thomas G., Richard H. Lathrop, and Tomás Lozano-Pérez.
+    "Solving the multiple instance problem with axis-parallel rectangles."
+    Artificial intelligence 89.1 (1997): 31-71.
     """
 
     def __init__(self) -> None:
         """
-        Constructor of the class APRClassifier
+        Constructor of the class AllPositiveAPRClassifier
         """
-        self.classifier = mil.models.APR(verbose=0)
+        self.apr = []
 
     def fit(self, x_train: np.ndarray, y_train: np.ndarray) -> None:
         """
@@ -44,41 +39,60 @@ class APRClassifier:
         y_train : ndarray (n_bags, n_instances, n_labels)
             Labels of bags in the training set.
         """
-        self.classifier.fit(x_train, y_train)
 
-    def predict(self, x: np.ndarray) -> int:
+        positive_bag_indices = np.where(y_train == 1)[0]
+
+        # Select a random instance as starting apr
+        initial_bag_index = np.random.choice(positive_bag_indices)
+        initial_index_instance = np.random.choice(x_train[initial_bag_index].shape[0])
+        apr_min = apr_max = x_train[initial_bag_index][initial_index_instance]
+
+        # We check all positive instances and expand apr to minimum and maximum attribute values
+        for bag_index in positive_bag_indices:
+            for instance in x_train[bag_index]:
+                apr_min = np.minimum(apr_min, instance)
+                apr_max = np.maximum(apr_max, instance)
+
+        self.apr = [apr_min, apr_max]
+
+    def predict(self, bag: np.array) -> int:
         """
         Predict the label of the bag
 
         Parameters
         ----------
-        x: np.ndarray of shape(n_instances, n_features)
+        bag: np.ndarray of shape(n_instances, n_features)
             features values of a bag
 
         Returns
         -------
         label: int
             Predicted label of the bag
-        """
-        # TODO: Check x shape, what happens if i call predict with various bags
-        x = x.reshape(1, x.shape[0], x.shape[1])
-        return self.classifier.predict(x)
 
-    def predict_proba(self, x: np.ndarray):
         """
-        Predict probabilities of given data
+        # If all instances of the bag and all feature values inside of apr, it is a positive bag
+        if np.all(bag >= self.apr[0]):
+            if np.all(bag <= self.apr[1]):
+                return 1
+        return 0
+
+    def predict_proba(self, x: np.ndarray) -> np.ndarray:
+        """
+        Predict probabilities of given data of having a positive label
 
         Parameters
         ----------
         x : np.ndarray of shape (n_instances, n_features)
-            Probabilities of data of being a positive label.
+            Data to predict probabilities
 
         Returns
         -------
         results: np.ndarray of shape (n_instances, n_features)
-             Predicted probabilities for given data
+            Predicted probabilities for given data
         """
         result = np.zeros(x.shape[0])
         for i in range(x.shape[0]):
             result[i] = self.predict(x[i])
         return result
+
+

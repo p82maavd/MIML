@@ -11,6 +11,7 @@ class LabelPowersetTransformation:
 
     def __init__(self):
         self.dataset = None
+        self.number_labels = 0
 
     def transform_dataset(self, dataset: MIMLDataset) -> MIMLDataset:
         """
@@ -25,14 +26,14 @@ class LabelPowersetTransformation:
 
         """
         self.dataset = deepcopy(dataset)
-        number_labels = self.dataset.get_number_labels()
+        self.number_labels = self.dataset.get_number_labels()
         labels = self.dataset.get_labels_by_bag()
         labels_transformed = []
 
         for label in labels:
             labels_transformed.append(np.dot(label, np.flip(2 ** np.arange(len(label)))))
 
-        for i in range(number_labels-1, 0, -1):
+        for i in range(self.number_labels-1, 0, -1):
             self.dataset.delete_attribute(self.dataset.get_number_features()+i)
 
         for i in range(self.dataset.get_number_bags()):
@@ -71,3 +72,7 @@ class LabelPowersetTransformation:
         transformed_bag.dataset.set_labels_name(["lp label"])
 
         return transformed_bag
+
+    def lp_to_ml_label(self, label):
+        binary_str = np.binary_repr(label.astype(int), width=self.number_labels)
+        return np.array([int(bit) for bit in binary_str])
