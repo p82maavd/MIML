@@ -655,6 +655,8 @@ class MIMLDataset:
         print("Average Instances per bag: ", n_instances / self.get_number_bags())
         print("Min Instances per bag: ", min_instances)
         print("Max Instances per bag: ", max_instances)
+        print("Features per bag: ", self.get_number_features())
+        print("Labels per bag: ", self.get_number_labels())
         print("Attributes per bag: ", self.get_number_attributes())
         print("\nDistribution of bags:")
         for number_instances_in_bag, occurrences in sorted(distribution.items()):
