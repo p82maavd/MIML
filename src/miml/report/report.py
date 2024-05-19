@@ -11,7 +11,7 @@ class Report:
     Class to generate a report
     """
 
-    def __init__(self, classifier: MIMLClassifier, dataset_test: MIMLDataset, metrics: list[str] = None,
+    def __init__(self, y_pred: np.ndarray, label_probs: np.ndarray, dataset_test: MIMLDataset, metrics: list[str] = None,
                  header: bool = True, per_label: bool = True):
 
         """
@@ -19,8 +19,8 @@ class Report:
         """
         self.dataset = dataset_test
         self.y_true = dataset_test.get_labels_by_bag()
-        self.y_pred = classifier.evaluate(dataset_test)
-        self.probs = classifier.predict_proba(dataset_test)
+        self.y_pred = y_pred
+        self.probs = label_probs
 
         all_metrics = ["precision-score-macro", "precision-score-micro", "average-precision-score-macro",
                        "average-precision-score-micro", "recall-score-macro", "recall-score-micro", "f1-score-macro",

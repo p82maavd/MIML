@@ -68,7 +68,7 @@ class MIMLtoMIClassifier(MIMLClassifier):
         if not self.trained:
             raise Exception("The classifier is not trained. You need to call fit before predict anything")
 
-        return self.predict(bag.get_features())
+        return self.predict(bag.get_features()).astype(int)
 
     @abstractmethod
     def predict_proba(self, dataset_test: MIMLDataset) -> np.ndarray:

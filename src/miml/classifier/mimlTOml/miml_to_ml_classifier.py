@@ -73,7 +73,7 @@ class MIMLtoMLClassifier(MIMLClassifier):
             raise Exception("The classifier is not trained. You need to call fit before predict anything")
         transformed_bag = self.transformation.transform_bag(bag)
 
-        return self.predict(transformed_bag.get_features())
+        return self.predict(transformed_bag.get_features()).astype(int)
 
     def predict_proba(self, dataset_test: MIMLDataset) -> np.ndarray:
         """
