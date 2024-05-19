@@ -55,14 +55,14 @@ class APRClassifier:
 
         self.apr = [apr_min, apr_max]
 
-    def predict(self, bag: np.array) -> int:
+    def predict(self, bag: np.ndarray) -> int:
         """
         Predict the label of the bag
 
         Parameters
         ----------
         bag: np.ndarray of shape(n_instances, n_features)
-            features values of a bag
+            Features values of a bag
 
         Returns
         -------
@@ -70,19 +70,19 @@ class APRClassifier:
             Predicted label of the bag
 
         """
-        # If all instances of the bag and all feature values inside of apr, it is a positive bag
+        # If all instances of the bag and all feature values in apr, it is a positive bag
         if np.all(bag >= self.apr[0]):
             if np.all(bag <= self.apr[1]):
                 return 1
         return 0
 
-    def predict_proba(self, x: np.ndarray) -> np.ndarray:
+    def predict_proba(self, x_test: np.ndarray) -> np.ndarray:
         """
         Predict probabilities of given data of having a positive label
 
         Parameters
         ----------
-        x : np.ndarray of shape (n_instances, n_features)
+        x_test : np.ndarray of shape (n_bags, n_instances, n_features)
             Data to predict probabilities
 
         Returns
@@ -90,9 +90,8 @@ class APRClassifier:
         results: np.ndarray of shape (n_instances, n_features)
             Predicted probabilities for given data
         """
-        result = np.zeros(x.shape[0])
-        for i in range(x.shape[0]):
-            result[i] = self.predict(x[i])
+        result = np.zeros(x_test.shape[0])
+        for i in range(x_test.shape[0]):
+            result[i] = self.predict(x_test[i])
         return result
-
 

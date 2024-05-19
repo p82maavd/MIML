@@ -2,7 +2,6 @@ import warnings
 import numpy as np
 from sklearn.metrics import hamming_loss, accuracy_score, fbeta_score, jaccard_score, log_loss, \
     roc_auc_score, f1_score, precision_score, recall_score, average_precision_score
-from ..classifier import MIMLClassifier
 from ..data import MIMLDataset
 
 
@@ -11,8 +10,8 @@ class Report:
     Class to generate a report
     """
 
-    def __init__(self, y_pred: np.ndarray, label_probs: np.ndarray, dataset_test: MIMLDataset, metrics: list[str] = None,
-                 header: bool = True, per_label: bool = True):
+    def __init__(self, y_pred: np.ndarray, label_probs: np.ndarray, dataset_test: MIMLDataset,
+                 metrics: list[str] = None, header: bool = True, per_label: bool = True):
 
         """
         Constructor of the class report

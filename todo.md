@@ -22,6 +22,7 @@
 - tutorial particionado datasets con varios clasificadores y sus reports
 - Ejecutarlos todos de nuevo
 - Que se entienda mejor, mas prints y tal.
+- ejemplo compact mode
 
 ### Otros
 - documentacion bonita del codigo a web. Usar sphinx

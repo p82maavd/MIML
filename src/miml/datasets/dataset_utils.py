@@ -50,7 +50,6 @@ def load_dataset_csv(file: str):
     file_name = os.path.basename(file)
     dataset.set_name(os.path.splitext(file_name)[0])
 
-    # TODO: Make it possible to pass by parameter
     num_labels = int(csv_file.readline().replace("\n", ""))
 
     header_line = csv_file.readline().replace("\n", "").split(",")

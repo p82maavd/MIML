@@ -320,7 +320,6 @@ class MIMLDataset:
         instance : Instance
             Instance of Instance class to be added
         """
-        # TODO: Test if it works
         new_bag = self.get_bag(bag)
         new_bag.add_instance(instance)
         self.data[new_bag.key] = new_bag
@@ -510,14 +509,13 @@ class MIMLDataset:
 
         Returns
         ----------
-        dataset_trein : MIMLDataset
+        dataset_train : MIMLDataset
             Train dataset
 
-        dataset_test:MIMLDataset
+        dataset_test : MIMLDataset
             Test dataset
         """
         for count_label in np.sum(self.get_labels_by_bag(), 0):
-            # print(count_label)
             if count_label == 0:
                 raise Exception("Dataset contain a label with no positive instance")
 

@@ -1,9 +1,7 @@
 import numpy as np
-from copy import deepcopy
 
 from .miml_to_mi_classifier import MIMLtoMIClassifier
 from ...transformation import LabelPowersetTransformation
-from ...data import Bag
 from ...data import MIMLDataset
 
 

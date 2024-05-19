@@ -3,7 +3,6 @@ from copy import deepcopy
 
 from .miml_to_mi_classifier import MIMLtoMIClassifier
 from ...transformation import BinaryRelevanceTransformation
-from ...data import Bag
 from ...data import MIMLDataset
 
 
