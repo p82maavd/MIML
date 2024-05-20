@@ -7,7 +7,7 @@ from ..data.instance import Instance
 from ..data.miml_dataset import MIMLDataset
 
 
-def load_dataset(file: str) -> MIMLDataset:
+def load_dataset(file: str, from_library: bool = False) -> MIMLDataset:
     """
     Function to load a dataset
 
@@ -15,12 +15,22 @@ def load_dataset(file: str) -> MIMLDataset:
     ----------
     file : str
         Path of the dataset file
+    from_library : bool, default = False
+        Boolean value to load datasets from library
 
     Returns
     ----------
     dataset : MIMLDataset
         Dataset loaded
     """
+    if from_library:
+        library_datasets = ["toy.arff", "miml_birds.arff", "miml_birds_random_20train.arff",
+                            "miml_birds_random_20test.arff"]
+        if file in library_datasets:
+            return load_dataset(pkg_resources.resource_filename('miml', 'datasets/'+file))
+        else:
+            raise Exception("Datasets available from library are: "+str(library_datasets))
+
     if file[-4:] == ".csv":
         return load_dataset_csv(file)
     elif file[-5:] == ".arff":
@@ -149,55 +159,6 @@ def load_dataset_arff(file: str) -> MIMLDataset:
                     dataset.add_instance(key, instance)
 
     return dataset
-
-
-def load_toy():
-    """
-    Load toy dataset from package
-
-    Returns
-    ----------
-    dataset : MIMLDataset
-        Dataset loaded
-    """
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/toy.arff'))
-
-
-def load_birds():
-    """
-    Load birds dataset from package
-
-    Returns
-    ----------
-    dataset : MIMLDataset
-        Dataset loaded
-    """
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds.arff'))
-
-
-def load_birds_train():
-    """
-    Load a train partition of birds dataset from package
-
-    Returns
-    ----------
-    dataset : MIMLDataset
-        Dataset loaded
-    """
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'))
-
-
-def load_birds_test():
-    """
-    Load a test partition of birds dataset from package
-
-    Returns
-    ----------
-    dataset : MIMLDataset
-        Dataset loaded
-    """
-    return load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'))
-
 
 def arff_to_csv(file: str) -> None:
     """
