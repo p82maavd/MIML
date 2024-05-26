@@ -21,7 +21,7 @@ class ArithmeticTransformation(MIMLtoMLTransformation):
         attribute the mean value of the instances in the bag.
 
         Parameters
-        -------
+        ----------
         dataset : MIMLDataset
             Dataset to transform
 

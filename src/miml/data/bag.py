@@ -302,7 +302,8 @@ class Bag:
             Index of instance to end showing
 
         mode : str
-            Mode to show the bag. Modes available are "table" and "compact" (csv format)
+            Mode to show the bag. Modes available are "table" and "csv" (csv format)
+
         attributes : list[str]
             List of attributes to display. If empty, all attributes will be displayed.
         """
@@ -330,7 +331,7 @@ class Bag:
 
             print(tabulate(table, headers='firstrow', tablefmt="grid", numalign="center"))
 
-        elif mode == "compact":
+        elif mode == "csv":
             print(", ".join(header))
             for index_instance in range(start, end):
                 instance_attributes = list(self.get_instance(index_instance).get_attributes())
@@ -340,4 +341,4 @@ class Bag:
                 print(", ".join([self.key] + instance_attributes))
 
         else:
-            raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")
+            raise Exception("Mode not available. Mode options are \"table\" and \"csv\"")

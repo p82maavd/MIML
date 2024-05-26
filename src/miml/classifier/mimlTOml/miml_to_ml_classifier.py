@@ -65,9 +65,9 @@ class MIMLtoMLClassifier(MIMLClassifier):
             Bag to predict their labels
 
         Returns
-         ----------
-         results : ndarray of shape (n_labels)
-             Predicted labels of data
+        ----------
+        results : ndarray of shape (n_labels)
+            Predicted labels of data
         """
         if not self.trained:
             raise Exception("The classifier is not trained. You need to call fit before predict anything")

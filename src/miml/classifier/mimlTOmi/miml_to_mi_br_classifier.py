@@ -11,16 +11,16 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
     Class to represent a multi-instance classifier using a binary relevance transformation
     """
 
-    def __init__(self, classifier) -> None:
+    def __init__(self, mi_classifier) -> None:
         """
         Constructor of the class MIMLtoMIBRClassifier
 
         Parameters
         ----------
-        classifier
+        mi_classifier
             Specific classifier to be used
         """
-        super().__init__(classifier)
+        super().__init__(mi_classifier)
         self.transformation = BinaryRelevanceTransformation()
         self.classifiers = []
 

@@ -21,7 +21,7 @@ class MinMaxTransformation(MIMLtoMLTransformation):
         value of each attribute as two new attributes.
 
         Parameters
-        -------
+        ----------
         dataset : MIMLDataset
             Dataset to transform
 

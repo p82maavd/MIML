@@ -5,7 +5,6 @@
 - Revisar todos los nombres
 
 ### Data
-- En show dataset y bag, ver si cambiar mode compact to mode csv
 
 ### Datasets
 
@@ -20,3 +19,7 @@
 ### Otros
 - documentacion bonita del codigo a web. Usar sphinx
 - Pequeño experimento
+- mostrar graficos por metrica, subset accuracy con 4 barras de cada clasificador
+- comentarios de python
+- splits test
+- add save_arff y csv to tutorial

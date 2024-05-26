@@ -10,16 +10,16 @@ class MIMLtoMILPClassifier(MIMLtoMIClassifier):
     Class to represent a multi-instance classifier using a label powerset transformation
     """
 
-    def __init__(self, classifier) -> None:
+    def __init__(self, mi_classifier) -> None:
         """
         Constructor of the class MIMLtoMILPClassifier
 
         Parameters
         ----------
-        classifier
+        mi_classifier
             Specific classifier to be used
         """
-        super().__init__(classifier)
+        super().__init__(mi_classifier)
         self.transformation = LabelPowersetTransformation()
 
     def fit_internal(self, dataset_train: MIMLDataset) -> None:

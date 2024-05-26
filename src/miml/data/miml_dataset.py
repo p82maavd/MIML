@@ -1,4 +1,5 @@
 import random
+from copy import deepcopy
 
 import numpy as np
 
@@ -278,14 +279,14 @@ class MIMLDataset:
         """
         self.data.pop(key_bag)
 
-    def get_instance(self, key_bag, index_instance) -> Instance:
+    def get_instance(self, bag, index_instance) -> Instance:
         """
         Get an Instance of the dataset
 
         Parameters
         ----------
-        key_bag : str
-            Key of the bag
+        bag : int/str
+            Index/Key of the bag
             
         index_instance : int
             Index of the instance in the bag
@@ -295,7 +296,7 @@ class MIMLDataset:
         instance : Instance
             Instance of Instance class
         """
-        return self.get_bag(key_bag).get_instance(index_instance)
+        return self.get_bag(bag).get_instance(index_instance)
 
     def get_number_instances(self) -> int:
         """
@@ -459,7 +460,7 @@ class MIMLDataset:
                 Attributes to show
 
             mode : str
-                Mode to show the dataset. Modes available are "table" and "compact" (csv format)
+                Mode to show the dataset. Modes available are "table" and "csv" (csv format)
 
             info: Boolean
                 Show more info
@@ -478,7 +479,7 @@ class MIMLDataset:
                 bag = self.get_bag(bag_index)
                 bag.show_bag(attributes=attributes)
 
-        elif mode == "compact":
+        elif mode == "csv":
             header = ["bag_id"] + self.get_features_name() + self.get_labels_name()
             if attributes:
                 header = ["bag_id"] + attributes
@@ -492,7 +493,7 @@ class MIMLDataset:
                                                if self.get_attributes_name()[i] in attributes]
                     print(",".join(list([bag.key] + instance_attributes)))
         else:
-            raise Exception("Mode not available. Mode options are \"table\" and \"compact\"")
+            raise Exception("Mode not available. Mode options are \"table\" and \"csv\"")
 
     def split_dataset(self, train_percentage: float = 0.8, seed=0):
 
@@ -535,6 +536,7 @@ class MIMLDataset:
         dataset_test.set_features_name(self.get_features_name())
         dataset_test.set_labels_name(self.get_labels_name())
 
+        # Add bags to train dataset for having bags with all labels
         while bags_not_used and labels_train:
             bag_index = random.randint(0, len(bags_not_used) - 1)
             bag = self.get_bag(bags_not_used[bag_index])
@@ -548,22 +550,146 @@ class MIMLDataset:
                 dataset_train.add_bag(bag)
                 bags_not_used.pop(bag_index)
 
+        # Randomly select the starting index of the rest of unused bags
+        start_index = random.randint(0, len(bags_not_used) - 1)
+        # Rotate the list to start from the given index
+        bags_not_used = bags_not_used[start_index:] + bags_not_used[:start_index]
+        # Add bags to train dataset until expected size
         while dataset_train.get_number_bags() < number_bags_train:
-            bag_index = random.randint(0, len(bags_not_used) - 1)
-            bag = self.get_bag(bags_not_used[bag_index])
+            # Get the bag at the current index
+            bag = self.get_bag(bags_not_used[0])
             dataset_train.add_bag(bag)
-            bags_not_used.pop(bag_index)
+            # Remove the bag from the list of unused bags
+            bags_not_used.pop(0)
 
+        # Add rest of unused bags to test dataset
         while bags_not_used:
-            bag_index = random.randint(0, len(bags_not_used) - 1)
-            bag = self.get_bag(bags_not_used[bag_index])
+            bag = self.get_bag(bags_not_used[0])
             dataset_test.add_bag(bag)
-            bags_not_used.pop(bag_index)
+            bags_not_used.pop(0)
 
         if dataset_test.get_number_bags() == 0:
             raise Exception("Dataset is too small to split")
 
         return dataset_train, dataset_test
+
+    def split_dataset_cv(self, folds: int = 4,  seed=0):
+        """
+        CrossValidation K-Fold split of dataset
+
+        Parameters
+        ----------
+        folds : int
+            Number of datasets
+        seed: int
+            Seed to generate random numbers
+
+        Returns
+        ----------
+        dataset_train : list[MIMLDataset]
+            Datasets
+        """
+        for count_label in np.sum(self.get_labels_by_bag(), 0):
+            if count_label == 0:
+                raise Exception("Dataset contain a label with no positive instance")
+
+        random.seed(seed)
+        labels_train = list(range(self.get_number_labels()))
+        bags_not_used = list(range(self.get_number_bags()))
+
+        datasets_train = []
+        datasets_test = []
+
+        dataset_train = MIMLDataset()
+        dataset_train.set_name(self.get_name() + "_train")
+        dataset_train.set_features_name(self.get_features_name())
+        dataset_train.set_labels_name(self.get_labels_name())
+
+        dataset_test = MIMLDataset()
+        dataset_test.set_name(self.get_name() + "_test")
+        dataset_test.set_features_name(self.get_features_name())
+        dataset_test.set_labels_name(self.get_labels_name())
+
+        # Add bags to train dataset for having bags with all labels
+        while bags_not_used and labels_train:
+            bag_index = random.randint(0, len(bags_not_used) - 1)
+            bag = self.get_bag(bags_not_used[bag_index])
+            used = False
+
+            for label_index in range(bag.get_number_labels()):
+                if bag.get_labels()[0][label_index] == 1 and label_index in labels_train:
+                    used = True
+                    labels_train.remove(label_index)
+            if used:
+                dataset_train.add_bag(bag)
+                bags_not_used.pop(bag_index)
+
+        for _ in range(folds):
+            datasets_train.append(deepcopy(dataset_train))
+            datasets_test.append(deepcopy(dataset_test))
+
+        # Randomly select the starting index of the rest of unused bags
+        start_index = random.randint(0, len(bags_not_used) - 1)
+        current_index = start_index
+        # Rotate the list to start from the given index
+        bags_not_used = bags_not_used[start_index:] + bags_not_used[:start_index]
+        # Separate unused_bags in number of folds lists
+        separated_bags_not_used = []
+        size = len(bags_not_used) / float(folds)
+        last = 0.0
+        while last < len(bags_not_used):
+            separated_bags_not_used.append(bags_not_used[int(last):int(last + size)])
+            last += size
+
+        for i in range(len(datasets_train)):
+            for j in range(len(separated_bags_not_used)):
+                if i == j:
+                    for bag_index in separated_bags_not_used[j]:
+                        datasets_test[i].add_bag(self.get_bag(bag_index))
+                else:
+                    for bag_index in separated_bags_not_used[j]:
+                        datasets_train[i].add_bag(self.get_bag(bag_index))
+
+        return datasets_train, datasets_test
+
+    def save_arff(self, path):
+        # TODO: Test and doc
+        with open(path, "w") as arff:
+            arff.write("@relation "+self.name+"\n")
+            arff.write("@attribute id {"+",".join(self.get_attributes_name())+"}"+"\n")
+            arff.write("@attribute bag relational"+"\n")
+            for feature in self.get_features_name():
+                arff.write("@attribute "+feature + " numeric"+"\n")
+            arff.write("@end bag"+"\n")
+            for label in self.get_labels_name():
+                arff.write("@attribute " + label + " {0,1}"+"\n")
+            arff.write("@data"+"\n")
+            for bag_index in range(self.get_number_bags()):
+                bag = self.get_bag(bag_index)
+                bag_str = bag.key + "'"
+                instance_values = []
+                for instance_index in range(bag.get_number_instances()):
+                    instance = bag.get_instance(instance_index)
+                    instance_values.append(",".join(list(instance.get_features().astype(str))))
+                bag_str += "\\n".join(instance_values) + "'"
+                bag_str += ",".join(list(bag.get_labels()[0].astype(int).astype(str)))
+                arff.write(bag_str+"\n")
+
+    def save_csv(self, path):
+        # TODO: Test and doc
+        with open(path, 'w') as csv:
+            csv.write(str(self.get_number_labels())+"\n")
+            # Write header
+            headers = ['id'] + self.get_features_name() + self.get_labels_name()
+            csv.write(",".join(headers))
+
+            # Writing data
+            for bag_index in range(self.get_number_bags()):
+                bag = self.get_bag(bag_index)
+                for instance_index in range(bag.get_number_instances()):
+                    instance = bag.get_instance(instance_index)
+                    row = [bag.key] + list(instance.get_features().astype(str)) + list(bag.get_labels()[0].astype(int).astype(str))
+                    csv.write(",".join(row)+"\n")
 
     def cardinality(self):
         """

@@ -21,7 +21,7 @@ class GeometricTransformation(MIMLtoMLTransformation):
         attribute the geometric center of the instances in the bag.
 
         Parameters
-        -------
+        ----------
         dataset : MIMLDataset
             Dataset to transform
 

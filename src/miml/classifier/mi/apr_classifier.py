@@ -12,7 +12,7 @@ class APRClassifier:
 
     Attributes
     ----------
-    apr : list
+    apr : list[np.ndarray of shape (n_labels)]
         List containing the minimum and maximum feature values defining the APR.
 
     References
