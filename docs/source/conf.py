@@ -9,13 +9,13 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../../'))
-sys.path.insert(0, os.path.abspath('../../src'))
 sys.path.insert(0, os.path.abspath('../../src/miml'))
-sys.path.insert(0, os.path.abspath('../../src/miml/'))
 sys.path.insert(0, os.path.abspath('../../src/'))
 print(os.getcwd())
-
+os.system("cd ..")
+os.system("cd ..")
+print(os.listdir())
+os.system("cd docs/source")
 
 project = 'miml'
 copyright = '2024, Damian'
