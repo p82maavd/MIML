@@ -1,5 +1,5 @@
-# miml: Multi Instance Multi Label Learning Library for Python
-The aim of the library is to ease the development, testing and comparison of classification algorithms for multi-instance multi-label learning (MIML). 
+# miml: Multi-Instance Multi-Label Learning Library for Python
+The aim of the library is to ease the development, testing, and comparison of classification algorithms for multi-instance multi-label learning (MIML). 
 
 ## Table of Contents
 
@@ -28,13 +28,10 @@ So install them with the package manager manually if not already downloaded.
 #### Datasets
 
 ``` python
-import pkg_resources
 from miml.data.load_datasets import load_dataset
 
-dataset_train = load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_80train.arff'),
-                             delimiter="'")
-dataset_test = load_dataset(pkg_resources.resource_filename('miml', 'datasets/miml_birds_random_20test.arff'),
-                            delimiter="'")
+dataset_train = load_dataset("miml_birds_random_80train.arff", from_library=True)
+dataset_test = load_dataset("C:/Users/Damián/Desktop/miml_birds_random_20test.arff")
 ```
 
 #### Classifier
@@ -45,6 +42,7 @@ from miml.classifier import MIMLtoMIBRClassifier, AllPositiveAPRClassifier
 classifier_mi = MIMLtoMIBRClassifier(AllPositiveAPRClassifier())
 classifier_mi.fit(dataset_train)
 results_mi=classifier_mi.evaluate(dataset_test)
+probs_mi = classifier_mi.predict_proba(dataset_test)
 ```
 
 #### Report
@@ -52,10 +50,10 @@ results_mi=classifier_mi.evaluate(dataset_test)
 ``` python
 from miml.report import Report
 
-report = Report()
-report.to_string(dataset_test.get_labels_by_bag(), results_ml)
+report = Report(results_mi, probs_mi, dataset_test)
+report.to_string()
 print("")
-report.to_csv(dataset_test.get_labels_by_bag(), results_ml)
+report.to_csv()
 ```
 
 ### License
