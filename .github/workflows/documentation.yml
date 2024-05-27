@@ -39,7 +39,18 @@ jobs:
           python -m pip install sphinx
           python -m pip install sphinx_book_theme
           python -m pip install ghp-import
-          
+          python -m pip install mimllearning
+
+      - name: Debug: List files
+        run: |
+          ls -R
+          ls -R docs
+          ls -R miml
+
+      - name: Debug: Show Python paths
+        run: |
+          python -c "import sys; print('\n'.join(sys.path))"
+                
       - name: Build HTML
         run: | 
           cd docs/
