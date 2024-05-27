@@ -1,17 +1,4 @@
 
-## Preguntas
-
-### Documentacion
-- Revisar todos los nombres
-
-### Data
-
-### Datasets
-
-### Classifiers
-
-### Report
-
 ### Tutorials
 - Ejecutarlos todos de nuevo
 - Que se entienda mejor, mas prints y tal.
@@ -23,3 +10,8 @@
 - comentarios de python
 - splits test
 - add save_arff y csv to tutorial
+
+### Memoria
+- En trabajo futuro hacer que sea mas compatible con librerias de pandas y tal
+- Automate github pages documentation with sphinx/github actions https://redandgreen.co.uk/sphinx-to-github-pages-via-github-actions/
+- Añadir evaluator class.
