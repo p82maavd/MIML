@@ -41,13 +41,13 @@ jobs:
           python -m pip install ghp-import
           python -m pip install mimllearning
 
-      - name: Debug: List files
+      - name: Debug
         run: |
           ls -R
           ls -R docs
           ls -R miml
 
-      - name: Debug: Show Python paths
+      - name: Debug python
         run: |
           python -c "import sys; print('\n'.join(sys.path))"
                 
