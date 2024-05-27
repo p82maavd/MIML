@@ -11,6 +11,9 @@ import sys
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../src/miml'))
 sys.path.insert(0, os.path.abspath('../src/miml/'))
+sys.path.insert(0, os.path.abspath('../src/miml/'))
+sys.path.insert(0, os.path.abspath('../../src'))
+sys.path.insert(0, os.path.abspath('../..'))
 sys.path.insert(0, os.path.abspath('../src/'))
 sys.path.insert(0, os.path.abspath('../src'))
 
