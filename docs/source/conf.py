@@ -10,7 +10,9 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../miml'))
-
+print(os.getcwd())
+os.system("cd ..")
+print(os.listdir())
 
 project = 'miml'
 copyright = '2024, Damian'
