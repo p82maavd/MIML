@@ -1,4 +1,4 @@
-MIML Libray
+MIML Library
 ==============================================
 
 .. toctree::
