@@ -4,6 +4,7 @@ The aim of the library is to ease the development, testing, and comparison of cl
 ## Table of Contents
 
 - [Installation](#installation)
+- [Documentation](#documentation)
 - [Usage](#usage)
 - [License](#license)
 
@@ -21,6 +22,11 @@ So install them with the package manager manually if not already downloaded.
 
     $ pip install numpy
     $ pip install scikit-learn
+
+### Documentation
+
+We can find the documentation of the project in this link: [Documentation](https://p82maavd.github.io/MIML/)
+
 
 ### Usage
 

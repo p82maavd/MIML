@@ -10,8 +10,3 @@
 - comentarios de python
 - splits test
 - add save_arff y csv to tutorial
-
-### Memoria
-- En trabajo futuro hacer que sea mas compatible con librerias de pandas y tal
-- Automate github pages documentation with sphinx/github actions https://redandgreen.co.uk/sphinx-to-github-pages-via-github-actions/
-- Añadir evaluator class.
