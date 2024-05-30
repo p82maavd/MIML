@@ -2,9 +2,9 @@ import os
 
 import pkg_resources
 
-from src.miml.data.bag import Bag
-from src.miml.data.instance import Instance
-from src.miml.data.miml_dataset import MIMLDataset
+from .bag import Bag
+from .instance import Instance
+from .miml_dataset import MIMLDataset
 
 
 def load_dataset(file: str, from_library: bool = False) -> MIMLDataset:

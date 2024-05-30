@@ -13,7 +13,7 @@ class Report:
     """
 
     def __init__(self, y_pred: np.ndarray, label_probs: np.ndarray, dataset_test: MIMLDataset,
-                 metrics: list[str] = None, header: bool = True, per_label: bool = True):
+                 metrics: list[str] = None, header: bool = True, per_label: bool = False):
         """
         Constructor of the class report
         """

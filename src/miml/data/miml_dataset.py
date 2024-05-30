@@ -29,6 +29,7 @@ class MIMLDataset:
         name : str
             Name of the dataset
         """
+        name = name.replace("\n", "")
         self.name = name
 
     def get_name(self) -> str:
@@ -488,6 +489,7 @@ class MIMLDataset:
                 bag = self.get_bag(bag_index)
                 for index_instance in range(bag.get_number_instances()):
                     instance_attributes = list(bag.get_instance(index_instance).get_attributes().astype(str))
+                    # Show attributes passed by parameter
                     if attributes:
                         instance_attributes = [instance_attributes[i] for i in range(len(instance_attributes))
                                                if self.get_attributes_name()[i] in attributes]
@@ -652,8 +654,15 @@ class MIMLDataset:
 
         return datasets_train, datasets_test
 
-    def save_arff(self, path):
-        # TODO: Test and doc
+    def save_arff(self, path) -> None:
+        """
+        Save MIMLDataset as arff file
+
+        Parameters
+        ----------
+        path : str
+            Path to store the arff file
+        """
         with open(path, "w") as arff:
             arff.write("@relation "+self.name+"\n")
             arff.write("@attribute id {"+",".join(self.get_attributes_name())+"}"+"\n")
@@ -677,6 +686,14 @@ class MIMLDataset:
 
     def save_csv(self, path):
         # TODO: Test and doc
+        """
+        Save MIMLDataset as csv file
+
+        Parameters
+        ----------
+        path : str
+            Path to store the csv file
+        """
         with open(path, 'w') as csv:
             csv.write(str(self.get_number_labels())+"\n")
             # Write header
