@@ -1,5 +1,4 @@
 @relation toy
-
  @attribute id {bag1,bag2}
  @attribute bag relational
    @attribute f1 numeric

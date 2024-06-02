@@ -685,7 +685,6 @@ class MIMLDataset:
                 arff.write(bag_str+"\n")
 
     def save_csv(self, path):
-        # TODO: Test and doc
         """
         Save MIMLDataset as csv file
 
@@ -699,6 +698,7 @@ class MIMLDataset:
             # Write header
             headers = ['id'] + self.get_features_name() + self.get_labels_name()
             csv.write(",".join(headers))
+            csv.write("\n")
 
             # Writing data
             for bag_index in range(self.get_number_bags()):

@@ -25,7 +25,7 @@ class Report:
         all_metrics = ["precision-score-macro", "precision-score-micro", "average-precision-score-macro",
                        "average-precision-score-micro", "recall-score-macro", "recall-score-micro", "f1-score-macro",
                        "f1-score-micro", "fbeta-score-macro", "fbeta-score-micro", "subset-accuracy-score",
-                       "hamming-score", "hamming-loss", "jaccard-score-macro", "jaccard-score-micro", "log-loss"]
+                       "accuracy-score", "hamming-loss", "jaccard-score-macro", "jaccard-score-micro", "log-loss"]
         if per_label:
             per_label_metrics = ["precision-score", "recall-score", "f1-score", "fbeta-score", "jaccard-score"]
             for metric in per_label_metrics:
@@ -80,7 +80,7 @@ class Report:
         # self.metrics_value["roc-auc-score-macro"] = roc_auc_score(self.y_true, self.probs, average="macro")
         # self.metrics_value["roc-auc-score-micro"] = roc_auc_score(self.y_true, self.probs, average="micro")
         self.metrics_value["subset-accuracy-score"] = accuracy_score(self.y_true, self.y_pred)
-        self.metrics_value["hamming-score"] = hamming_score(self.y_true, self.y_pred)
+        self.metrics_value["accuracy-score"] = hamming_accuracy_score(self.y_true, self.y_pred)
         self.metrics_value["hamming-loss"] = hamming_loss(self.y_true, self.y_pred)
         self.metrics_value["jaccard-score-macro"] = jaccard_score(self.y_true, self.y_pred, average="macro",
                                                                   zero_division=0)
@@ -146,9 +146,9 @@ class Report:
             print(metric, ": ", self.metrics_value[metric])
 
 
-def hamming_score(y_true: np.ndarray, y_pred: np.ndarray):
+def hamming_accuracy_score(y_true: np.ndarray, y_pred: np.ndarray):
     """
-    Calculate hamming score of given data
+    Calculate hamming accuracy score of given data
 
     Parameters
     ----------
