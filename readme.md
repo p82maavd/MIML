@@ -25,7 +25,7 @@ So install them with the package manager manually if not already downloaded.
 
 ### Documentation
 
-We can find the documentation of the project in this link: [Documentation](https://p82maavd.github.io/MIML/)
+We can find the documentation of the project in this link: [Documentation](https://p82maavd.github.io/MIML/miml)
 
 
 ### Usage
