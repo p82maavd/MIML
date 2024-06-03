@@ -1,5 +1,4 @@
 import warnings
-from copy import deepcopy
 
 import numpy as np
 from sklearn.metrics import hamming_loss, accuracy_score, fbeta_score, jaccard_score, log_loss, \
@@ -43,6 +42,7 @@ class Report:
         self.per_label = per_label
         self.metrics_value = dict()
         self.beta = 0.5
+        self.calculate_metrics()
 
     def calculate_metrics(self, beta: int = 0.5):
         """
@@ -107,7 +107,7 @@ class Report:
                 # self.metrics_value["roc-auc-score-"+label] = roc_auc_score_per_label[i]
                 self.metrics_value["jaccard-score-" + label] = jaccard_score_per_label[i]
 
-    def to_csv(self, path: str = None):
+    def to_csv(self, path: str = None, metrics: list[str] = None):
         """
         Print/save data as csv format
 
@@ -116,31 +116,48 @@ class Report:
         path : str, default=None
             Path to csv where the data would be stored
 
+        metrics : list[str], default=None
+            List of metrics to show. If empty, show all metrics.
         """
-        self.calculate_metrics()
+        # If not metrics passed, show all metrics
+        if metrics is None:
+            metrics = self.metrics_name
+
         header = ""
         if self.header:
-            metrics = deepcopy(self.metrics_name)
-
             for metric in range(len(metrics)):
+                header += metrics[metric]
                 if metrics[metric][0:5] == "fbeta":
-                    metrics[metric] += " beta value = " + str(self.beta)
-            header = ",".join(str(metric) for metric in metrics)
-        values = ",".join(str(self.metrics_value[metric]) for metric in self.metrics_name)
+                    header += " beta value = " + str(self.beta)
+                header += ","
+            header = header[0:-1]
+
+        values = ",".join(str(self.metrics_value[metric]) for metric in metrics)
+
+        # If not path passed, print on screen
         if path is None:
             print(header)
             print(values)
+        # Else, save it in a file
         else:
             with open(path, mode="a") as f:
                 f.write(header)
                 f.write(values)
 
-    def to_string(self):
+    def to_string(self, metrics: list[str] = None):
         """
         Print data as string format
+
+        Parameters
+        ----------
+        metrics : list[str], default=None
+            List of metrics to show. If empty, show all metrics.
         """
-        self.calculate_metrics()
-        for metric in self.metrics_name:
+        # If not metrics passed, show all metrics
+        if metrics is None:
+            metrics = self.metrics_name
+
+        for metric in metrics:
             if metric[0:5] == "fbeta":
                 print(metric, "beta value =", self.beta, ": ", self.metrics_value[metric])
             print(metric, ": ", self.metrics_value[metric])

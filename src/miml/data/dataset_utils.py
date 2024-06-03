@@ -160,6 +160,7 @@ def load_dataset_arff(file: str) -> MIMLDataset:
 
     return dataset
 
+
 def arff_to_csv(file: str) -> None:
     """
     Convert MIML Arff to CSV.

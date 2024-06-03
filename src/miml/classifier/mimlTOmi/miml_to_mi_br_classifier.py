@@ -80,7 +80,7 @@ class MIMLtoMIBRClassifier(MIMLtoMIClassifier):
 
         Returns
         -------
-        results: np.ndarray of shape (n_instances, n_features)
+        results: np.ndarray of shape (n_instances, n_labels)
             Predicted probabilities for given dataset
         """
         if not self.trained:

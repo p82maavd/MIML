@@ -87,7 +87,7 @@ class APRClassifier:
 
         Returns
         -------
-        results: np.ndarray of shape (n_instances, n_features)
+        results: np.ndarray of shape (n_instances)
             Predicted probabilities for given data
         """
         result = np.zeros(x_test.shape[0])

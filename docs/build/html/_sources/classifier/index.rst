@@ -4,8 +4,8 @@
 .. toctree::
    :maxdepth: 1
    
-   mi
+   mi/index
    miml_classifier
-   mimlTOml
-   mimlTOmi
+   mimlTOml/index
+   mimlTOmi/index
    

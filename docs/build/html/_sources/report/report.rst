@@ -1,8 +1,8 @@
-﻿Report Class
+﻿Report
 ===========================
 
 .. autosummary::
-   :template: base.rst
+   :template: class.rst
    :toctree: _autosummary
    :nosignatures:
 

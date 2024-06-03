@@ -10,5 +10,8 @@ update.bat
 .gitignore
 src/miml/tutorial/classifiers_tutorial.py
 src/miml/tutorial/tests.py
+src/miml/datasets/miml_text_data
+src/miml/datasets/miml_image_data
+
 
 

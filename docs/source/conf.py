@@ -9,18 +9,13 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../src/miml'))
-sys.path.insert(0, os.path.abspath('../src/miml/'))
-sys.path.insert(0, os.path.abspath('../src/miml/'))
+sys.path.insert(0, os.path.abspath('../../'))
 sys.path.insert(0, os.path.abspath('../../src'))
-sys.path.insert(0, os.path.abspath('../..'))
-sys.path.insert(0, os.path.abspath('../src/'))
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('../../src/'))
 
-
-project = 'miml'
+project = 'MIML Library'
 copyright = '2024, Damian'
-author = 'Damian'
+author = 'Damian Martinez'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -34,7 +29,7 @@ autosummary_generate = True  # Turn on sphinx.ext.autosummary
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-root_doc = 'index'
+root_doc = 'miml'
 
 
 # -- Options for HTML output -------------------------------------------------

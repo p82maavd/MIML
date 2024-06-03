@@ -78,7 +78,7 @@ class LabelPowersetTransformation:
 
         return transformed_bag
 
-    def lp_to_ml_label(self, label) -> np.ndarray:
+    def lp_to_ml_label(self, label: int) -> np.ndarray:
         """
         Transform lp label to multilabel
 
@@ -92,7 +92,8 @@ class LabelPowersetTransformation:
         labels : np.ndarray
             Multilabel labels
         """
-        binary_str = np.binary_repr(label.astype(int), width=self.number_labels)
+
+        binary_str = np.binary_repr(int(label), width=self.number_labels)
         return np.array([int(bit) for bit in binary_str])
 
     def ml_to_lp_label(self, labels: np.ndarray) -> float:

@@ -60,7 +60,7 @@ class MIWrapperClassifier:
         self.base_classifier.fit(x_instances, y_instances, sample_weight=instance_weights)
         self.classes_ = self.base_classifier.classes_
 
-    def predict(self, bag: np.ndarray):
+    def predict(self, bag: np.ndarray) -> int:
         """
         Predict the label of the bag
 
@@ -75,11 +75,17 @@ class MIWrapperClassifier:
             Predicted label of the bag
         """
         x_test = np.expand_dims(bag, axis=0)
-        bag_probs = self.predict_proba(x_test)[0]
+        bag_probs = self.predict_proba(x_test)
         label = self.classes_[np.argmax(bag_probs)]
+        # If single-label problem return 0 or 1
+        if len(self.classes_) == 2:
+            if bag_probs[0] <= 0.49:
+                return 0
+            else:
+                return 1
         return label
 
-    def predict_proba(self, x_test: np.ndarray):
+    def predict_proba(self, x_test: np.ndarray) -> np.ndarray:
         """
         Predict probabilities of given data of having a positive label
 
@@ -90,12 +96,15 @@ class MIWrapperClassifier:
 
         Returns
         -------
-        results: np.ndarray of shape (n_instances, n_features)
+        results: np.ndarray of shape (n_instances, n_labels)
             Predicted probabilities for given data
         """
         bag_probs = []
         for bag in x_test:
             instance_probs = self.base_classifier.predict_proba(bag)
             avg_probs = np.mean(instance_probs, axis=0)
+            # sklearn.predict_proba change output if not multilabel. Adjusting output
+            if len(self.classes_) == 2:
+                avg_probs = avg_probs[1]
             bag_probs.append(avg_probs)
         return np.array(bag_probs)

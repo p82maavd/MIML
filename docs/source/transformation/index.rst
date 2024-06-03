@@ -4,5 +4,5 @@
 .. toctree::
    :maxdepth: 1
 
-   mimlTOmi
-   mimlTOml
+   mimlTOmi/index
+   mimlTOml/index
